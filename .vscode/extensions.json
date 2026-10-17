@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "charliermarsh.ruff",
+    "tamasfe.even-better-toml",
+    "DavidAnson.vscode-markdownlint",
+    "typos.typos-vscode"
+  ]
+}

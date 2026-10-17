@@ -1,0 +1,281 @@
+[executor]
+    type = "uv"
+
+[env]
+    PYTHONWARNDEFAULTENCODING = "1"
+    PYTHONUTF8                = "1"
+
+    # ------------------------------------------------------------------------------
+    # Testing & Code Coverage
+    # ------------------------------------------------------------------------------
+
+[tasks.test]
+    cmd  = "pytest --cov --cov-report=term-missing --cov-report=xml"
+    help = "Run tests with coverage measurement (pytest + pytest-cov)."
+
+[tasks.test-fast]
+    cmd  = "pytest -n auto --dist=worksteal --max-worker-restart=0 --cov --cov-report=term-missing --cov-report=xml"
+    help = "Run tests in parallel across CPU cores with pytest-xdist work-stealing."
+
+[tasks.test-snapshot-update]
+    cmd  = "pytest --snapshot-update"
+    help = "Update syrupy test snapshots."
+
+[tasks.coverage]
+    cmd  = "pytest --cov --cov-report=html --cov-report=term-missing --cov-report=xml"
+    help = "Generate interactive HTML coverage report in htmlcov/."
+
+[tasks.test-lowest]
+    help = "Verify test suite against minimum declared dependency versions (lowest-direct)."
+    sequence = [
+        { cmd = "uv sync --resolution lowest-direct" },
+        { cmd = "pytest --cov --cov-report=term-missing" },
+        { cmd = "uv sync" },
+    ]
+
+[tasks.test-dist]
+    cmd  = "python scripts/verify_wheel.py --run-tests"
+    help = "Build wheel package and run pytest suite against installed distribution in an isolated environment."
+
+[tasks.test-sdist]
+    help = "Build source distribution, extract it, and run tests from the extracted archive."
+    shell = """
+  set -euo pipefail
+  uv build --sdist
+  rm -rf dist/extracted
+  mkdir -p dist/extracted
+  tar -xzf dist/*.tar.gz -C dist/extracted
+  cd dist/extracted/*
+  uv sync --group test
+  uv run poe test
+  uv build --wheel
+  python scripts/verify_wheel.py
+  echo "✅ Source distribution verified successfully!"
+"""
+
+[tasks.verify-wheel]
+    cmd  = "python scripts/verify_wheel.py"
+    help = "Build wheel and verify clean imports in an isolated virtual environment."
+
+[tasks.test-mutation]
+    cmd  = "mutmut run"
+    help = "Run fast mutation testing across package source with mutmut."
+
+[tasks.test-mutation-cosmic]
+    help = "Run distributed mutation testing with cosmic-ray."
+    sequence = [
+        { script = "shutil:rmtree('session.sqlite', ignore_errors=1)" },
+        { cmd = "cosmic-ray init cosmic-ray.toml session.sqlite" },
+        { cmd = "cosmic-ray exec session.sqlite" },
+        { cmd = "cr-report session.sqlite" },
+    ]
+
+
+    # ------------------------------------------------------------------------------
+    # Quality: Formatting, Linting, & Static Typing
+    # ------------------------------------------------------------------------------
+
+[tasks.lint]
+    cmd  = "ruff check --config ruff.toml"
+    help = "Lint Python source code with Ruff."
+
+[tasks.format]
+    cmd  = "ruff format"
+    help = "Format Python code with Ruff."
+
+[tasks.format-check]
+    cmd  = "ruff format --check"
+    help = "Verify Python code formatting with Ruff without modifying files."
+
+[tasks.lint-md]
+    cmd  = "rumdl check"
+    help = "Lint markdown documentation with rumdl."
+
+[tasks.format-md]
+    cmd  = "rumdl fmt"
+    help = "Format markdown and embedded code snippets with rumdl."
+
+[tasks.typos]
+    cmd  = "typos"
+    help = "Check source code and documentation for typos."
+
+[tasks.typos-fix]
+    cmd  = "typos -w"
+    help = "Automatically fix typos across the codebase."
+
+[tasks.type-check]
+    cmd  = "pyrefly check"
+    help = "Strict static type checking with Pyrefly."
+
+[tasks.complexity]
+    cmd  = "complexipy src tests"
+    help = "Verify cognitive complexity limits with complexipy."
+
+
+[tasks.zizmor]
+    cmd  = "zizmor --config .zizmor.yml --pedantic --min-severity informational .github/workflows"
+    help = "Audit GitHub Actions workflows for security vulnerabilities with zizmor."
+
+
+[tasks.audit]
+    cmd  = "uv audit"
+    help = "Audit locked dependencies in uv.lock against security advisories."
+
+[tasks.check-api]
+    cmd  = "griffe check zenith_example --search src"
+    help = "Detect breaking public API changes against the previous git tag with Griffe."
+
+[tasks.fix]
+    default_item_type = "cmd"
+    help              = "Auto-fix linting and formatting issues."
+    ignore_fail       = "return_non_zero"
+    sequence          = [ "ruff check --fix", "ruff format", "rumdl fmt", "typos -w" ]
+
+[tasks.check-skills]
+    cmd  = "python scripts/check_skills.py .agents/skills"
+    help = "Validate structural invariants and frontmatter of agent skills in .agents/skills/."
+
+[tasks.code-quality]
+    help = "Execute the full code quality verification pipeline."
+    ignore_fail = "return_non_zero"
+    sequence = [
+        "lint",
+        "format-check",
+        "lint-md",
+        "typos",
+        "type-check",
+        "complexity",
+
+        "zizmor",
+
+        "dependencies",
+        "check-skills",
+    ]
+
+    # ------------------------------------------------------------------------------
+    # Architecture & Modular Boundaries
+    # ------------------------------------------------------------------------------
+
+[tasks.dependencies]
+    default_item_type = "cmd"
+    help              = "Validate modular architecture boundaries and external dependencies with Tach."
+    ignore_fail       = "return_non_zero"
+    sequence          = [ "tach check", "tach check-external" ]
+
+[tasks.dependency-graph]
+    cmd  = "tach show --mermaid -o docs/dependency_graph.mmd"
+    help = "Export architecture dependency graph in Mermaid format."
+
+    # ------------------------------------------------------------------------------
+    # Project Maintenance & Cleanup
+    # ------------------------------------------------------------------------------
+
+[tasks._clean-dist]
+    script = "shutil:rmtree('dist', ignore_errors=1)"
+
+[tasks._clean-build]
+    script = "shutil:rmtree('build', ignore_errors=1)"
+
+[tasks._clean-site]
+    script = "shutil:rmtree('site', ignore_errors=1)"
+
+[tasks._clean-coverage]
+    script = "shutil:rmtree('htmlcov', ignore_errors=1)"
+
+[tasks._clean-pytest]
+    script = "shutil:rmtree('.pytest_cache', ignore_errors=1)"
+
+[tasks._clean-ruff]
+    script = "shutil:rmtree('.ruff_cache', ignore_errors=1)"
+
+[tasks._clean-temp]
+    script = "shutil:rmtree('.temp', ignore_errors=1)"
+
+[tasks._clean-mutation]
+    script = "shutil:rmtree('.mutmut-cache', ignore_errors=1)"
+
+[tasks._clean-cosmic]
+    script = "shutil:rmtree('session.sqlite', ignore_errors=1)"
+
+[tasks.clean]
+    help = "Remove build artifacts, cache directories, and test coverage outputs."
+    sequence = [
+        "_clean-dist",
+        "_clean-build",
+        "_clean-site",
+        "_clean-coverage",
+        "_clean-pytest",
+        "_clean-ruff",
+        "_clean-temp",
+        "_clean-mutation",
+        "_clean-cosmic",
+    ]
+
+    # ------------------------------------------------------------------------------
+    # Interactive Development & Ergonomics
+    # ------------------------------------------------------------------------------
+
+[tasks.repl]
+    cmd  = 'python -i -c "import zenith_example as pkg; print(f\"✨ Zenith Example {pkg.__version__} loaded as `pkg`\")"'
+    help = "Launch interactive Python REPL with package pre-loaded."
+
+    # ------------------------------------------------------------------------------
+    # Documentation & Publishing
+    # ------------------------------------------------------------------------------
+
+[tasks.docs-serve]
+    cmd  = "zensical serve"
+    help = "Live-preview documentation with Zensical and MathJax."
+
+[tasks.docs-build]
+    cmd  = "zensical build --strict --clean"
+    help = "Build production static documentation into site/."
+
+[tasks.docs-logo]
+    cmd  = "typst compile docs/assets/python-logo.typ docs/assets/python-logo.svg"
+    help = "Compile documentation logotype SVG with Typst."
+
+[tasks.publish-docs]
+    help = "Build and deploy Zensical docs to gh-pages via clean orphan branch."
+    shell = """
+  START_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+
+  cleanup() {
+    echo "Cleaning up deployment branch..."
+    git checkout -f "$START_BRANCH"
+    git branch -D temp-deploy-docs 2>/dev/null || true
+  }
+  trap cleanup EXIT
+
+  zensical build --strict --clean
+
+  git checkout --orphan temp-deploy-docs
+  git rm -rf . --cached --quiet
+  git add -f site
+  git commit -m "Deploy Zensical: $(date)" --no-verify
+  git push origin $(git subtree split --prefix site temp-deploy-docs):gh-pages --force
+
+  echo "Deployment successful! Returned to $START_BRANCH."
+"""
+
+[tasks.publish]
+    help = "Build wheels with uv and publish package and docs."
+    sequence = [
+        "clean",
+        "code-quality",
+        "test",
+        { script = "shutil:rmtree('dist', ignore_errors=1)" },
+        { cmd = "uv build" },
+        "test-dist",
+        { cmd = "uv publish" },
+        "publish-docs",
+    ]
+
+    # ------------------------------------------------------------------------------
+    # AI Coding Assistants & Agent Skills
+    # ------------------------------------------------------------------------------
+
+[tasks.sync-skills]
+    cmd  = "uvx library-skills --all -y"
+    help = "Synchronize agent skills from installed library dependencies via library-skills."
+

@@ -1,0 +1,119 @@
+[project]
+    authors = [
+        { name = "Bartosz Marcin Wróblewski", email = "bartosz.marcin.wroblewski@gmail.com" },
+    ]
+    classifiers = [
+        "Development Status :: 3 - Alpha",
+        "Intended Audience :: Developers",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python :: 3",
+
+
+        "Programming Language :: Python :: 3.13",
+
+
+        "Programming Language :: Python :: 3.14",
+
+        "Programming Language :: Python :: 3.15",
+        "Topic :: Software Development :: Libraries :: Python Modules",
+        "Typing :: Typed",
+    ]
+
+    dependencies = [ "rich>=14.0.0", "typer>=0.16.0" ]
+
+    description = "Demonstration and showcase repository instantiated from the Zenith template."
+
+    license = "MIT"
+    license-files = [ "LICENSE" ]
+
+    name = "zenith-example"
+    readme = "README.md"
+    requires-python = ">=3.13"
+    version = "0.1.0"
+
+    [project.urls]
+        Documentation = "https://bwrob.github.io/zenith-example/"
+        Homepage      = "https://github.com/bwrob/zenith-example"
+        Issues        = "https://github.com/bwrob/zenith-example/issues"
+        Repository    = "https://github.com/bwrob/zenith-example.git"
+
+
+    [project.scripts]
+        zenith-example = "zenith_example.__main__:main"
+
+
+[build-system]
+    build-backend = "uv_build"
+    requires      = [ "uv_build>=0.12.7,<0.13.0" ]
+
+[dependency-groups]
+    dev = [
+        "poethepoet>=0.42.0",
+        { include-group = "test" },
+        { include-group = "lint" },
+        { include-group = "docs" },
+        { include-group = "mutation" },
+    ]
+    docs = [
+        "griffe-warnings-deprecated>=1.1.0",
+        "markdown-exec>=1.12.0",
+        "mkdocstrings[python]>=0.28.0",
+        "typst>=0.13.0",
+        "zensical>=0.0.70",
+    ]
+    lint = [
+        "complexipy>=8.0.0",
+        "pre-commit>=4.5.0",
+        "pyrefly>=1.3.0",
+        "ruff>=0.17.0",
+        "rumdl>=0.2.75",
+        "tach>=0.35.0",
+        "typos>=1.30.0",
+        "zizmor>=1.23.0",
+    ]
+    mutation = [
+        "cosmic-ray>=8.7.0",
+        "mutmut>=3.8.0",
+    ]
+    test = [
+        "hypothesis>=6.125.0",
+        "poethepoet>=0.42.0",
+        "pytest>=9.0.0",
+        "pytest-cov>=7.0.0",
+        "pytest-randomly>=3.16.0",
+        "pytest-sugar>=1.0.0",
+        "pytest-xdist>=3.8.0",
+        "syrupy>=6.1.0",
+    ]
+
+[tool.uv]
+    default-groups = [ "dev", "test", "lint", "docs", "mutation" ]
+    package        = true
+    # Supply-chain protection buffer against zero-day compromised upstream releases.
+    # Uncomment to exclude packages published in the last N days during resolution
+    # while optionally exempting specific trusted packages via exclude-newer-package:
+    # exclude-newer  = "7 days"
+    # exclude-newer-package = { "my-internal-pkg" = false, "trusted-pkg" = "2026-10-08T00:00:00Z" }
+    # Transitive security floor ledger (remediated CVEs via `uv run poe audit`):
+    # constraint-dependencies = [ "urllib3>=2.6.3" ]
+    # build-constraint-dependencies = [ "uv_build>=0.12.7,<0.13.0" ]
+
+[tool.uv.build-backend]
+    source-include = [
+        "tests/**",
+        "poe_tasks.toml",
+        "ruff.toml",
+        "pytest.ini",
+        ".coveragerc",
+        "tach.toml",
+        ".zizmor.yml",
+        "cosmic-ray.toml",
+    ]
+
+[tool.mutmut]
+    paths_to_mutate = "src/"
+    runner          = "pytest"
+    tests_dir       = "tests/"
+
+[tool.poe]
+    include = "poe_tasks.toml"

@@ -1,0 +1,250 @@
+---
+description: >-
+  Authoritative guide for Zensical TOML-based static documentation generator.
+  Use when building, serving, configuring, or writing static documentation and API references.
+  Triggers: zensical, docs, documentation, zensical.toml, mkdocstrings, mathjax.
+name: tool-zensical
+version: 1.0.0
+---
+
+
+# Zensical Static Documentation Generator (`tool-zensical`)
+
+`zensical` is a modern, fast static documentation site generator built in Rust
+and Python by the creators of *Material for MkDocs* and *mkdocstrings*. It
+replaces legacy `mkdocs.yml` configurations with clean, typed `zensical.toml`
+files, instant live reloading, and native support for Mermaid diagrams, MathJax
+math, and `mkdocstrings`.
+
+In Zenith projects, `zensical` manages all public documentation and API
+references.
+
+---
+
+## 1. Core CLI Commands
+
+Serve documentation locally or compile production static sites.
+
+```bash
+uv run zensical serve                  # Start live-reloading dev server
+uv run zensical build                  # Build static site into site/
+uv run zensical build --strict --clean # Production build with strict checks
+```
+
+In Zenith, canonical tasks are wired into Poe:
+
+```bash
+uv run poe docs-serve                  # Runs zensical serve
+uv run poe docs-build                  # Runs zensical build --strict --clean
+```
+
+---
+
+## 2. Configuration & Where It Lives
+
+Zensical is configured via **`zensical.toml`** at the project root.
+For the complete drop-in production configuration, see:
+👉 [templates/zensical.toml](./templates/zensical.toml)
+
+Essential baseline configuration:
+
+```toml
+[project]
+site_name = "My Project"
+site_description = "A modern Python project"
+site_author = "Jane Developer"
+site_url = "https://username.github.io/my-project/"
+repo_name = "username/my-project"
+repo_url = "https://github.com/username/my-project"
+edit_uri = "edit/main/docs/"
+
+# Documentation Navigation Hierarchy
+nav = [
+    { "Get Started" = "index.md" },
+    { "Guide" = "getting-started.md" },
+    { "Reference" = "reference.md" },
+]
+
+# Strict Build-Time Validation
+[project.validation]
+invalid_links = true
+invalid_link_anchors = true
+unresolved_references = true
+unresolved_footnotes = true
+
+# Theme, Markdown Extensions & Plugins
+[project.theme]
+language = "en"
+logo = "assets/python-logo.svg"
+
+[project.plugins.gh-admonitions]
+[project.plugins.markdown-exec]
+[project.plugins.llmstxt]
+[project.plugins.mkdocstrings.handlers.python]
+inventories = ["https://docs.python.org/3/objects.inv"]
+paths = ["src"]
+```
+
+---
+
+## 3. Most Common Configuration Changes During Development
+
+Manage pages, navigation, automated API docs, and interactive diagrams with
+these patterns.
+
+### A. Adding a New Documentation Page
+
+1. Create the markdown file inside `docs/` (e.g., `docs/architecture.md`).
+2. Register the page in `project.nav` in `zensical.toml`:
+
+   ```toml
+   nav = [
+       { "Get Started" = "index.md" },
+       { "Guide" = "getting-started.md" },
+       { "Architecture" = "architecture.md" },
+       { "Reference" = "reference.md" },
+   ]
+   ```
+
+3. For nested sections:
+
+   ```toml
+   nav = [
+       { "Home" = "index.md" },
+       { "Guides" = [
+           { "Installation" = "guides/install.md" },
+           { "Deployment" = "guides/deploy.md" },
+       ] },
+   ]
+   ```
+
+### B. Auto-Documenting Python Code with `mkdocstrings` & `griffe`
+
+In any markdown document (e.g. `docs/reference.md`), use the `:::` block:
+
+```markdown
+# API Reference
+
+::: my_package.core
+    options:
+      show_source: true
+      members:
+        - get_greeting
+```
+
+Zensical automatically reloads docs when source files in `src/` change:
+
+- **Cross-References & Backlink Trees**: With
+  `inventories = ["https://docs.python.org/3/objects.inv"]`,
+  `signature_crossrefs = true`, `relative_crossrefs = true`,
+  `scoped_crossrefs = true`, and `options.backlinks = "tree"`, type
+  annotations and shorthand `[Class][.Class]` / `[method][.method]` links
+  resolve directly to upstream or local docs, and each symbol renders a
+  collapsible tree of pages that reference it.
+- **PEP 695 Type Parameters**: `options.show_signature_type_parameters = true`
+  and `options.type_parameter_headings = true` render Python 3.12+ generic
+  syntax (`def func[T](x: T) -> T`, `class Box[T]`, `type Alias[T] = ...`) directly in
+  signatures and table-of-contents headings, formatted with Ruff at
+  `options.line_length = 88`.
+- **Auto Summary Tables & Class Diagrams**: `options.summary = true` generates
+  module/class summary tables automatically, and
+  `options.show_inheritance_diagram = true` renders inline SVG class hierarchy
+  diagrams.
+- **PEP 702 Deprecation Badges**: `options.extensions = ["griffe_warnings_deprecated"]`
+  inspects `@warnings.deprecated("...")` decorators via AST and renders
+  structured deprecation admonitions automatically.
+- **Floating Link Previews**:
+  `zensical.extensions.preview.targets.include = ["*"]` enables instant
+  floating preview cards when hovering internal documentation links (note: an
+  empty `preview = {}` table is a no-op because `targets.include` defaults to
+  `[]`).
+- **GitHub-Style Alerts (`gh-admonitions`)**: `[project.plugins.gh-admonitions]`
+  natively converts `> [!NOTE]`, `> [!TIP]`, `> [!IMPORTANT]`, `> [!WARNING]`,
+  and `> [!CAUTION]` blockquotes into styled Zensical admonitions.
+
+### C. Detecting Breaking Public API Changes (`griffe check`)
+
+Because `griffe` is installed alongside `mkdocstrings[python]`, use it to
+statically compare the current AST against the latest git tag and detect
+breaking public API changes (removed/renamed parameters, narrowed types,
+changed defaults) before releasing:
+
+```bash
+uv run poe check-api   # Runs: griffe check <package_name> --search src
+```
+
+### D. Using Mermaid Diagrams
+
+Mermaid is built into Zensical natively. Write standard markdown fences:
+
+````markdown
+```mermaid
+flowchart LR
+    A[Client] --> B[API]
+    B --> C[(Database)]
+```
+````
+
+### E. Dynamic Code Execution & Directory Trees with `markdown-exec`
+
+With `[project.plugins.markdown-exec]` enabled, Zensical registers custom
+fences for `python`, `py`, `pycon`, `console`, `sh`, `bash`, and `tree`
+automatically:
+
+````markdown
+```python exec="on" session="quickstart" source="material-block" result="ansi"
+import sys
+
+print(f"Built with Python {sys.version.split()[0]}")
+```
+````
+
+- **Session Persistence**: Blocks sharing `session="name"` reuse variables and
+  imports across a page.
+- **Doctest (`pycon`) & Shell (`console`) Execution**: Execute interactive
+  REPL transcripts (` ```pycon exec="1" `) or shell commands (` ```console `)
+  automatically without writing `exec="on"` when using `pycon`.
+- **Rich Directory Trees (` ```tree `)**: Render styled filesystem trees with
+  Material SVG folder/file icons from plain indented text:
+
+  ````markdown
+  ```tree
+  ./
+      pyproject.toml
+      zensical.toml
+      src/
+          my_package/
+              __init__.py
+  ```
+  ````
+
+### F. Embedding Tested Code Snippets with `pymdownx.snippets`
+
+Embed external source or test files directly into documentation using `--8<--`
+with `pymdownx.snippets.check_paths = true` and
+`pymdownx.snippets.dedent_subsections = true` (which fails the build if a
+referenced file path does not exist and dedents indented blocks):
+
+````markdown
+```python
+--8<-- "examples/quickstart.py"
+```
+````
+
+---
+
+## 4. Best Practices & Troubleshooting
+
+Keep these principles in mind when maintaining documentation:
+
+- **Always build with `--strict`**: Running `uv run poe docs-build`
+  validates all internal links, anchors, and docstring references. Never
+  deploy a build with broken links. (Note: `zensical serve` does not currently
+  support `--strict`; run `zensical build --strict` to verify before committing.)
+- **Automated `llms.txt` & `llms-full.txt` Generation**: Zensical's built-in
+  Rust `[project.plugins.llmstxt]` plugin automatically compiles `site/llms.txt`
+  and `site/llms-full.txt` (including rendered `mkdocstrings` API signatures)
+  during `zensical build`. When adding new pages to `nav` in `zensical.toml`,
+  also add them under `[project.plugins.llmstxt.sections]` and `docs/llms.txt`.
+- **Image Paths**: Keep asset images in `docs/assets/` and reference them
+  using relative paths (`assets/my-image.png`).

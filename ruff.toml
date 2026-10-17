@@ -1,0 +1,55 @@
+exclude = [ ".venv", "site", "dist", "scripts", ".agents" ]
+line-length = 88
+
+[lint]
+    exclude = [ ".venv", "site", "dist", "scripts", ".agents" ]
+    ignore = [
+        "blank-line-before-class",
+        "COM",
+        "incorrect-blank-line-before-class",
+        "missing-copyright-notice",
+        "missing-trailing-comma",
+        "multi-line-summary-second-line",
+        "too-many-branches",
+    ]
+    preview = true
+    select = [ "ALL" ]
+
+    [lint.flake8-bugbear]
+        extend-immutable-calls = [ "typer.Argument", "typer.Option" ]
+
+    [lint.flake8-tidy-imports]
+        ban-relative-imports = "all"
+
+    [lint.flake8-type-checking]
+        exempt-modules = [ "typing", "typing_extensions" ]
+        runtime-evaluated-base-classes = [ "pydantic.BaseModel" ]
+        runtime-evaluated-decorators = [
+            "attrs.define",
+            "attrs.frozen",
+            "attrs.mutable",
+            "dataclasses.dataclass",
+            "pydantic.dataclasses.dataclass",
+            "pydantic.validate_call",
+        ]
+
+    [lint.isort]
+        combine-as-imports = true
+
+
+
+    [lint.per-file-ignores]
+        "src/*/__init__.py" = [ "non-empty-init-module" ]
+        "src/*/cli.py" = [
+            "boolean-default-value-positional-argument",
+            "boolean-positional-value-in-call",
+            "boolean-type-hint-positional-argument",
+            "line-too-long",
+        ]
+        "tests/**/*" = [ "assert", "docstring-missing-returns", "print" ]
+
+    [lint.pyupgrade]
+        keep-runtime-typing = true
+
+[format]
+    docstring-code-format = true

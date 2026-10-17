@@ -1,0 +1,140 @@
+disable = [ "MD052", "MD060", "MD063", "MD078", "MD082", "MD090", "MD093" ]
+enable = [ "ALL" ]
+exclude = [
+    ".git",
+    ".github",
+    ".agents",
+    ".venv",
+    ".ruff_cache",
+    ".rumdl_cache",
+    ".complexipy_cache",
+    ".temp",
+    "site",
+    "dist",
+]
+extend-enable = [ "MD080", "MD083" ]
+flavor = "gfm"
+line-length = 88
+respect-gitignore = true
+
+# --- Code Block Tools (Format & Lint Python & JSON in Markdown) ---
+[code-block-tools]
+    enabled                = true
+    on-error               = "warn"
+    on-missing-tool-binary = "warn"
+
+    [code-block-tools.language-aliases]
+        "bash"     = "shell"
+        "py"       = "python"
+        "python3"  = "python"
+        "{bash}"   = "shell"
+        "{json}"   = "json"
+        "{python}" = "python"
+        "{py}"     = "python"
+
+    [code-block-tools.languages.python]
+        format = [ "ruff:format" ]
+        lint   = [ "ruff:check" ]
+
+    [code-block-tools.languages.json]
+        format = [ "jq" ]
+
+    [code-block-tools.tools."ruff:format"]
+        command = [ "ruff", "format", "--line-length=79", "-" ]
+
+    [code-block-tools.tools."ruff:check"]
+        command = [
+            "ruff",
+            "check",
+            "--output-format=concise",
+            "--ignore=INP001,F821,D,ANN,FBT,E402,B018,S101,TRY,EM,PL,N,ERA,S,EXE,RET,SIM,PTH,F841,B,E501,C4,FURB,PIE,RUF,UP,F401,F403,I,SLF,T201,T203,TC,CPY",
+            "-",
+        ]
+
+# --- Rigid Markdown Rules ---
+[MD001]
+    front-matter-title = true
+
+[MD003]
+    style = "atx"
+
+[MD004]
+    style = "dash"
+
+[MD007]
+    indent = 2
+
+[MD009]
+    strict = true
+
+[MD010]
+    code-blocks = true
+
+[MD012]
+    maximum = 1
+
+[MD013]
+    code-block-line-length = 79
+    code-blocks            = true
+    headings               = false
+    line-length            = 88
+    math-blocks            = false
+    reflow                 = true
+    tables                 = false
+
+[MD022]
+    lines-above = 1
+    lines-below = 1
+
+[MD026]
+    punctuation = ".,;:!"
+
+[MD031]
+    list-items = true
+
+[MD033]
+    allowed-elements = [
+        "a",
+        "audio",
+        "br",
+        "details",
+        "div",
+        "i",
+        "iframe",
+        "img",
+        "kbd",
+        "p",
+        "span",
+        "sub",
+        "summary",
+        "sup",
+        "table",
+        "tbody",
+        "td",
+        "th",
+        "thead",
+        "tr",
+        "video",
+    ]
+
+[MD035]
+    style = "---"
+
+[MD046]
+    style = "fenced"
+
+[MD048]
+    style = "backtick"
+
+[MD049]
+    style = "asterisk"
+
+[MD050]
+    style = "asterisk"
+
+[MD058]
+    minimum-after  = 1
+    minimum-before = 1
+
+[MD059]
+    prohibited-texts = [ "click here", "here", "link", "read more" ]
