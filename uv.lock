@@ -1,5 +1,5 @@
 version = 1
-revision = 3
+revision = 5
 requires-python = ">=3.13"
 resolution-markers = [
     "python_full_version >= '3.14'",
@@ -2139,6 +2139,7 @@ sdist = { url = "https://files.pythonhosted.org/packages/1c/1a/d3b2a2b8f843f5e71
 name = "zenith-example"
 version = "0.1.0"
 source = { editable = "." }
+default-groups = ["dev", "docs", "lint", "mutation", "test"]
 dependencies = [
     { name = "rich" },
     { name = "typer" },

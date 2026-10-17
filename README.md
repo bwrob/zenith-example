@@ -45,6 +45,10 @@ stack designed for reliability, speed, and clean architecture:
 
 ## Quick Start
 
+> [!TIP]
+> Run `uv run poe --help` to inspect all available workflow tasks and automation
+> scripts.
+
 Get started with **Zenith Example** in moments.
 
 ### 1. Installation
