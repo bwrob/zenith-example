@@ -73,16 +73,21 @@ uv run poe test
 uv run poe code-quality
 ```
 
-???+ tip "Hermetic Task Execution"
-Always invoke tasks using `uv run poe <task>`. Tasks inherit project environment flags,
-strict encoding checks (`PYTHONUTF8=1`), and hermetic virtual environments.
+> [!TIP]
+> **Hermetic Task Execution**: Always invoke tasks using `uv run poe <task>`. Tasks
+> inherit project environment flags, strict encoding checks (`PYTHONUTF8=1`), and
+> hermetic virtual environments.
 
-??? example "Advanced Testing & Marker Options"
+<details>
+<summary>Advanced Testing &amp; Marker Options</summary>
+
 Free arguments can be forwarded directly through Poe to underlying tools using `--`:
 
 ```bash
 uv run poe test -- -k "test_greeting" -v
 ```
+
+</details>
 
 ### Verification Checklist
 
@@ -102,8 +107,8 @@ uv run poe test -- -k "test_greeting" -v
 Code snippets can be embedded directly from verified tests or source files using
 `--8<--`:
 
-```python
---8 < --"tests/test_core.py:10:14"
+```markdown
+--8<-- "tests/test_core.py:10:14"
 ```
 
 ## Architecture & Diagrams

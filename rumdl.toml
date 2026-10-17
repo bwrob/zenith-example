@@ -1,4 +1,4 @@
-disable = [ "MD052", "MD060", "MD063", "MD078", "MD082", "MD090", "MD093" ]
+disable = [ "MD052", "MD060", "MD063", "MD078", "MD082", "MD085", "MD090", "MD093" ]
 enable = [ "ALL" ]
 exclude = [
     ".git",
