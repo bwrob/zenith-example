@@ -10,3 +10,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Initial project scaffolding created with [Zenith](https://github.com/bwrob/zenith).
+
+[unreleased]: https://github.com/bwrob/zenith-example/compare/v0.1.0...HEAD

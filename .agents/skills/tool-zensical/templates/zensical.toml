@@ -9,9 +9,9 @@ edit_uri = "edit/main/docs/"
 
 # Documentation Navigation Hierarchy
 nav = [
-    { "Get Started" = "index.md" },
-    { "Guide" = "getting-started.md" },
-    { "Reference" = "reference.md" },
+  { "Overview" = "index.md" },
+  { "Getting Started" = "getting-started.md" },
+  { "Reference" = "reference.md" },
 ]
 
 # Strict Build-Time Validation
@@ -27,8 +27,8 @@ shadowed_footnotes = true
 
 # Client-Side JavaScript (e.g. MathJax)
 extra_javascript = [
-    "javascripts/mathjax.js",
-    "https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js",
+  "javascripts/mathjax.js",
+  "https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js",
 ]
 
 # Theme & Palette Settings
@@ -36,11 +36,11 @@ extra_javascript = [
 language = "en"
 logo = "assets/python-logo.svg"
 features = [
-    "navigation.instant",
-    "navigation.top",
-    "content.code.copy",
-    "content.code.select",
-    "search.highlight",
+  "navigation.instant",
+  "navigation.top",
+  "content.code.copy",
+  "content.code.select",
+  "search.highlight",
 ]
 
 [[project.theme.palette]]
@@ -68,8 +68,8 @@ pymdownx.highlight.anchor_linenums = true
 pymdownx.snippets.check_paths = true
 pymdownx.snippets.dedent_subsections = true
 pymdownx.superfences.custom_fences = [
-    { name = "mermaid", class = "mermaid", format = "pymdownx.superfences.fence_code_format" },
-    { name = "python", class = "python", validator = "markdown_exec.validator", format = "markdown_exec.formatter" },
+  { name = "mermaid", class = "mermaid", format = "pymdownx.superfences.fence_code_format" },
+  { name = "python", class = "python", validator = "markdown_exec.validator", format = "markdown_exec.formatter" },
 ]
 zensical.extensions.preview.targets.include = ["*"]
 
@@ -83,9 +83,9 @@ full_output = "llms-full.txt"
 
 [project.plugins.llmstxt.sections]
 "Documentation" = [
-    "index.md: Overview and quickstart",
-    "getting-started.md: Installation and development setup",
-    "reference.md: Public API reference",
+  "index.md: Overview and quickstart",
+  "getting-started.md: Installation and development setup",
+  "reference.md: Public API reference",
 ]
 
 # mkdocstrings Plugin

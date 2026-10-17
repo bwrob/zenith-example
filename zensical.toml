@@ -8,8 +8,8 @@
     site_url         = "https://bwrob.github.io/zenith-example/"
 
     nav = [
-        { "Get Started" = "index.md" },
-        { "Guide" = "getting-started.md" },
+        { "Overview" = "index.md" },
+        { "Getting Started" = "getting-started.md" },
         { "Reference" = "reference.md" },
         { "Architecture (ADRs)" = [
             { "Overview" = "adr/index.md" },

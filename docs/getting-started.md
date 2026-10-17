@@ -79,9 +79,10 @@ strict encoding checks (`PYTHONUTF8=1`), and hermetic virtual environments.
 
 ??? example "Advanced Testing & Marker Options"
 Free arguments can be forwarded directly through Poe to underlying tools using `--`:
-    ```bash
-    uv run poe test -- -k "test_greeting" -v
-    ```
+
+```bash
+uv run poe test -- -k "test_greeting" -v
+```
 
 ### Verification Checklist
 
@@ -101,8 +102,8 @@ Free arguments can be forwarded directly through Poe to underlying tools using `
 Code snippets can be embedded directly from verified tests or source files using
 `--8<--`:
 
-```markdown
---8<-- "tests/test_core.py:10:14"
+```python
+--8 < --"tests/test_core.py:10:14"
 ```
 
 ## Architecture & Diagrams

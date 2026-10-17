@@ -60,8 +60,8 @@ edit_uri = "edit/main/docs/"
 
 # Documentation Navigation Hierarchy
 nav = [
-    { "Get Started" = "index.md" },
-    { "Guide" = "getting-started.md" },
+    { "Overview" = "index.md" },
+    { "Getting Started" = "getting-started.md" },
     { "Reference" = "reference.md" },
 ]
 
@@ -99,8 +99,8 @@ these patterns.
 
    ```toml
    nav = [
-       { "Get Started" = "index.md" },
-       { "Guide" = "getting-started.md" },
+       { "Overview" = "index.md" },
+       { "Getting Started" = "getting-started.md" },
        { "Architecture" = "architecture.md" },
        { "Reference" = "reference.md" },
    ]

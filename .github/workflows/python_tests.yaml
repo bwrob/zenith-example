@@ -111,7 +111,7 @@ jobs:
         run: echo "UV_EXCLUDE_NEWER=$(python3 -c 'import datetime; print((datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(hours=1)).strftime("%Y-%m-%dT%H:%M:%SZ"))')" >> "$GITHUB_ENV"
 
       - name: 🛠️ Install project dependencies
-        run: uv sync --group test
+        run: uv sync --frozen --group test
 
       - name: 🧪 Run pytest suite
         run: uv run poe test
@@ -127,8 +127,6 @@ jobs:
       - name: 🧹 Verify clean working tree after tests
         shell: bash
         run: |
-          rm -f codecov codecov.SHA256SUM codecov.SHA256SUM.sig
-          git checkout -- uv.lock 2>/dev/null || true
           if [ -n "$(git status --porcelain)" ]; then
             echo "::error::Tests left untracked or modified files in the working tree:"
             git status --short
