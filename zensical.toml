@@ -2,7 +2,7 @@
     edit_uri         = "edit/main/docs/"
     repo_name        = "bwrob/zenith-example"
     repo_url         = "https://github.com/bwrob/zenith-example"
-    site_author      = "Bartosz Marcin Wróblewski"
+    site_author      = "bwrob"
     site_description = "Demonstration and showcase repository instantiated from the Zenith template."
     site_name        = "Zenith Example"
     site_url         = "https://bwrob.github.io/zenith-example/"
@@ -12,22 +12,11 @@
         { "Getting Started" = "getting-started.md" },
         { "Reference" = "reference.md" },
         { "Architecture (ADRs)" = [
-            { "Overview" = "adr/index.md" },
+            "adr/index.md",
             { "ADR-0001: Record Architecture Decisions" = "adr/0001-record-architecture-decisions.md" },
         ] },
         { "Changelog" = "changelog.md" },
     ]
-
-    [project.validation]
-        invalid_links         = true
-        invalid_link_anchors  = true
-        shadowed_definitions  = true
-        shadowed_footnotes    = true
-        unresolved_footnotes  = true
-        unresolved_references = true
-        unused_definitions    = true
-        unused_footnotes      = true
-
 
 
     extra_css = [
@@ -42,6 +31,16 @@
         "javascripts/termynal.js",
 
     ]
+
+    [project.validation]
+        invalid_links         = true
+        invalid_link_anchors  = true
+        shadowed_definitions  = true
+        shadowed_footnotes    = true
+        unresolved_footnotes  = true
+        unresolved_references = true
+        unused_definitions    = true
+        unused_footnotes      = true
 
     [project.theme]
         features = [
@@ -60,7 +59,6 @@
             "navigation.instant.prefetch",
             "navigation.instant.preview",
             "navigation.path",
-            "navigation.sections",
             "navigation.top",
             "navigation.tracking",
             "search.highlight",
@@ -116,6 +114,9 @@
         pymdownx.snippets.dedent_subsections = true
         pymdownx.superfences.custom_fences = [
             { name = "mermaid", class = "mermaid", format = "pymdownx.superfences.fence_code_format" },
+            { name = "tree", class = "tree", validator = "markdown_exec.validator", format = "markdown_exec.formatter" },
+            { name = "markdown", class = "markdown", validator = "markdown_exec.validator", format = "markdown_exec.formatter" },
+            { name = "md", class = "md", validator = "markdown_exec.validator", format = "markdown_exec.formatter" },
             { name = "python", class = "python", validator = "markdown_exec.validator", format = "markdown_exec.formatter" },
             { name = "bash", class = "bash", validator = "markdown_exec.validator", format = "markdown_exec.formatter" },
             { name = "sh", class = "sh", validator = "markdown_exec.validator", format = "markdown_exec.formatter" },

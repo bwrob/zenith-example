@@ -1,6 +1,6 @@
 [project]
     authors = [
-        { name = "Bartosz Marcin Wróblewski", email = "bartosz.marcin.wroblewski@gmail.com" },
+        { name = "bwrob", email = "contact@bwrob.dev" },
     ]
     classifiers = [
         "Development Status :: 3 - Alpha",

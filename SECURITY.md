@@ -29,10 +29,9 @@ you have discovered a vulnerability, please report it responsibly:
    - Provide a detailed summary, proof of concept (PoC), and impact assessment.
 
 2. **Direct Security Contact**:
-   - If GitHub Private Reporting is unavailable, send an email to
-     **Bartosz Marcin Wróblewski** at
-     [bartosz.marcin.wroblewski@gmail.com](mailto:bartosz.marcin.wroblewski@gmail.com)
-     with the subject line `[SECURITY] Zenith Example Vulnerability Report`.
+   - If GitHub Private Reporting is unavailable, send an email to **bwrob** at
+     [contact@bwrob.dev](mailto:contact@bwrob.dev) with the subject line
+     `[SECURITY] Zenith Example Vulnerability Report`.
    - Please include reproduction steps, affected environment/versions, and any proposed
      mitigation.
 

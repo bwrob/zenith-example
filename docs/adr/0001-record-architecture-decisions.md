@@ -2,7 +2,7 @@
 
 - **Status**: Accepted
 - **Date**: 2026-01-01
-- **Deciders**: Bartosz Marcin Wróblewski
+- **Deciders**: bwrob
 - **Consulted**: Maintainers
 - **Informed**: Contributors and Developers
 
