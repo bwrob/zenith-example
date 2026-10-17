@@ -44,7 +44,7 @@
 
 [build-system]
     build-backend = "uv_build"
-    requires      = [ "uv_build>=0.12.7,<0.13.0" ]
+    requires      = [ "uv_build>=0.12.7,<0.14.0" ]
 
 [dependency-groups]
     dev = [
@@ -96,7 +96,7 @@
     # exclude-newer-package = { "my-internal-pkg" = false, "trusted-pkg" = "2026-10-08T00:00:00Z" }
     # Transitive security floor ledger (remediated CVEs via `uv run poe audit`):
     # constraint-dependencies = [ "urllib3>=2.6.3" ]
-    # build-constraint-dependencies = [ "uv_build>=0.12.7,<0.13.0" ]
+    # build-constraint-dependencies = [ "uv_build>=0.12.7,<0.14.0" ]
 
 [tool.uv.build-backend]
     source-include = [
