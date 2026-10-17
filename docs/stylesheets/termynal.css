@@ -4,128 +4,130 @@
  */
 
 :root {
-    --termynal-bg: #1e222b;
-    --termynal-text: #eaeaea;
-    --termynal-subtle: #7d8590;
-    --termynal-accent: #2dd4bf;
-    --termynal-comment: #5eead4;
+  --termynal-bg: #1e222b;
+  --termynal-text: #eaeaea;
+  --termynal-subtle: #7d8590;
+  --termynal-accent: #2dd4bf;
+  --termynal-comment: #5eead4;
 }
 
 [data-termynal] {
-    width: 100%;
-    max-width: 100%;
-    background: var(--termynal-bg);
-    color: var(--termynal-text);
-    font-size: 0.85rem;
-    font-family: var(--md-code-font-family, monospace);
-    border-radius: 6px;
-    padding: 50px 24px 24px;
-    position: relative;
-    box-sizing: border-box;
-    line-height: 1.5;
-    margin: 1.2em 0;
-    overflow-x: auto;
-    white-space: pre-wrap;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  max-width: 100%;
+  background: var(--termynal-bg);
+  color: var(--termynal-text);
+  font-size: 0.85rem;
+  font-family: var(--md-code-font-family, monospace);
+  border-radius: 6px;
+  padding: 50px 24px 24px;
+  position: relative;
+  box-sizing: border-box;
+  line-height: 1.5;
+  margin: 1.2em 0;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
 }
 
 [data-termynal]:before {
-    content: '';
-    position: absolute;
-    top: 16px;
-    left: 16px;
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    /* macOS window controls: red, yellow, green */
-    background: #ff5f56;
-    box-shadow: 20px 0 0 #ffbd2e, 40px 0 0 #27c93f;
+  content: "";
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  /* macOS window controls: red, yellow, green */
+  background: #ff5f56;
+  box-shadow:
+    20px 0 0 #ffbd2e,
+    40px 0 0 #27c93f;
 }
 
 [data-termynal]:after {
-    content: 'terminal';
-    position: absolute;
-    color: var(--termynal-subtle);
-    top: 14px;
-    left: 0;
-    width: 100%;
-    text-align: center;
-    font-size: 0.75rem;
-    font-family: var(--md-text-font-family, sans-serif);
-    font-weight: 500;
-    opacity: 0.7;
-    pointer-events: none;
+  content: "terminal";
+  position: absolute;
+  color: var(--termynal-subtle);
+  top: 14px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 0.75rem;
+  font-family: var(--md-text-font-family, sans-serif);
+  font-weight: 500;
+  opacity: 0.7;
+  pointer-events: none;
 }
 
 button[data-terminal-control] {
-    cursor: pointer;
-    text-align: right;
-    display: block;
-    width: 100%;
-    color: var(--termynal-subtle);
-    border: 0;
-    background: transparent;
-    font-family: inherit;
-    font-size: 0.75rem;
-    padding: 4px 0;
-    transition: color 0.15s ease;
+  cursor: pointer;
+  text-align: right;
+  display: block;
+  width: 100%;
+  color: var(--termynal-subtle);
+  border: 0;
+  background: transparent;
+  font-family: inherit;
+  font-size: 0.75rem;
+  padding: 4px 0;
+  transition: color 0.15s ease;
 }
 
 button[data-terminal-control]:hover {
-    color: var(--termynal-accent);
+  color: var(--termynal-accent);
 }
 
 [data-ty] {
-    display: block;
-    line-height: 1.6;
+  display: block;
+  line-height: 1.6;
 }
 
 [data-ty]:before {
-    content: '';
-    display: inline-block;
-    vertical-align: middle;
+  content: "";
+  display: inline-block;
+  vertical-align: middle;
 }
 
 [data-ty="input"]:before,
 [data-ty-prompt]:before {
-    margin-right: 0.75em;
-    color: var(--termynal-accent);
-    font-weight: bold;
+  margin-right: 0.75em;
+  color: var(--termynal-accent);
+  font-weight: bold;
 }
 
 [data-ty="input"]:before {
-    content: '$';
+  content: "$";
 }
 
 [data-ty][data-ty-prompt]:before {
-    content: attr(data-ty-prompt);
+  content: attr(data-ty-prompt);
 }
 
 [data-ty-cursor]:after {
-    content: attr(data-ty-cursor);
-    font-family: monospace;
-    margin-left: 0.25em;
-    animation: termynal-blink 1s infinite;
+  content: attr(data-ty-cursor);
+  font-family: monospace;
+  margin-left: 0.25em;
+  animation: termynal-blink 1s infinite;
 }
 
 .termynal-comment {
-    color: var(--termynal-comment);
-    font-style: italic;
-    display: block;
-    opacity: 0.85;
+  color: var(--termynal-comment);
+  font-style: italic;
+  display: block;
+  opacity: 0.85;
 }
 
 .termy [data-termynal] {
-    white-space: pre-wrap;
+  white-space: pre-wrap;
 }
 
 .termy .linenos {
-    display: none;
+  display: none;
 }
 
 @keyframes termynal-blink {
-    50% {
-        opacity: 0;
-    }
+  50% {
+    opacity: 0;
+  }
 }

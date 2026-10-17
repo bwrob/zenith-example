@@ -38,7 +38,6 @@ jobs:
         shell: bash
         run: echo "UV_EXCLUDE_NEWER=$(python3 -c 'import datetime; print((datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(hours=1)).strftime("%Y-%m-%dT%H:%M:%SZ"))')" >> "$GITHUB_ENV"
 
-
       - name: 🛠️ Install project dependencies
         run: uv sync
 

@@ -18,9 +18,13 @@
         { "Changelog" = "changelog.md" },
     ]
 
+    extra_css = [
+        "stylesheets/palette.css",
+        "stylesheets/custom.css",
 
-    extra_css = [ "stylesheets/termynal.css" ]
+        "stylesheets/termynal.css",
 
+    ]
 
     extra_javascript = [
         "javascripts/mathjax.js",

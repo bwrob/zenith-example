@@ -65,6 +65,11 @@ nav = [
     { "Reference" = "reference.md" },
 ]
 
+extra_css = [
+    "stylesheets/palette.css",
+    "stylesheets/custom.css",
+]
+
 # Strict Build-Time Validation
 [project.validation]
 invalid_links = true
@@ -230,6 +235,22 @@ referenced file path does not exist and dedents indented blocks):
 --8<-- "examples/quickstart.py"
 ```
 ````
+
+### G. Custom Color Palette & Theming (`palette.css` & `custom.css`)
+
+Zenith styles Zensical documentation with a modular two-file CSS architecture
+located in `docs/stylesheets/`:
+
+- **`palette.css`**: Defines global named color tokens on `:root` organized
+  strictly by hue and lightness (`--color-blue-*`, `--color-amber-*`,
+  `--color-indigo-*`, `--color-lavender-*`, `--color-slate-*`) based on the
+  Catppuccin palette (Latte for light, Mocha for dark) harmonized with the
+  Typst logo colors (`#387eb8` steel sapphire blue and `#ffc331` amber gold).
+- **`custom.css`**: Maps these hue-based design tokens to Zensical's
+  `--md-primary-*`, `--md-accent-*`, and refined `--md-default-*`
+  foreground/background variables for `[data-md-color-scheme="default"]` and
+  `[data-md-color-scheme="slate"]`, shifting the dark hue (`--md-hue: 240deg;`)
+  away from harsh grayscale into rich midnight indigo.
 
 ---
 
