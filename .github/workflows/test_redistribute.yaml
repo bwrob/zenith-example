@@ -60,4 +60,4 @@ jobs:
         run: |
           cd dist/extracted/*
           uv build --wheel
-          python scripts/verify_wheel.py --run-tests
+          python "$GITHUB_WORKSPACE/scripts/verify_wheel.py" --run-tests

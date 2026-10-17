@@ -41,6 +41,7 @@
     help = "Build source distribution, extract it, and run tests from the extracted archive."
     shell = """
   set -euo pipefail
+  ROOT_DIR="$(pwd)"
   uv build --sdist
   rm -rf dist/extracted
   mkdir -p dist/extracted
@@ -49,7 +50,7 @@
   uv sync --group test
   uv run poe test
   uv build --wheel
-  python scripts/verify_wheel.py
+  python "$ROOT_DIR/scripts/verify_wheel.py"
   echo "✅ Source distribution verified successfully!"
 """
 
