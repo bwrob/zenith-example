@@ -19,24 +19,38 @@ flowchart LR
 
 <div class="termy">
 
-```console
-$ uv run zenith-example greet "World"
+```python exec="on"
+import os
+import subprocess
 
-✨ Hello, World!
+env = {**os.environ, "COLUMNS": "80", "NO_COLOR": "1"}
+res_greet = subprocess.run(
+    ["uv", "run", "zenith-example", "greet", "World"],
+    capture_output=True,
+    text=True,
+    env=env,
+    check=True,
+)
+res_help = subprocess.run(
+    ["uv", "run", "zenith-example", "--help"],
+    capture_output=True,
+    text=True,
+    env=env,
+    check=True,
+)
+greet_out = "\n".join(line.rstrip() for line in res_greet.stdout.splitlines())
+help_out = "\n".join(line.rstrip() for line in res_help.stdout.splitlines())
 
-// Inspect CLI options and help
-$ uv run zenith-example --help
-
-<b>Usage: </b><b>zenith-example [OPTIONS] COMMAND [ARGS]...</b>
-
-╭─ Options ─────────────────────────────────────────╮
-│ --version  -v        Show version and exit.       │
-│ --help               Show this message and exit.  │
-╰───────────────────────────────────────────────────╯
-╭─ Commands ────────────────────────────────────────╮
-│ greet                Display a personalized       │
-│                      greeting.                    │
-╰───────────────────────────────────────────────────╯
+print("```console")
+print('$ uv run zenith-example greet "World"')
+print()
+print(greet_out)
+print()
+print("// Inspect CLI options and help")
+print("$ uv run zenith-example --help")
+print()
+print(help_out)
+print("```")
 ```
 
 </div>
