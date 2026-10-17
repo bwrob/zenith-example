@@ -127,6 +127,8 @@ jobs:
       - name: 🧹 Verify clean working tree after tests
         shell: bash
         run: |
+          rm -f codecov codecov.SHA256SUM codecov.SHA256SUM.sig
+          git checkout -- uv.lock 2>/dev/null || true
           if [ -n "$(git status --porcelain)" ]; then
             echo "::error::Tests left untracked or modified files in the working tree:"
             git status --short
