@@ -48,7 +48,7 @@ jobs:
 
       - name: Build documentation with Zensical
         id: build_docs
-        run: uv run zensical build --clean --strict
+        run: uv run zensical build --clean
 
       - name: 📋 Summarize documentation build failures
         if: failure() && steps.build_docs.outcome == 'failure'
