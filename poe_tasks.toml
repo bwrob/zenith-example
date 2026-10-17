@@ -2,8 +2,8 @@
     type = "uv"
 
 [env]
-    PYTHONWARNDEFAULTENCODING = "1"
     PYTHONUTF8                = "1"
+    PYTHONWARNDEFAULTENCODING = "1"
 
     # ------------------------------------------------------------------------------
     # Testing & Code Coverage
@@ -88,6 +88,14 @@
     cmd  = "ruff format --check"
     help = "Verify Python code formatting with Ruff without modifying files."
 
+[tasks.format-toml]
+    cmd  = "taplo format"
+    help = "Format TOML configuration files with Taplo."
+
+[tasks.format-check-toml]
+    cmd  = "taplo format --check"
+    help = "Verify TOML configuration file formatting with Taplo without modifying files."
+
 [tasks.lint-md]
     cmd  = "rumdl check"
     help = "Lint markdown documentation with rumdl."
@@ -128,9 +136,15 @@
 
 [tasks.fix]
     default_item_type = "cmd"
-    help              = "Auto-fix linting and formatting issues."
-    ignore_fail       = "return_non_zero"
-    sequence          = [ "ruff check --fix", "ruff format", "rumdl fmt", "typos -w" ]
+    help = "Auto-fix linting and formatting issues."
+    ignore_fail = "return_non_zero"
+    sequence = [
+        "ruff check --fix",
+        "ruff format",
+        "taplo format",
+        "rumdl fmt",
+        "typos -w",
+    ]
 
 [tasks.check-skills]
     cmd  = "python scripts/check_skills.py .agents/skills"
@@ -142,6 +156,7 @@
     sequence = [
         "lint",
         "format-check",
+        "format-check-toml",
         "lint-md",
         "typos",
         "type-check",
@@ -279,4 +294,3 @@
 [tasks.sync-skills]
     cmd  = "uvx library-skills --all -y"
     help = "Synchronize agent skills from installed library dependencies via library-skills."
-

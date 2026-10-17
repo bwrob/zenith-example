@@ -1,7 +1,5 @@
 [project]
-    authors = [
-        { name = "bwrob", email = "contact@bwrob.dev" },
-    ]
+    authors = [ { name = "bwrob", email = "contact@bwrob.dev" } ]
     classifiers = [
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
@@ -23,13 +21,13 @@
 
     description = "Demonstration and showcase repository instantiated from the Zenith template."
 
-    license = "MIT"
+    license       = "MIT"
     license-files = [ "LICENSE" ]
 
-    name = "zenith-example"
-    readme = "README.md"
+    name            = "zenith-example"
+    readme          = "README.md"
     requires-python = ">=3.13"
-    version = "0.1.0"
+    version         = "0.1.0"
 
     [project.urls]
         Documentation = "https://bwrob.github.io/zenith-example/"
@@ -68,13 +66,11 @@
         "ruff>=0.17.0",
         "rumdl>=0.2.75",
         "tach>=0.35.0",
+        "taplo>=0.9.3",
         "typos>=1.30.0",
         "zizmor>=1.23.0",
     ]
-    mutation = [
-        "cosmic-ray>=8.7.0",
-        "mutmut>=3.8.0",
-    ]
+    mutation = [ "cosmic-ray>=8.7.0", "mutmut>=3.8.0" ]
     test = [
         "hypothesis>=6.125.0",
         "poethepoet>=0.42.0",
@@ -98,17 +94,17 @@
     # constraint-dependencies = [ "urllib3>=2.6.3" ]
     # build-constraint-dependencies = [ "uv_build>=0.12.7,<0.13.0" ]
 
-[tool.uv.build-backend]
-    source-include = [
-        "tests/**",
-        "poe_tasks.toml",
-        "ruff.toml",
-        "pytest.ini",
-        ".coveragerc",
-        "tach.toml",
-        ".zizmor.yml",
-        "cosmic-ray.toml",
-    ]
+    [tool.uv.build-backend]
+        source-include = [
+            "tests/**",
+            "poe_tasks.toml",
+            "ruff.toml",
+            "pytest.ini",
+            ".coveragerc",
+            "tach.toml",
+            ".zizmor.yml",
+            "cosmic-ray.toml",
+        ]
 
 [tool.mutmut]
     paths_to_mutate = "src/"

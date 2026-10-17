@@ -166,6 +166,8 @@ Inline equations like $E = mc^2$ and $\Omega(n)$ are supported out of the box.
 | **Lint** | `uv run poe lint` | Checks code against all Ruff rules |
 | **Format** | `uv run poe format` | Formats code with Ruff |
 | **Format Check** | `uv run poe format-check` | Verifies code format with Ruff without modifying files |
+| **Format TOML** | `uv run poe format-toml` | Formats TOML configuration files with Taplo |
+| **Format Check TOML** | `uv run poe format-check-toml` | Verifies TOML format with Taplo without modifying files |
 | **Markdown** | `uv run poe lint-md` | Lints markdown files with rumdl |
 | **Typos** | `uv run poe typos` | Checks source code and documentation for typos |
 | **Typos Fix** | `uv run poe typos-fix` | Automatically fixes typos across the codebase |
@@ -200,7 +202,7 @@ Inline equations like $E = mc^2$ and $\Omega(n)$ are supported out of the box.
 | `CONTRIBUTING.md` | Contribution guidelines, AI policy, and workflow instructions |
 | `CODE_OF_CONDUCT.md` | Contributor Covenant v2.1 standards |
 | `docs/adr/` | Architecture Decision Records (ADRs) |
-| `.coveragerc` | Coverage thresholds (80%+ target) and exclusions |
+| `.coveragerc` | Mandatory 100% test coverage target and exclusions |
 | `pytest.ini` | Test paths and verbose output options |
 
 ## License

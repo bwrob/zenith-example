@@ -1,19 +1,11 @@
 [default]
-extend-ignore-re = [
-    "(?Rm)^.*(#|//)\\s*(spellchecker:disable-line|codespell:ignore)\\s*$",
-]
+    extend-ignore-re = [
+        "(?Rm)^.*(#|//)\\s*(spellchecker:disable-line|codespell:ignore)\\s*$",
+    ]
 
-[default.extend-words]
-CPY  = "CPY"
-Ines = "Ines"
+    [default.extend-words]
+        CPY  = "CPY"
+        Ines = "Ines"
 
 [files]
-extend-exclude = [
-    "*.ambr",
-    "*.min.js",
-    "*.svg",
-    "build",
-    "dist",
-    "site",
-]
-
+    extend-exclude = [ "*.ambr", "*.min.js", "*.svg", "build", "dist", "site" ]

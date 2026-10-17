@@ -1,4 +1,4 @@
-exclude = [ ".venv", "site", "dist", "scripts", ".agents" ]
+exclude     = [ ".venv", "site", "dist", "scripts", ".agents" ]
 line-length = 88
 
 [lint]
@@ -37,7 +37,6 @@ line-length = 88
         combine-as-imports = true
 
 
-
     [lint.per-file-ignores]
         "src/*/__init__.py" = [ "non-empty-init-module" ]
         "src/*/cli.py" = [
@@ -46,7 +45,13 @@ line-length = 88
             "boolean-type-hint-positional-argument",
             "line-too-long",
         ]
-        "tests/**/*" = [ "assert", "docstring-missing-returns", "print" ]
+        "tests/**/*" = [
+            "import-private-name",
+            "private-member-access",
+            "assert",
+            "docstring-missing-returns",
+            "print",
+        ]
 
     [lint.pyupgrade]
         keep-runtime-typing = true
