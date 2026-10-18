@@ -1,61 +1,59 @@
 ---
 description: >
-  Performs an authoritative pre-flight code review against Zenith engineering,
+  Performs a pre-flight code review against Zenith engineering,
   architecture, and AI policy standards before submitting changes or opening a PR.
   Use when asked to review code, conduct pre-PR audits, check compliance with
-  AI_POLICY.md, verify architectural boundaries, or check typing precision.
+  AI_POLICY.md, check architectural boundaries, or check typing precision.
 name: code-review
 version: 1.0.0
 ---
 
 # Pre-Flight Code Review (`code-review`)
 
-This workflow skill defines the comprehensive code review protocol for Zenith
-Python repositories. It establishes the mandatory quality gates that all code
-changes, whether authored by humans or AI coding assistants, must satisfy prior
-to merging.
+This skill defines the code review protocol for Zenith Python repositories.
+It establishes the quality gates that all code changes must satisfy before merge.
 
 ---
 
 ## 1. Read-Only & Grounded Review Contract
 
 1. **Strict Read-Only Contract**: When asked to review a working tree or pull request
-   diff, **report findings and stop**. Never edit any file during a review turn, and do
+   diff, **report findings and stop**. Never edit any file during a review turn. Do
    not mix unrequested fixes with review output. Apply fixes only after the user
    explicitly asks you to fix specific items.
 2. **Bias Ordering (Diff Before Context)**:
    Inspect `git status` and `git diff` **before** reading surrounding files or PR
-   descriptions so your review stays anchored to the actual code change rather than the
+   descriptions. This anchors your review to the actual code change rather than the
    author's stated intent.
 3. **Risk-Tiered Review Depth**:
    Allocate review scrutiny proportionally to the risk surface of the diff:
-   - **Low risk** (docs, comments, isolated test additions): Quick pass for accuracy and
+   - **Low risk** (docs, comments, isolated test additions): Check for accuracy and
      hollow assertions.
-   - **Medium risk** (standard module logic, internal refactors): Full 6-Point Matrix
-     verification.
+   - **Medium risk** (standard module logic, internal refactors): Complete full 6-Point Matrix
+     check.
    - **High risk** (public API signatures, concurrency/async state, serialization,
-     security/subprocess boundaries, dependency changes): Deep adversarial trace of failure
-     modes, edge-case inputs, and backward compatibility.
+     security/subprocess boundaries, dependency changes): Trace failure modes,
+     edge-case inputs, and backward compatibility.
 4. **Ground Every Finding & Suppress False Positives**:
    Before reporting a finding, resolve symbols through base classes and protocols.
    - For a **correctness finding**, name the concrete input or state that triggers the
      failure.
    - For an **architectural, typing, or style finding**, quote the exact rule or
      convention it violates.
-   - **Causal Root-Cause Attribution**: Never dismiss a failing test or lint gate as
-     "unrelated to this change" without proving it fails identically on the base commit
-     and identifying the actual cause.
-   - **False-Positive Suppression Filter**: Omit speculative nitpicks, hypothetical race
-     conditions without a concrete trigger path, issues already enforced by automated CI
-     gates (unless currently failing), and stylistic preferences not codified in
-     `python-style-guide`. If a finding cannot be grounded in a failing input or an
-     explicit rule, leave it out.
+   - **Causal Root-Cause Attribution**:
+     Never dismiss a failing test or lint gate as unrelated without proof.
+     Check that it fails identically on the base commit and name the cause.
+   - **False-Positive Suppression Filter**:
+     Omit speculative nitpicks and hypothetical race conditions without a concrete trigger path.
+     Skip issues enforced by automated CI gates unless currently failing.
+     Omit stylistic preferences not codified in `python-style-guide`.
+     If you cannot ground a finding in a failing input or an explicit rule, leave it out.
 
 ---
 
 ## 2. The 6-Point Review Matrix
 
-Review candidate changes systematically across the following six dimensions:
+Review changes across six dimensions:
 
 ### 1. AI Governance & Accountability (`AI_POLICY.md`)
 
@@ -99,9 +97,9 @@ Review candidate changes systematically across the following six dimensions:
 
 - [ ] **One Test File Per Unit**: Are new tests placed in the canonical
   `tests/test_<module>.py` file rather than a change-named grab-bag file?
-- [ ] **Hollow-Proof & Transformation Assertions**: Do assertions verify
-  computed/transformed outputs rather than echoing input arguments, and do bug
-  fixes include provenance docstrings (`Bug / Root cause / Fix`)?
+- [ ] **Transformation Assertions**: Do assertions check computed outputs rather than
+  echoing input arguments? Do bug fixes include provenance docstrings
+  (`Bug / Root cause / Fix`)?
 - [ ] **Coverage Threshold**: Does test coverage satisfy project thresholds (80%+
   branch coverage)?
 
@@ -116,7 +114,7 @@ Review candidate changes systematically across the following six dimensions:
 
 ## 3. Review Execution Workflow
 
-When conducting a pre-flight review, run the automated verification suite:
+Follow these steps to conduct a pre-flight review:
 
 ```bash
 # 1. Inspect working tree status and diff
@@ -147,3 +145,4 @@ Always include:
 - Executive verdict (`APPROVE` or `CHANGES REQUESTED`).
 - Verification gate outcomes (`poe code-quality`, `poe test`, `poe verify-wheel`).
 - Prioritized findings with concrete `file:line` locations and failing inputs or violated rules.
+

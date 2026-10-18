@@ -15,7 +15,7 @@ uv run pytest -n auto --dist loadfile  # Group tests by test file
 uv run pytest -f                      # Loop-on-fail: re-run on code change
 ```
 
-In Zenith, parallel execution is exposed via the built-in Poe task:
+In Zenith, run parallel tests through the Poe task:
 
 ```bash
 uv run poe test-fast                  # Executes pytest with -n auto
@@ -23,12 +23,12 @@ uv run poe test-fast                  # Executes pytest with -n auto
 
 ## 2. Distribution Modes (`--dist`)
 
-The `--dist` option controls how test items are partitioned across workers:
+The `--dist` option controls how xdist partitions tests across workers:
 
-- **`--dist load`** (default): Tests are dispatched to idle workers one by
-  one. Maximizes CPU utilization across heterogeneous test suites.
-- **`--dist loadscope`**: Tests in the same module or class are assigned to
-  the same worker. Ideal when class-level or module-level fixtures are
+- **`--dist load`** (default): xdist dispatches tests to idle workers one by
+  one. Maximizes CPU use across test suites.
+- **`--dist loadscope`**: Assigns tests in the same module or class to the
+  same worker. Ideal when class-level or module-level fixtures are
   expensive to initialize.
 - **`--dist loadfile`**: All tests within a single test file execute on the
   same worker process.

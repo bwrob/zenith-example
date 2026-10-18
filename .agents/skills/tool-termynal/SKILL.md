@@ -1,6 +1,6 @@
 ---
 description: >-
-  Authoritative guide for Termynal animated terminal widgets in documentation.
+  Guide for Termynal animated terminal widgets in documentation.
   Covers the HTML data-ty API, Markdown .termy console wrapping, animation delays,
   interactive controls, and styling. Use when creating, debugging, or styling
   terminal animation widgets in Zensical docs.
@@ -11,9 +11,9 @@ version: 1.0.0
 
 # Termynal Animated Terminal (`tool-termynal`)
 
-This skill documents **Termynal**, the lightweight, modern animated terminal window
-widget designed by Ines Montani and extended for Markdown documentation by Sebastián
-Ramírez and Zenith.
+This skill documents **Termynal**, an animated terminal widget designed by Ines
+Montani. Sebastián Ramírez and Zenith extended Termynal for Markdown
+documentation.
 
 Termynal uses native browser `async`/`await` for typing animations without external
 dependencies or layout reflows. Non-JavaScript visitors still see the complete
@@ -24,7 +24,7 @@ terminal output as clean static text.
 ## 1. Quick Reference & Core Syntax
 
 Zenith configures Termynal in Zensical documentation when `include_cli=yes`.
-Styles and scripts are loaded via `docs/stylesheets/termynal.css` and
+Zenith loads styles and scripts through `docs/stylesheets/termynal.css` and
 `docs/javascripts/termynal.js`.
 
 ### Markdown Integration (`.termy`)
@@ -59,7 +59,7 @@ $ uv run my-cli --help
 
 ### Line Syntax Mapping
 
-When wrapped in `<div class="termy">`, Termynal automatically parses each line:
+When you wrap lines in `<div class="termy">`, Termynal parses each line:
 
 | Markdown Syntax | Parsed Type | Behavior in Animation |
 | :--- | :--- | :--- |
@@ -94,7 +94,7 @@ Configure terminal-wide timing and appearance on the root `<div data-termynal>`:
 
 | Attribute | Default | Description |
 | :--- | :--- | :--- |
-| `data-ty-startDelay` | `600` | Delay in milliseconds before typing begins. |
+| `data-ty-startDelay` | `600` | Delay in milliseconds before typing starts. |
 | `data-ty-typeDelay` | `80` (or `60`) | Delay in milliseconds between individual typed characters. |
 | `data-ty-lineDelay` | `1200` (or `500`) | Delay in milliseconds before revealing the next line. |
 | `data-ty-progressLength` | `40` | Total character width of the progress bar. |
@@ -119,7 +119,7 @@ Override behavior on individual child `<span>` elements:
 
 ## 3. JavaScript API
 
-Termynal can also be instantiated programmatically:
+You can also instantiate Termynal programmatically:
 
 ```javascript
 import { Termynal } from './termynal.js';
@@ -147,7 +147,7 @@ Zenith's Termynal includes interactive control buttons in the top right:
 
 ## 4. Styling & Custom Properties (`termynal.css`)
 
-Terminal appearance is controlled entirely via CSS variables in `docs/stylesheets/termynal.css`:
+CSS variables in `docs/stylesheets/termynal.css` control terminal appearance:
 
 ```css
 :root {
@@ -164,7 +164,7 @@ The top window bar renders macOS-style window controls (red `#ff5f56`, yellow
 
 ---
 
-## 5. Architectural Invariants & Best Practices
+## 5. Guidelines and Best Practices
 
 1. **Always Use Static `console` Inside `<div class="termy">`**:
    Never use dynamic Python execution (` ```python exec="on" `) inside a `<div class="termy">`.
@@ -178,4 +178,4 @@ The top window bar renders macOS-style window controls (red `#ff5f56`, yellow
    and renders them with proper browser font weight.
 4. **Instant Navigation Support**:
    In Zensical with `instant` navigation, Termynal hooks into `document$.subscribe()`
-   to automatically initialize newly mounted `.termy` blocks without full page reloads.
+   to initialize newly mounted `.termy` blocks without full page reloads.

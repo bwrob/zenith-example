@@ -1,11 +1,12 @@
 ---
 description: >
-  Sets up, bootstraps, or repairs a local Zenith Python development environment:
+  Sets up, bootstraps, or fixes a local Zenith Python development environment:
   a uv-managed virtual environment, dependency groups, pre-commit hooks, and
-  initial verification runs. Runs only when explicitly requested. Use when asked
-  to set up, bootstrap, or repair a development checkout, install project
-  dependencies, fix a missing or broken .venv, or prepare a machine for
-  contributing. Don't use for routine code editing or individual test runs.
+  initial verification runs. Runs only when explicitly requested.
+  Use when asked to set up or fix a development checkout.
+  Use to install project dependencies, fix a missing or broken .venv,
+  or prepare a machine for contributing. Do not use for routine code editing
+  or individual test runs.
 disable-model-invocation: true
 name: project-setup
 version: 1.0.0
@@ -13,21 +14,18 @@ version: 1.0.0
 
 # Project Setup & Bootstrap (`project-setup`)
 
-This workflow skill provides the authoritative process for bootstrapping,
-configuring, and repairing a local development checkout for a Zenith-based
-Python project.
+This skill defines the process to set up, configure, and fix
+a local development environment for a Zenith Python project.
 
 > [!IMPORTANT]
-> This skill operates with `disable-model-invocation: true`. Only execute these
-> setup commands when explicitly requested by the user to bootstrap or repair the
-> environment.
+> This skill operates with `disable-model-invocation: true`. Execute these
+> commands only when the user explicitly asks to set up or fix the environment.
 
 ---
 
 ## 1. Prerequisites
 
-Before setting up the environment, verify that the required system tools are
-installed:
+Before you set up the environment, check that required system tools are available:
 
 1. **Python 3.12+**:
    ```bash
@@ -38,7 +36,7 @@ installed:
    ```bash
    uv --version
    ```
-   If `uv` is not installed, install it via the official installer:
+   If your system lacks `uv`, install it with the official script:
    ```bash
    curl -LsSf https://astral.sh/uv/install.sh | sh
    ```
@@ -47,22 +45,21 @@ installed:
 
 ## 2. Environment Bootstrap Procedure
 
-Execute the following steps sequentially from the repository root:
+Run these steps from the repository root:
 
 ### Step 1: Synchronize Virtual Environment & Dependencies
 
-Install all declared dependency groups (`dev`, `test`, `lint`, `docs`) inside a
-hermetic virtual environment managed by `uv`:
+Install all declared dependency groups in a virtual environment with `uv`:
 
 ```bash
 uv sync
 ```
 
-This creates `.venv/` and synchronizes all packages defined in `uv.lock`.
+This command creates `.venv/` and syncs all packages defined in `uv.lock`.
 
 ### Step 2: Install Pre-Commit Hooks
 
-Activate git pre-commit hooks to automate static verification before commits:
+Install git pre-commit hooks to run verification before commits:
 
 ```bash
 uv run pre-commit install
@@ -70,7 +67,7 @@ uv run pre-commit install
 
 ### Step 3: Run Baseline Quality Verification
 
-Verify that all linters, static type checkers, and complexity limits pass cleanly:
+Check that all linters, static type checkers, and complexity checks pass cleanly:
 
 ```bash
 uv run poe code-quality
@@ -78,16 +75,15 @@ uv run poe code-quality
 
 ### Step 4: Run Automated Test Suite
 
-Execute unit tests and coverage thresholds:
+Run unit tests and check coverage thresholds:
 
 ```bash
 uv run poe test
 ```
 
-### Step 5: Verify Wheel Artifact Pre-Flight
+### Step 5: Check Wheel Artifact Pre-Flight
 
-Verify that distribution packages build cleanly and all package modules import
-in an isolated sandbox:
+Check that packages build cleanly and all modules import in an isolated environment:
 
 ```bash
 uv run poe verify-wheel
@@ -104,10 +100,10 @@ uv run poe verify-wheel
 | **Add Dev Dependency** | `uv add --group <group> <pkg>` | Add package to specific dependency group |
 | **Run Poe Tasks** | `uv run poe <task>` | Run declared development tasks via Poe |
 | **Format & Lint** | `uv run poe fix` | Auto-format with Ruff and fix typos |
-| **Run Quality Checks** | `uv run poe code-quality` | Run full static verification pipeline |
+| **Run Quality Gate** | `uv run poe code-quality` | Run full static verification pipeline |
 | **Run Test Suite** | `uv run poe test` | Run pytest with coverage thresholds |
-| **Smoke Test Wheel** | `uv run poe verify-wheel` | Verify built wheel in isolated environment |
-| **Preview Documentation** | `uv run poe docs-serve` | Launch live Zensical docs server |
+| **Smoke Test Wheel** | `uv run poe verify-wheel` | Check built wheel in isolated environment |
+| **Preview Documentation** | `uv run poe docs-serve` | Run live Zensical docs server |
 
 ---
 
@@ -115,7 +111,7 @@ uv run poe verify-wheel
 
 ### Missing or Corrupted Virtual Environment
 
-If `.venv/` becomes corrupted or exhibits inconsistent state:
+If `.venv/` breaks or becomes inconsistent:
 
 ```bash
 rm -rf .venv
@@ -124,7 +120,7 @@ uv sync
 
 ### Dependency Cache Desynchronization
 
-If local wheel cache requires refreshing against PyPI:
+If you must refresh the dependency cache from PyPI:
 
 ```bash
 uv sync --refresh
@@ -132,9 +128,10 @@ uv sync --refresh
 
 ### Pre-Commit Hook Cache Issues
 
-To reset pre-commit environments:
+To reset pre-commit hook environments:
 
 ```bash
 uv run pre-commit clean
 uv run pre-commit install --install-hooks
 ```
+

@@ -1,8 +1,8 @@
 ---
 name: <skill-name>
 description: >-
-  <Authoritative description explaining WHAT this skill accomplishes and WHEN the agent
-  should use it. Include clear intent triggers (e.g. "Use when the user asks to...")>.
+  <Summary explaining WHAT this skill does and WHEN to use it.
+  Include clear intent triggers (e.g. "Use when asked to...")>.
 version: 1.0.0
 ---
 
@@ -22,15 +22,15 @@ version: 1.0.0
 ## 2. Standard Workflow & Procedures
 
 ### Step 1: <Initial Phase>
-<Actionable instructions, CLI commands, or decision trees.>
+<Actionable instructions, CLI commands, or decision trees written in ASD-STE100.>
 
 ```bash
 uv run <command>
 ```
 
 ### Step 2: <Execution Phase>
-<Actionable instructions. If document, code, or configuration templates are required,
-link to external templates in `./templates/` rather than embedding large inline blocks.>
+<Actionable instructions. If templates are required, link to external templates
+in `./templates/` instead of embedding large inline blocks.>
 
 - See template: [templates/<name>.<ext>](./templates/<name>.<ext>)
 
@@ -41,5 +41,7 @@ link to external templates in `./templates/` rather than embedding large inline 
 <Mandatory verification commands to confirm the workflow succeeded without regressions.>
 
 ```bash
+uv run python .agents/skills/asd-ste100/scripts/ste-lint.py .agents/skills/<skill-name>/SKILL.md
 uv run <verification-command>
 ```
+

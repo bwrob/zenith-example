@@ -1,6 +1,6 @@
 ---
 description: >-
-  Authoritative guide for building modern type-safe CLIs with Typer and Rich in Python 3.12+.
+  Guide for building modern type-safe CLIs with Typer and Rich in Python 3.12+.
   Use when designing command-line interfaces, parsing options, adding commands, or styling terminal output.
   Triggers: typer, cli, rich, arguments, options, commands.
 name: tool-typer
@@ -11,28 +11,28 @@ version: 1.0.0
 # Typer CLI Framework (`tool-typer`)
 
 `typer` is the standard library for writing ergonomic, type-safe, and self-documenting
-command-line interfaces (CLIs) in modern Python. It is built on Python type hints,
-providing automatic shell completion, parsing, validation, and rich terminal output.
+command-line interfaces (CLIs) in modern Python. It uses Python type hints to
+provide automatic shell completion, parsing, validation, and rich terminal output.
 
 In Zenith projects, `typer` and `rich` constitute the CLI layer (`src/<package>/cli.py`)
-when CLI generation is enabled.
+when you enable CLI generation.
 
 ---
 
 ## 1. Core Architecture & Philosophy
 
 - **Type Hints as Single Source of Truth**: Typer derives CLI option names, arguments, types, defaults, and help menus directly from function signatures and docstrings.
-- **Vendored Click (`typer._click`)**: Starting in Typer 0.26+, Click is vendored internally. Downstream applications must never import Click or rely on external Click extensions.
+- **Vendored Click (`typer._click`)**: Starting in Typer 0.26+, Typer vendors Click internally. Downstream applications must never import Click or rely on external Click extensions.
 - **Explicit `Typer()` Apps**: Always instantiate an explicit `app = typer.Typer(...)` instance and register subcommands with `@app.command()`. Never use `typer.run()` in production applications.
 - **Modern Configurations**:
   - `no_args_is_help=True`: Display the help message automatically when invoked without required arguments.
-  - `rich_markup_mode="rich"`: Allow Rich tags (e.g. `[bold green]...[/bold green]`) in command docstrings and parameter help text.
+  - `rich_markup_mode="rich"`: Allow Rich tags (for example, `[bold green]...[/bold green]`) in command docstrings and parameter help text.
 
 ---
 
 ## 2. Modern Parameter Declaration with PEP 593 `Annotated`
 
-Zenith projects strictly enforce PEP 593 `typing.Annotated` for all Typer CLI parameters.
+Zenith projects enforce PEP 593 `typing.Annotated` for all Typer CLI parameters.
 
 ### Canonical Argument Syntax
 
@@ -74,7 +74,7 @@ def deploy(
     ...
 ```
 
-### Legacy Antipatterns to Strictly Avoid
+### Legacy Antipatterns to Avoid
 
 ```python
 # ❌ NEVER DO THIS: Deprecated legacy style causes Ruff B008 lint warnings
@@ -89,7 +89,7 @@ def legacy(
 
 ### Deprecated Click-Inherited Parameters
 
-Do not use Click parameters that have been deprecated in modern Typer:
+Do not use Click parameters that modern Typer deprecates:
 - `is_flag` (inferred automatically from `bool` type)
 - `expose_value`
 - `shell_complete`
@@ -101,12 +101,13 @@ Do not use Click parameters that have been deprecated in modern Typer:
 
 ## 3. Microsecond Cold-Startup & Lazy Loading
 
-CLI applications must respond near-instantaneously (<50ms). Heavy imports executed at module load time degrade perceived developer experience.
+CLI applications must respond quickly (<50ms). Heavy imports executed at module load time degrade developer experience.
 
 ### Guidelines for Fast CLI Startup
 
-1. **Defer Heavy Imports**: Do not import heavy libraries (e.g., database drivers, machine learning frameworks, large data parsers) at the top of `cli.py`. Import them lazily inside the command body where they are actually executed.
-2. **Import Rich Utilities Inside Functions**: When using internal formatting or progress helpers, import lazily or use `Console()` instances constructed within commands if startup latency is critical.
+1. **Defer Heavy Imports**: Do not import heavy libraries (for example, database drivers, machine learning frameworks, large data parsers) at the top of `cli.py`. Import them lazily inside the command body where they execute.
+2. **Import Rich Utilities Inside Functions**: When using formatting or progress helpers,
+   import lazily. Construct `Console()` instances within commands if startup latency is critical.
 3. **Enforce with Ruff**: Use `flake8-tidy-imports` to detect and forbid premature top-level imports:
    ```toml
    [tool.ruff.lint.flake8-tidy-imports]
@@ -117,7 +118,7 @@ CLI applications must respond near-instantaneously (<50ms). Heavy imports execut
 
 ## 4. Rich Formatting & Terminal Output
 
-Typer seamlessly bridges into `rich` for elegant terminal experiences:
+Typer connects directly with `rich` for terminal formatting:
 
 ```python
 from rich.console import Console
@@ -141,7 +142,7 @@ When testing Typer CLI applications with pytest:
 
 ### Documentation Terminal Visualizations with Termynal (`.termy`)
 
-When CLI generation is enabled in Zenith (`include_cli=yes`), interactive animated terminal widgets are automatically configured in Zensical via Termynal (`docs/javascripts/termynal.js` and `docs/stylesheets/termynal.css`).
+When you enable CLI generation in Zenith (`include_cli=yes`), Zensical configures interactive animated terminal widgets via Termynal (`docs/javascripts/termynal.js` and `docs/stylesheets/termynal.css`).
 
 Wrap any console code block in `<div class="termy">` in your Markdown documentation:
 
@@ -208,10 +209,9 @@ def test_cli_main_invocation(monkeypatch: pytest.MonkeyPatch) -> None:
 
 ## 6. Standard Zenith CLI Implementation Recipe
 
-In Zenith projects with `include_cli=yes`, the standard layout is defined in
-[examples/cli_recipe.py](./examples/cli_recipe.py).
+In Zenith projects with `include_cli=yes`, [examples/cli_recipe.py](./examples/cli_recipe.py) defines the standard layout.
 
-Key implementation components:
+Key implementation elements:
 - Explicit `app = typer.Typer(no_args_is_help=True, rich_markup_mode="rich")`.
 - Eager version flag callback (`version_callback`) raising `typer.Exit`.
 - Subcommands registered via `@app.command()` with PEP 593 `Annotated` parameters.

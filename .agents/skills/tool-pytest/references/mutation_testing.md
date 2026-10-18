@@ -10,7 +10,7 @@ Zenith supports both **`mutmut`** and **`cosmic-ray`**, each optimized for disti
 
 | Dimension | `mutmut` | `cosmic-ray` |
 | :--- | :--- | :--- |
-| **Primary Strength** | Lightning-fast developer iteration | Distributed, exhaustive test campaign |
+| **Primary Strength** | Fast developer iteration | Distributed, exhaustive test campaign |
 | **Execution Model** | Direct AST mutation in local files/cache | SQLite-backed task distribution |
 | **Dependencies** | Minimal (`parso`) | Extended (`sqlalchemy`, `libcst`, `aiohttp`) |
 | **Configuration** | `[tool.mutmut]` in `pyproject.toml` | `cosmic-ray.toml` |

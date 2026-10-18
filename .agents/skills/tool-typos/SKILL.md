@@ -1,6 +1,6 @@
 ---
 description: >-
-  Authoritative guide for typos source code and doc spell checker in Rust.
+  Guide for typos source code and doc spell checker in Rust.
   Use when checking or fixing spelling mistakes across code, documentation, and commit messages.
   Triggers: typos, spell check, typos.toml, spelling.
 name: tool-typos
@@ -10,10 +10,9 @@ version: 1.0.0
 
 # typos Source Code Spell Checker (`tool-typos`)
 
-`typos` is a blazing-fast source code and documentation spell checker written in
-Rust by `crate-ci`. It is designed specifically for software codebases, finding
-real typos in identifiers, comments, strings, and markdown while maintaining an
-exceptionally low false-positive rate.
+`typos` is a fast source code and documentation spell checker written in
+Rust by `crate-ci`. The tool targets software codebases to find typos in
+identifiers, comments, strings, and markdown with a low false-positive rate.
 
 In Zenith projects, `typos` runs in CI, pre-commit, and local verification tasks.
 
@@ -30,7 +29,7 @@ uv run typos -w                        # Fix all detected typos in place
 uv run typos --format brief            # Output path:line:col findings
 ```
 
-In Zenith, task aliases are managed via Poe:
+Zenith manages task aliases via Poe:
 
 ```bash
 uv run poe typos                       # Runs typos check
@@ -39,9 +38,9 @@ uv run poe typos-fix                   # Runs typos -w (auto-fix)
 
 ---
 
-## 2. Configuration & Where It Lives
+## 2. Configuration Location
 
-`typos` is configured via **`typos.toml`** at the project root:
+Configure `typos` through **`typos.toml`** at the project root:
 
 ```toml
 [default]
@@ -72,7 +71,7 @@ complexipy = "complexipy"
 
 ---
 
-## 3. Most Common Configuration Changes During Development
+## 3. Common Configuration Changes During Development
 
 Customize accepted words, file exclusions, and syntax-specific dictionaries with
 these patterns.
@@ -92,8 +91,7 @@ uuid = "uuid"
 
 ### B. Ignoring Generated or Snapshot Files
 
-Files with non-human hashes, glyph IDs, or serialized data should be
-excluded:
+Exclude files with non-human hashes, glyph IDs, or serialized data:
 
 ```toml
 [files]
@@ -129,13 +127,13 @@ API_ENDPT = "/api/v1/custom"  # spellchecker:disable-line
 
 ---
 
-## 4. Best Practices & Troubleshooting
+## 4. Guidelines and Troubleshooting
 
-Keep these points in mind when resolving typos:
+Follow these guidelines to resolve typos:
 
-- **Fix vs. Ignore**: If `typos` flags a real spelling error, run
-  `uv run poe typos-fix` or correct it manually. Only add words to
+- **Fix Versus Ignore**: If `typos` flags a real spelling error, run
+  `uv run poe typos-fix` or fix it manually. Only add words to
   `[default.extend-words]` if the term is legitimate domain vocabulary.
 - **Respect `.gitignore`**: By default, `typos` ignores files matching
-  `.gitignore`. Ensure build outputs (like `site/` or `.venv/`) are either
-  gitignored or explicitly listed in `extend-exclude`.
+  `.gitignore`. Check that build outputs (such as `site/` or `.venv/`) appear in
+  `.gitignore` or `extend-exclude`.

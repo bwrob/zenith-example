@@ -1,6 +1,6 @@
 ---
 description: >-
-  Authoritative guide for Zensical TOML-based static documentation generator.
+  Guide for Zensical TOML-based static documentation generator.
   Use when building, serving, configuring, or writing static documentation and API references.
   Triggers: zensical, docs, documentation, zensical.toml, mkdocstrings, mathjax.
 name: tool-zensical
@@ -10,7 +10,7 @@ version: 1.0.0
 
 # Zensical Static Documentation Generator (`tool-zensical`)
 
-`zensical` is a modern, fast static documentation site generator built in Rust
+`zensical` is a fast static documentation site generator written in Rust
 and Python by the creators of *Material for MkDocs* and *mkdocstrings*. It
 replaces legacy `mkdocs.yml` configurations with clean, typed `zensical.toml`
 files, instant live reloading, and native support for Mermaid diagrams, MathJax
@@ -31,7 +31,7 @@ uv run zensical build                  # Build static site into site/
 uv run zensical build --strict --clean # Production build with strict checks
 ```
 
-In Zenith, canonical tasks are wired into Poe:
+Zenith wires documentation tasks into Poe:
 
 ```bash
 uv run poe docs-serve                  # Runs zensical serve
@@ -40,13 +40,13 @@ uv run poe docs-build                  # Runs zensical build --strict --clean
 
 ---
 
-## 2. Configuration & Where It Lives
+## 2. Configuration Location
 
-Zensical is configured via **`zensical.toml`** at the project root.
+Configure Zensical through **`zensical.toml`** at the project root.
 For the complete drop-in production configuration, see:
 👉 [templates/zensical.toml](./templates/zensical.toml)
 
-Essential baseline configuration:
+Baseline configuration:
 
 ```toml
 [project]
@@ -92,14 +92,14 @@ paths = ["src"]
 
 ---
 
-## 3. Most Common Configuration Changes During Development
+## 3. Common Configuration Changes During Development
 
 Manage pages, navigation, automated API docs, and interactive diagrams with
 these patterns.
 
 ### A. Adding a New Documentation Page
 
-1. Create the markdown file inside `docs/` (e.g., `docs/architecture.md`).
+1. Create the markdown file inside `docs/` (for example, `docs/architecture.md`).
 2. Register the page in `project.nav` in `zensical.toml`:
 
    ```toml
@@ -125,7 +125,7 @@ these patterns.
 
 ### B. Auto-Documenting Python Code with `mkdocstrings` & `griffe`
 
-In any markdown document (e.g. `docs/reference.md`), use the `:::` block:
+In any markdown document (for example, `docs/reference.md`), use the `:::` block:
 
 ```markdown
 # API Reference
@@ -139,18 +139,12 @@ In any markdown document (e.g. `docs/reference.md`), use the `:::` block:
 
 Zensical automatically reloads docs when source files in `src/` change:
 
-- **Cross-References & Backlink Trees**: With
-  `inventories = ["https://docs.python.org/3/objects.inv"]`,
-  `signature_crossrefs = true`, `relative_crossrefs = true`,
-  `scoped_crossrefs = true`, and `options.backlinks = "tree"`, type
-  annotations and shorthand `[Class][.Class]` / `[method][.method]` links
-  resolve directly to upstream or local docs, and each symbol renders a
-  collapsible tree of pages that reference it.
+- **Cross-References & Backlink Trees**: Setting `options.backlinks = "tree"`
+  and crossref flags resolves type annotations to upstream or local docs.
+  Each symbol renders a collapsible tree of pages that reference it.
 - **PEP 695 Type Parameters**: `options.show_signature_type_parameters = true`
-  and `options.type_parameter_headings = true` render Python 3.12+ generic
-  syntax (`def func[T](x: T) -> T`, `class Box[T]`, `type Alias[T] = ...`) directly in
-  signatures and table-of-contents headings, formatted with Ruff at
-  `options.line_length = 88`.
+  renders Python 3.12+ generic syntax in signatures. Ruff formats these signatures
+  using `options.line_length = 88`.
 - **Auto Summary Tables & Class Diagrams**: `options.summary = true` generates
   module/class summary tables automatically, and
   `options.show_inheritance_diagram = true` renders inline SVG class hierarchy
@@ -158,21 +152,18 @@ Zensical automatically reloads docs when source files in `src/` change:
 - **PEP 702 Deprecation Badges**: `options.extensions = ["griffe_warnings_deprecated"]`
   inspects `@warnings.deprecated("...")` decorators via AST and renders
   structured deprecation admonitions automatically.
-- **Floating Link Previews**:
-  `zensical.extensions.preview.targets.include = ["*"]` enables instant
-  floating preview cards when hovering internal documentation links (note: an
-  empty `preview = {}` table is a no-op because `targets.include` defaults to
-  `[]`).
+- **Floating Link Previews**: Setting `zensical.extensions.preview.targets.include = ["*"]`
+  enables floating preview cards on internal links. Note: an empty `preview = {}`
+  table is a no-op because `targets.include` defaults to empty.
 - **GitHub-Style Alerts (`gh-admonitions`)**: `[project.plugins.gh-admonitions]`
   natively converts `> [!NOTE]`, `> [!TIP]`, `> [!IMPORTANT]`, `> [!WARNING]`,
   and `> [!CAUTION]` blockquotes into styled Zensical admonitions.
 
 ### C. Detecting Breaking Public API Changes (`griffe check`)
 
-Because `griffe` is installed alongside `mkdocstrings[python]`, use it to
-statically compare the current AST against the latest git tag and detect
-breaking public API changes (removed/renamed parameters, narrowed types,
-changed defaults) before releasing:
+`griffe` installs alongside `mkdocstrings[python]`. Use it to compare the
+current AST against the latest git tag. This detects breaking public API changes
+(such as removed parameters or narrowed types) before releasing:
 
 ```bash
 uv run poe check-api   # Runs: griffe check <package_name> --search src
@@ -180,7 +171,7 @@ uv run poe check-api   # Runs: griffe check <package_name> --search src
 
 ### D. Using Mermaid Diagrams
 
-Mermaid is built into Zensical natively. Write standard markdown fences:
+Zensical supports Mermaid natively. Write standard markdown fences:
 
 ````markdown
 ```mermaid
@@ -207,8 +198,8 @@ print(f"Built with Python {sys.version.split()[0]}")
 - **Session Persistence**: Blocks sharing `session="name"` reuse variables and
   imports across a page.
 - **Doctest (`pycon`) & Shell (`console`) Execution**: Execute interactive
-  REPL transcripts (` ```pycon exec="1" `) or shell commands (` ```console `)
-  automatically without writing `exec="on"` when using `pycon`.
+  REPL transcripts or shell commands automatically. You do not need to write
+  `exec="on"` when using `pycon`.
 - **Rich Directory Trees (` ```tree `)**: Render styled filesystem trees with
   Material SVG folder/file icons from plain indented text:
 
@@ -225,10 +216,9 @@ print(f"Built with Python {sys.version.split()[0]}")
 
 ### F. Embedding Tested Code Snippets with `pymdownx.snippets`
 
-Embed external source or test files directly into documentation using `--8<--`
-with `pymdownx.snippets.check_paths = true` and
-`pymdownx.snippets.dedent_subsections = true` (which fails the build if a
-referenced file path does not exist and dedents indented blocks):
+Embed external source files directly into documentation using `--8<--`.
+Settings like `pymdownx.snippets.check_paths = true` fail the build if a
+referenced file does not exist.
 
 ````markdown
 ```python
@@ -241,27 +231,23 @@ referenced file path does not exist and dedents indented blocks):
 Zenith styles Zensical documentation with a modular two-file CSS architecture
 located in `docs/stylesheets/`:
 
-- **`palette.css`**: Defines global named color tokens on `:root` organized
-  strictly by hue and lightness (`--color-blue-*`, `--color-amber-*`,
-  `--color-indigo-*`, `--color-lavender-*`, `--color-slate-*`) based on the
-  Catppuccin palette (Latte for light, Mocha for dark) harmonized with the
-  Typst logo colors (`#387eb8` steel sapphire blue and `#ffc331` amber gold).
-- **`custom.css`**: Maps these hue-based design tokens to Zensical's
-  `--md-primary-*`, `--md-accent-*`, and refined `--md-default-*`
-  foreground/background variables for `[data-md-color-scheme="default"]` and
-  `[data-md-color-scheme="slate"]`, shifting the dark hue (`--md-hue: 240deg;`)
-  away from harsh grayscale into rich midnight indigo.
+- **`palette.css`**: Defines global color tokens on `:root` organized by hue and
+  lightness. It uses the Catppuccin palette (Latte for light, Mocha for dark),
+  harmonized with the Typst logo colors (`#387eb8` blue and `#ffc331` gold).
+- **`custom.css`**: Maps these design tokens to Zensical's theme variables.
+  It sets primary and accent colors for default and slate schemes,
+  shifting the dark hue into midnight indigo.
 
 ---
 
-## 4. Best Practices & Troubleshooting
+## 4. Guidelines and Troubleshooting
 
-Keep these principles in mind when maintaining documentation:
+Follow these guidelines to maintain documentation:
 
 - **Always build with `--strict`**: Running `uv run poe docs-build`
-  validates all internal links, anchors, and docstring references. Never
+  checks all internal links, anchors, and docstring references. Never
   deploy a build with broken links. (Note: `zensical serve` does not currently
-  support `--strict`; run `zensical build --strict` to verify before committing.)
+  support `--strict`. Run `zensical build --strict` to check before you commit.)
 - **Automated `llms.txt` & `llms-full.txt` Generation**: Zensical's built-in
   Rust `[project.plugins.llmstxt]` plugin automatically compiles `site/llms.txt`
   and `site/llms-full.txt` (including rendered `mkdocstrings` API signatures)

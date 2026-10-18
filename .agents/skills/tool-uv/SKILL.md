@@ -1,6 +1,6 @@
 ---
 description: >-
-  Authoritative guide for using Astral uv to manage packages and environments.
+  Guide for using Astral uv to manage packages and environments.
   Use when adding dependencies, syncing environments, locking packages, running commands, or building distributions.
   Triggers: uv, packages, dependencies, virtual environment, lockfile, uv.lock.
 name: tool-uv
@@ -10,7 +10,7 @@ version: 1.0.0
 
 # uv Package & Environment Manager (`tool-uv`)
 
-`uv` is an extremely fast, Rust-based Python package and project manager
+`uv` is a fast, Rust-based Python package and project manager
 developed by Astral. It replaces `pip`, `poetry`, and `virtualenv`.
 
 In Zenith projects, `uv` is the exclusive manager for dependencies,
@@ -64,9 +64,9 @@ uv publish                           # Publish distributions to PyPI
 
 ---
 
-## 2. Configuration & Where It Lives
+## 2. Configuration Location
 
-`uv` is configured primarily through `pyproject.toml` in the project root:
+Configure `uv` primarily through `pyproject.toml` in the project root:
 
 ```toml
 [project]
@@ -111,13 +111,13 @@ requires = ["uv_build>=0.12.7,<0.13.0"]
 
 ---
 
-## 3. Most Common Configuration Changes During Development
+## 3. Common Configuration Changes During Development
 
-Here are typical modifications needed in `pyproject.toml` during development.
+Follow these patterns to change `pyproject.toml` during development.
 
 ### A. Adding a New Dependency Group (PEP 735)
 
-When adding a specialized group (e.g. `benchmark` or `typing`):
+When adding a specialized group (for example, `benchmark` or `typing`):
 
 1. Declare the group under `[dependency-groups]`:
 
@@ -128,7 +128,7 @@ When adding a specialized group (e.g. `benchmark` or `typing`):
    ]
    ```
 
-2. If it should install automatically during local `uv sync`, add it to
+2. If the group must install automatically during local `uv sync`, add it to
    `default-groups`:
 
    ```toml
@@ -158,11 +158,9 @@ When raising or lowering the supported Python target:
 
 ### C. Pinning or Constraining an Indirect or Build Dependency
 
-Use `constraint-dependencies` as a transitive CVE floor ledger (when `uv audit`
-reports a vulnerability in an indirect dependency) so `project.dependencies`
-remains clean of transitive packages, or use `override-dependencies` /
-`build-constraint-dependencies` when an upstream release or PEP 517 build
-backend is broken:
+Use `constraint-dependencies` as a transitive CVE floor ledger when `uv audit`
+reports a vulnerability. This keeps `project.dependencies` clean of indirect packages.
+Use `override-dependencies` or `build-constraint-dependencies` when an upstream release breaks:
 
 ```toml
 [tool.uv]
@@ -194,7 +192,7 @@ explicit = true
 my-private-package = { index = "internal" }
 ```
 
-### E. Packaging Mode (`package = true` vs `package = false`)
+### E. Packaging Mode (`package = true` Versus `package = false`)
 
 - **Libraries & CLI apps** (`package = true`): Installs the current project
   in editable mode (`-e .`) into `.venv`.
@@ -203,14 +201,13 @@ my-private-package = { index = "internal" }
 
 ### F. Supply Chain Protection with `exclude-newer` & `exclude-newer-package`
 
-Astral `uv` supports an `exclude-newer` cutoff (via CLI, environment variable,
-or configuration) that limits package resolution to releases published prior
-to a given timestamp or relative age, while allowing per-package exemptions or
-exact RFC 3339 audit-point timestamps via `exclude-newer-package`:
+Astral `uv` supports an `exclude-newer` cutoff. It limits package resolution to
+releases published before a given timestamp or relative age.
+Use `exclude-newer-package` for package exemptions or exact RFC 3339 timestamps:
 
-1. **In `pyproject.toml`**: Enforce a rolling stabilization window with
-   targeted exemptions (`false`) for internal packages or audited RFC 3339
-   timestamps when cherry-picking a newly released upstream hotfix:
+1. **In `pyproject.toml`**: Enforce a rolling stabilization window.
+   Add exemptions (`false`) for internal packages or RFC 3339 timestamps for
+   upstream hotfixes:
 
    ```toml
    [tool.uv]
@@ -238,18 +235,18 @@ exact RFC 3339 audit-point timestamps via `exclude-newer-package`:
 
 ---
 
-## 4. Best Practices & Common Gotchas
+## 4. Guidelines and Gotchas
 
-Keep these rules in mind when working with `uv`:
+Follow these guidelines when you use `uv`:
 
 - **Never edit versions directly in `uv.lock`**: Always update
   `pyproject.toml` and run `uv lock` or `uv add`.
 - **Never invoke `pip` inside `uv` projects**: Running `pip install`
   bypasses `uv.lock` and creates un-reproducible environments.
-- **Scope CI installs with `--only-group`**: In cross-platform CI test
-  matrices, run `uv sync --only-group test` so test runners do not waste time
-  downloading documentation (`zensical`, `typst`) or linter binaries.
+- **Scope CI installs with `--only-group`**: In CI test matrices, run
+  `uv sync --only-group test`. This prevents downloading documentation or
+  linter binaries in test runners.
 - **Audit dependencies regularly**: Run `uv run poe audit` (`uv audit`) to
-  verify `uv.lock` against published security advisories.
+  check `uv.lock` against published security advisories.
 - **Group inclusions**: Use `{ include-group = "..." }` in composite groups
   like `dev` to keep logical tool sets modular and decoupled.

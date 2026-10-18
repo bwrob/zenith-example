@@ -1,6 +1,6 @@
 ---
 description: >-
-  Authoritative guide for linting and formatting Python with Astral Ruff.
+  Guide for linting and formatting Python with Astral Ruff.
   Use when linting code, auto-fixing violations, formatting source files, or configuring rules.
   Triggers: ruff, lint, format, ruff.toml, code style.
 name: tool-ruff
@@ -10,11 +10,11 @@ version: 1.0.0
 
 # Ruff Linter & Formatter (`tool-ruff`)
 
-`ruff` is an extremely fast Python linter and code formatter written in Rust by
+`ruff` is a fast Python linter and code formatter written in Rust by
 Astral. It replaces Flake8, Black, isort, pydocstyle, pyupgrade, and autoflake.
 
-In Zenith projects, `ruff` is configured strictly via `ruff.toml` with
-`select = ["ALL"]` and targeted exceptions.
+Zenith projects configure `ruff` via `ruff.toml` with `select = ["ALL"]`
+and targeted exceptions.
 
 ---
 
@@ -51,9 +51,9 @@ uv run ruff rule E501                    # Display explanation for a rule
 
 ---
 
-## 2. Configuration & Where It Lives
+## 2. Configuration Location
 
-In Zenith projects, Ruff is configured via a standalone **`ruff.toml`** at the
+Zenith projects configure Ruff via a standalone **`ruff.toml`** at the
 repository root:
 
 ```toml
@@ -133,7 +133,7 @@ docstring-code-line-length = 79
 
 ---
 
-## 3. Most Common Configuration Changes During Development
+## 3. Common Configuration Changes During Development
 
 Use these patterns to adjust rule selections, relaxations, and exceptions.
 
@@ -153,9 +153,9 @@ If a rule is noisy or conflicts with domain design:
 ### B. Relaxing Rules for Specific Subtrees (`per-file-ignores`)
 
 Tests, benchmarks, documentation scripts, or CLI files often require rule
-exceptions. You can also use negated globs (`"!src/**.py"`) to relax strict
-docstring or typing rules across all auxiliary files (`tests/`, `scripts/`,
-`examples/`, `benchmarks/`) in a single rule while keeping `src/` 100% strict:
+exceptions. Use negated globs (`"!src/**.py"`) to relax rules across all
+auxiliary files in one line. This approach keeps `src/` strictly enforced
+while relaxing checks for tests and scripts:
 
 ```toml
 [lint.per-file-ignores]
@@ -174,7 +174,7 @@ docstring or typing rules across all auxiliary files (`tests/`, `scripts/`,
 
 ### C. Inline Rule Suppression (`# noqa`)
 
-When an exception is needed on a single line rather than an entire file:
+When you need an exception on a single line rather than an entire file:
 
 ```python
 # Suppress a single specific rule with explanation
@@ -199,8 +199,8 @@ convention = "google"  # Options: "google", "numpy", "pep257"
 
 ### E. Enabling Unsafe Fixes for Specific Rules
 
-By default, `ruff check --fix` only applies *safe* fixes. To enable automated
-fixes for rules considered unsafe:
+By default, `ruff check --fix` applies only safe fixes. To enable automated
+fixes for rules that Ruff marks as unsafe:
 
 ```toml
 [lint]
@@ -209,15 +209,15 @@ extend-safe-fixes = ["UP006", "UP035"]
 
 ---
 
-## 4. Best Practices & Common Gotchas
+## 4. Guidelines and Gotchas
 
-Keep these essential guidelines in mind:
+Follow these guidelines:
 
-- **Always run check and format together**: A file is only clean when both
+- **Always run check and format together**: A file is clean only when both
   `ruff check` and `ruff format` succeed.
 - **Never fight the formatter**: If `ruff format` breaks lines across multiple
   rows, adjust structure or simplify expressions instead.
-- **Formatter vs. Linter Conflicts**: Rules `COM812` and `ISC001` should
-  always remain in `lint.ignore` when using `ruff format`.
+- **Formatter vs. Linter Conflicts**: Always keep rules `COM812` and `ISC001`
+  in `lint.ignore` when you use `ruff format`.
 - **Scope fixes to edited code**: Avoid running `--unsafe-fixes` across an
-  entire codebase; review diffs carefully with `--diff` first.
+  entire codebase. Inspect diffs with `--diff` first.

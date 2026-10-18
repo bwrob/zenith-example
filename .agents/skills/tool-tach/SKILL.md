@@ -1,6 +1,6 @@
 ---
 description: >-
-  Authoritative guide for Tach modular architecture and layer boundary tool.
+  Guide for Tach modular architecture and layer boundary tool.
   Use when validating module boundaries, preventing circular imports, and defining layer hierarchies.
   Triggers: tach, architecture, layers, boundaries, circular imports, tach.toml.
 name: tool-tach
@@ -10,23 +10,23 @@ version: 1.0.0
 
 # Tach Architecture & Boundary Linter (`tool-tach`)
 
-`tach` is an ultra-fast architectural linter and dependency graph visualizer for
-Python, written in Rust. It enforces strict modular boundaries, defines public
+`tach` is a fast architectural linter and dependency graph visualizer for
+Python, written in Rust. It enforces modular boundaries, defines public
 module interfaces, and guarantees that low-level domain layers never import
 from high-level presentation or CLI layers.
 
-In Zenith projects, `tach` enforces clean acyclic layer separation and blocks
+Zenith projects configure `tach` to enforce clean acyclic layer separation and block
 circular imports.
 
 ---
 
 ## 1. Core CLI Commands
 
-Use these commands to validate boundaries, show trees, and generate reports.
+Use these commands to check boundaries, show trees, and generate reports.
 
 ```bash
-uv run tach check                  # Validate internal module boundaries
-uv run tach check-external         # Validate pyproject.toml external deps
+uv run tach check                  # Check internal module boundaries
+uv run tach check-external         # Check pyproject.toml external deps
 uv run tach check --exact          # Fail on unused module dependencies
 uv run tach show                   # Print terminal architecture tree
 uv run tach show --mermaid         # Export dependency graph in Mermaid
@@ -36,9 +36,9 @@ uv run tach report                 # Generate health report
 
 ---
 
-## 2. Configuration & Where It Lives
+## 2. Configuration Location
 
-Tach is configured via **`tach.toml`** at the project root:
+Configure Tach through **`tach.toml`** at the project root:
 
 ```toml
 # Source roots for Python import resolution
@@ -74,14 +74,14 @@ layer = "core"
 
 ---
 
-## 3. Most Common Configuration Changes During Development
+## 3. Common Configuration Changes During Development
 
 Manage architectural layers, module dependencies, public interfaces, and external
 `pyproject.toml` dependency hygiene with these patterns.
 
 ### A. Adding a New Architectural Layer
 
-To introduce a new layer (such as `domain`, `adapters`, or `storage`):
+To add a new layer (such as `domain`, `adapters`, or `storage`):
 
 1. Define the layer in the `layers` array in order of hierarchy:
 
@@ -125,22 +125,21 @@ expose = ["my_app.core.get_greeting", "my_app.core.GreetingConfig"]
 Any attempt to import an unexposed symbol from outside `my_app.core` will
 trigger a Tach interface violation error.
 
-### D. Validating External `pyproject.toml` Dependencies (`tach check-external`)
+### D. Checking External `pyproject.toml` Dependencies (`tach check-external`)
 
 `uv run poe dependencies` runs both `tach check` (internal layer boundaries) and
 `tach check-external` (external third-party dependency hygiene). `tach check-external`
 automatically catches:
 
-1. **Unused dependencies**: Packages declared in `[project.dependencies]` that are never
-   imported in `src/` (controlled by `[rules] unused_external_dependencies = "error"`,
+1. **Unused dependencies**: Packages declared in `[project.dependencies]` that the codebase
+   never imports in `src/` (controlled by `[rules] unused_external_dependencies = "error"`,
    which is `"error"` by default).
-2. **Transitive or dev-only imports**: Importing a transitive dependency (e.g., `click`
-   via `typer`) or a dev-group dependency (e.g., `pytest`) inside `src/` without
-   declaring it in `[project.dependencies]`.
+2. **Transitive or dev-only imports**: Importing an undeclared transitive
+   dependency (such as `click` via `typer`) or a dev dependency inside `src/`.
 
-If a runtime dependency is loaded dynamically (e.g., a database driver or ASGI server
-plugin never imported directly) or has non-standard distribution metadata, configure
-`[external]` in `tach.toml`:
+A runtime dependency can load dynamically without direct imports in source code.
+It can also have non-standard metadata. In these cases, configure `[external]`
+in `tach.toml`:
 
 ```toml
 [external]
@@ -160,7 +159,7 @@ dependency graph directly as a Mermaid diagram:
 uv run poe dependency-graph
 ```
 
-This generates `docs/dependency_graph.mmd`, which can be embedded in docs.
+This generates `docs/dependency_graph.mmd`, which you can embed in docs.
 
 ### F. Suppressing False Positives or Temporary Migration Exceptions
 
@@ -182,14 +181,14 @@ from my_app.cli import (
 
 ---
 
-## 4. Best Practices & Troubleshooting
+## 4. Architecture Guidelines
 
-Keep these architecture rules in mind:
+Follow these architecture guidelines:
 
-- **Check boundaries & external deps with Poe**: Always run `uv run poe dependencies`
+- **Check boundaries and external dependencies with Poe**: Always run `uv run poe dependencies`
   before merging.
 - **Top-Down Only**: Imports must flow downwards through layers (`cli` $\to$
   `services` $\to$ `core`). Never allow `core` to import anything from `cli`.
-- **Acyclic Enforcement**: Tach mathematically prevents circular dependency
-  cycles. If a cycle is detected, extract shared interfaces into a lower-level
+- **Acyclic Enforcement**: Tach prevents circular dependency
+  cycles. If Tach detects a cycle, extract shared interfaces into a lower-level
   protocol module.

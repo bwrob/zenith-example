@@ -28,12 +28,11 @@ uv run pytest -v                      # Detailed test listing with sugar bar
 
 ## 3. Interaction with Other Plugins
 
-`pytest-sugar` is designed to compose cleanly with the rest of Zenith's
-testing toolchain:
+`pytest-sugar` composes cleanly with Zenith's testing tools:
 
 - **`pytest-xdist`**: Renders aggregate progress across all parallel worker
   processes.
-- **`pytest-cov`**: Displays coverage statistics after the final test completes
+- **`pytest-cov`**: Shows coverage statistics after the final test completes
   without graphical glitches.
 - **`hypothesis`**: Shows shrinking and falsifying examples with full colored
   tracebacks.
@@ -42,8 +41,8 @@ testing toolchain:
 
 ## 4. Disabling in Headless CI Environments
 
-In non-interactive CI environments or plain terminal logs where ASCII animation
-is undesired, disable `pytest-sugar` via the command line or environment:
+In CI workflows or logs without animation support, disable `pytest-sugar`
+from the command line:
 
 ```bash
 # In CI workflow step

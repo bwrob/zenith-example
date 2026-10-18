@@ -108,6 +108,10 @@
     cmd  = "rumdl check"
     help = "Lint markdown documentation with rumdl."
 
+[tasks.lint-ste]
+    cmd  = "python .agents/skills/asd-ste100/scripts/ste-lint.py .agents/skills"
+    help = "Lint agent skills against ASD-STE100 structural rules."
+
 [tasks.format-md]
     cmd  = "rumdl fmt"
     help = "Format markdown and embedded code snippets with rumdl."

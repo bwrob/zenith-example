@@ -1,6 +1,6 @@
 ---
 description: >-
-  Authoritative engineering style guide for modern Python 3.12+ projects.
+  Engineering style guide for modern Python 3.12+ projects.
   Enforces PEP 695 generic syntax, structural protocols, frozen slots dataclasses, pure functional transformations, strict typing with Pyrefly, and composition over inheritance.
   Use when writing, reviewing, architecting, refactoring, or type-checking Python code in this repository.
   Triggers: python style, pep 695, protocols, dataclasses, typing, refactor.
@@ -8,19 +8,18 @@ name: python-style-guide
 version: 1.0.0
 ---
 
-
 # Modern Python 3.12+ Style Guide (`python-style-guide`)
 
-This style guide establishes the engineering standards for code in this
-repository. It codifies patterns from modern Python 3.12+, PEP 695, structural
-subtyping, functional data transformation, and strict static verification.
+This style guide defines engineering standards for Python code in this
+repository. It codifies Python 3.12+, PEP 695, structural
+subtyping, functional transformation, and static typing.
 
 ---
 
 ## 1. Core Principles
 
 1. **Explicit, Static Precision**: Every signature, return value, and interface
-   boundary must be fully typed. If a type cannot be expressed, refactor the design.
+   boundary must have complete types. If you cannot express a type, refactor the design.
 2. **Data & Behavior Separation**: Model data with immutable, transparent
    records (`dataclass(frozen=True)`). Express operations as pure functions.
 3. **Composition over Inheritance**: Never use subclassing for code reuse. Compose
@@ -36,11 +35,11 @@ subtyping, functional data transformation, and strict static verification.
 
 ## 2. Python 3.12+ & PEP 695 Generics
 
-Leverage native type parameter syntax and standard collection abstractions.
+Use native type parameter syntax and standard collection abstractions.
 
 ### Type Parameter Syntax
 
-Never use legacy `TypeVar`, `ParamSpec`, or `TypeAlias` imports. Always use native
+Do not use legacy `TypeVar`, `ParamSpec`, or `TypeAlias` imports. Use native
 Python 3.12+ PEP 695 syntax:
 
 ```python
@@ -114,8 +113,8 @@ class UserProfile:
 - Always set `frozen=True` and `slots=True`.
 - Use `kw_only=True` when constructors have more than 2-3 fields to eliminate
   positional argument bugs.
-- If data must change, use `dataclasses.replace` to produce a new instance rather
-  than mutating fields.
+- If data must change, use `dataclasses.replace` to produce a new instance.
+  Do not mutate fields.
 
 ---
 
@@ -152,7 +151,7 @@ class TokenProvider(Protocol):
 
 ## 5. Composition Over Inheritance
 
-Avoid class hierarchies. When polymorphism is required, use protocols,
+Avoid class hierarchies. When you need polymorphism, use protocols,
 callable injection, or algebraic sum types:
 
 ```python
@@ -231,11 +230,10 @@ def dispatch(action: Action) -> None:
 
 > [!TIP]
 > **Forward-Compatible Exhaustiveness (`if TYPE_CHECKING: assert_never(...)`)**:
-> For internal closed unions, call `typing.assert_never(x)` directly in the default
-> branch so both static type checkers and runtime raise on unhandled variants. When
-> matching external API payloads or wire schemas that may add new enum values in the
-> future without breaking existing clients, guard `assert_never(x)` behind
-> `if TYPE_CHECKING:` and log or gracefully fallback at runtime.
+> For internal closed unions, call `typing.assert_never(x)` directly in the default branch.
+> This makes both static type checkers and runtime fail on unhandled variants.
+> External API payloads can add new enum values in the future without breaking existing clients.
+> In that case, guard `assert_never(x)` behind `if TYPE_CHECKING:` and log a warning at runtime.
 
 ---
 
@@ -246,13 +244,13 @@ def dispatch(action: Action) -> None:
 - **Explicit Returns**: Always declare return types, including `-> None`.
 - **Narrow Types Early**: Use `assert`, `isinstance`, or `match` guards to narrow
   `object` or broad unions at system boundaries.
-- **PEP 561**: Ensure `py.typed` is present in the package root.
+- **PEP 561**: Include `py.typed` in the package root.
 
 ---
 
 ## 8. Architectural Boundaries (Tach)
 
-- **Strict Layering**: Respect module layer boundaries defined in `tach.toml`.
+- **Strict Layering**: Follow module layer boundaries defined in `tach.toml`.
   - `cli` depends on `core`.
   - `core` NEVER imports from `cli`.
 - **Zero Circular Imports**: Keep module dependencies as a Directed Acyclic
@@ -262,12 +260,12 @@ def dispatch(action: Action) -> None:
 
 ## 9. Docstrings & Markdown Rendering
 
-- **NumPy-Style Markdown Docstrings**: Format public module, class, and function
-  docstrings using the `numpy` convention (`Parameters`, `Returns`, `Raises`,
-  `Examples`), rendered as Markdown by `mkdocstrings` and Zensical.
-- **Single Backticks for Inline Code**: Because docstrings are parsed as
-  Markdown rather than reStructuredText (RST), always use single backticks for
-  inline code references (`` `value` ``), never RST double backticks
-  (```` ``value`` ````).
-- **Executable Doctests**: Include concise `>>>` doctest examples in pure
-  functions where appropriate (verified automatically by `pytest --doctest-modules`).
+- **NumPy-Style Markdown Docstrings**: Format public docstrings using the `numpy` convention
+  (`Parameters`, `Returns`, `Raises`, `Examples`).
+  Zensical and `mkdocstrings` render these docstrings as Markdown.
+- **Single Backticks for Inline Code**: Docstrings parse as Markdown rather than
+  reStructuredText (RST). Always use single backticks for inline code references
+  (`` `value` ``), never RST double backticks (```` ``value`` ````).
+- **Executable Doctests**: Include `>>>` doctest examples in pure functions when appropriate.
+  Automated tests check these doctests via `pytest --doctest-modules`.
+

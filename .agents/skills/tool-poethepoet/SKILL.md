@@ -35,12 +35,12 @@ uv run poe -C /path <task>       # Run as if from another directory
 
 ## 2. Core Task Types
 
-Poe supports multiple declarative task types defined under `[tasks]` or
+Poe supports declarative task types defined under `[tasks]` or
 `[tool.poe.tasks]`.
 
 ### Command Tasks (`cmd`)
 
-Runs a CLI binary or executable command as a subprocess without a shell:
+Runs an executable command as a subprocess without a shell:
 
 ```toml
 [tasks.test]
@@ -64,7 +64,7 @@ help = "Run code generator script"
 script = "shutil:rmtree('dist', ignore_errors=1)"
 ```
 
-Arguments can be passed directly in the call expression or forwarded as keyword
+Pass arguments directly in the call expression or forward them as keyword
 arguments when referencing a callable.
 
 ### Shell Tasks (`shell`)
@@ -80,7 +80,7 @@ echo "Test lines:   $(find tests -name '*.py' | xargs wc -l)"
 """
 ```
 
-Only public arguments are exported to shell environments.
+Poe exports only public arguments to shell environments.
 
 ### Sequence Tasks (`sequence`)
 
@@ -105,9 +105,8 @@ parallel = ["lint", "type-check"]
 
 ### Expression Tasks (`expr`) & Switch Tasks (`switch`)
 
-`expr` evaluates a Python expression directly and prints the result, while
-`switch` conditionally executes steps based on an argument, environment
-variable, or platform:
+`expr` evaluates a Python expression and prints the result. `switch` runs
+steps based on an argument, environment variable, or platform:
 
 ```toml
 [tasks.platform]
@@ -140,7 +139,7 @@ switch = [
 
 ## 3. Advanced Task Composition and DAG Dependencies
 
-Compose robust workflows using Poe's directed acyclic graph (DAG) dependency
+Compose workflows using Poe's directed acyclic graph (DAG) dependency
 engine and argument binding.
 
 ### Defining Task Dependencies (`deps`)
@@ -208,8 +207,8 @@ help = "Remove build artifacts and cache directories"
 sequence = ["_clean-dist"]
 ```
 
-Internal `_` tasks cannot be called directly from the CLI and must be invoked
-via `sequence`, `parallel`, `deps`, or `uses`.
+Users cannot call internal `_` tasks from the CLI. Invoke them through
+`sequence`, `parallel`, `deps`, or `uses`.
 
 ### Organizing Large Task Sets with `groups`
 
@@ -227,9 +226,8 @@ help = "Lint codebase"
 
 ### Side-Channel Drift Verification Without Dirtying the Working Tree
 
-When verifying that a generated artifact (such as a JSON Schema or OpenAPI spec)
-is up to date, generate it to a gitignored comparison path and diff with
-`git diff --no-index` so running the check never mutates tracked files:
+To check that a generated artifact is up to date, output it to a temporary path.
+Then run `git diff --no-index`. This check prevents changes to tracked files:
 
 ```toml
 [tasks.schema-check-drift]
@@ -243,13 +241,12 @@ sequence = [
 
 ## 4. Environment Variables Management
 
-Poe provides environment variable configuration at both the global project level
-and the task level.
+Configure environment variables at the global project level and the task level.
 
 ### Global Environment Variables (`env`)
 
-Configure environment variables exposed to all tasks in `pyproject.toml` or
-standalone task files (`poe_tasks.toml`):
+Configure environment variables for all tasks in `pyproject.toml` or
+`poe_tasks.toml`:
 
 ```toml
 # In pyproject.toml:
@@ -267,8 +264,8 @@ APP_ENV = "test"
 ```
 
 - **POSIX Parameter Expansion**: Global variables support parameter expansion
-  (`${VAR}`, `${VAR:-default}`, `${VAR:+alt}`) referencing variables already
-  defined in the host environment or referenced env files.
+  (`${VAR}`, `${VAR:-default}`, `${VAR:+alt}`). These reference variables
+  defined in the host environment or loaded env files.
 - **Default Fallback (`default`)**: Use `{ default = "fallback" }` or
   `VAR.default = "fallback"` to set a variable only if it is not already
   defined in the host environment:
@@ -307,32 +304,31 @@ env = { APP_ENV = "ci", PYTEST_TIMEOUT = "30" }
 envfile = ".env.test"
 ```
 
-Task-level settings take precedence over global options, providing precise
-control per command.
+Task settings override global options.
 
 ## 5. Declarative Primitives Over Bash Scripting
 
-Before writing a `shell` task, check if a declarative Poe feature expresses the
-intent portably. See the full mapping in:
+Before you write a `shell` task, check whether a declarative Poe feature satisfies the
+requirement. See the mapping in:
 👉 [references/declarative_primitives.md](./references/declarative_primitives.md)
 
-Common declarative equivalents include using `arg` definitions with `default`,
-`choices`, and `required`, conditional dispatch with `switch`, capturing task outputs
-with `uses`/`uses_env`, and chaining tasks via `sequence` or `parallel`.
+Declarative alternatives include `arg` definitions with `default`, `choices`, and `required`.
+Use `switch` for conditionals, `uses` to capture task outputs, and `sequence` or `parallel` to chain tasks.
 
 ## 6. Best Practices and Rules
 
 Follow these engineering conventions when editing poe tasks:
 
-- **Use global `env` for project-wide runtime flags**: Set cross-cutting flags
-  (such as `PYTHONUTF8 = "1"` and `PYTHONWARNDEFAULTENCODING = "1"`) under `[env]` (or
-  `[tool.poe.env]`) rather than repeating them across multiple individual tasks.
-- **Compose, don't recurse**: Use `sequence`, `parallel`, or `deps` to chain
+- **Use global `env` for project-wide runtime flags**: Set flags (such as
+  `PYTHONUTF8 = "1"`) under `[env]` or `[tool.poe.env]`.
+  Do not repeat them across multiple individual tasks.
+- **Compose, do not recurse**: Use `sequence`, `parallel`, or `deps` to chain
   tasks. Never shell out using `cmd = "poe other-task"`.
 - **Always provide `help`**: Every public task must include a concise `help`
   string for self-documentation.
 - **Never hand-edit dependencies**: Use `uv add <pkg>` or
-  `uv add --group <group> <pkg>` rather than modifying `pyproject.toml`
+  `uv add --group <group> <pkg>` rather than changing `pyproject.toml`
   manually.
-- **Inspect discovery**: Run `uv run poe --help` to confirm tasks parse and
-  documentation displays properly.
+- **Inspect discovery**: Run `uv run poe --help` to check that tasks parse and
+  documentation displays correctly.
+

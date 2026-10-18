@@ -1,16 +1,15 @@
 ---
 description: >-
-  Authoritative guide for modern pytest testing stack and plugins.
+  Guide for the pytest testing stack and plugins.
   Use when writing, running, debugging, or configuring unit, property, and snapshot tests.
   Triggers: pytest, testing, coverage, xdist, syrupy, hypothesis, pytest-cov.
 name: tool-pytest
 version: 1.0.0
 ---
 
-
 # pytest Testing Stack (`tool-pytest`)
 
-Zenith equips `pytest` with a modern, high-speed testing toolchain:
+Zenith equips `pytest` with these testing tools:
 
 - **Parallel Execution**: `pytest-xdist` (`-n auto`) for multi-core speed.
 - **Flakiness Detection**: `pytest-randomly` for randomized execution order.
@@ -23,7 +22,7 @@ Zenith equips `pytest` with a modern, high-speed testing toolchain:
 
 ## 1. Core CLI Commands
 
-Execute tests across the suite, single files, or in parallel.
+Run tests across the suite, single files, or in parallel:
 
 ```bash
 uv run pytest                         # Run all tests with coverage
@@ -35,7 +34,7 @@ uv run pytest --snapshot-update       # Update syrupy snapshot files (.ambr)
 uv run pytest --cov --cov-report=html # Generate HTML coverage in htmlcov/
 ```
 
-In Zenith, task aliases are managed via Poe:
+In Zenith, run tasks through Poe:
 
 ```bash
 uv run poe test                 # Run tests with coverage and doctests
@@ -50,7 +49,7 @@ uv run poe coverage             # Generate HTML coverage report
 
 ## 2. Configuration Files
 
-Pytest and coverage behavior are configured through root configuration files.
+Configure pytest and coverage in root configuration files.
 
 ### `pytest.ini`
 
@@ -80,19 +79,19 @@ doctest_optionflags    =
 ```
 
 > [!TIP]
-> Setting `-p no:legacypath` banishes pytest's legacy `py.path.local` plugin, enforcing
+> Setting `-p no:legacypath` disables pytest's legacy `py.path.local` plugin, enforcing
 > standard `pathlib.Path` across test fixtures (`tmp_path`). Setting `log_level = DEBUG`
-> without `log_cli = true` captures `DEBUG` logs in memory and prints them **only when a test fails**,
-> keeping passing test runs quiet and preserving LLM context window budgets.
+> without `log_cli = true` captures `DEBUG` logs in memory. pytest prints them
+> **only when a test fails**, keeping passing test runs quiet.
 > When using `pytest-asyncio` 0.24+, set `asyncio_default_fixture_loop_scope = function` to
 > silence event loop scoping warnings.
 
 ### `.coveragerc`
 
-Coverage uses Python 3.12+'s low-overhead PEP 669 `sys.monitoring` engine
-(`core = sysmon`), tracks subprocesses and `os._exit()` calls automatically
-(`patch = subprocess, _exit`), and monitors both `src/` and `tests/` so dead
-test helpers or unreachable fixture branches are immediately caught:
+Coverage uses Python 3.12+'s low-overhead PEP 669 `sys.monitoring` engine (`core = sysmon`).
+It tracks subprocesses and `os._exit()` calls automatically (`patch = subprocess, _exit`).
+It monitors both `src/` and `tests/` so that pytest catches untested helper functions
+or fixture branches immediately:
 
 ```ini
 [run]
@@ -128,7 +127,7 @@ exclude_also =
 
 ## 3. Testing Paradigms in Zenith
 
-Zenith integrates snapshot, property-based, and randomized testing patterns.
+Zenith supports snapshot, property-based, and randomized tests.
 
 ### A. Snapshot Testing with `syrupy` (or `inline-snapshot` + `dirty-equals`)
 
@@ -141,7 +140,7 @@ def test_greeting_snapshot(snapshot):
     assert result == snapshot
 ```
 
-Snapshots are stored in `tests/__snapshots__/<test_file>.ambr`.
+Syrupy stores snapshots in `tests/__snapshots__/<test_file>.ambr`.
 To update snapshots after intentional code changes:
 
 ```bash
@@ -174,9 +173,9 @@ def test_greeting_always_contains_name(name: str):
 
 ### C. Randomized & Work-Stealing Execution (`pytest-randomly` & `pytest-xdist`)
 
-`pytest-randomly` runs tests in a different order on every invocation. If a test
-fails only when run after another test, they share state (e.g. global variables,
-un-reset caches, or dirty file systems).
+`pytest-randomly` runs tests in a different order on each run. If a test
+fails only when run after another test, they share state (for example,
+global variables, un-reset caches, or dirty file systems).
 
 To reproduce a specific randomized run:
 
@@ -185,20 +184,20 @@ uv run pytest --randomly-seed=12345
 ```
 
 When running in parallel (`uv run poe test-fast`), Zenith uses
-`--dist=worksteal --max-worker-restart=0` so slow property-based tests do not
-bottleneck a single worker and native worker crashes fail immediately instead of
+`--dist=worksteal --max-worker-restart=0`. Slow property-based tests do not
+bottleneck a single worker, and native worker crashes fail immediately instead of
 hanging.
 
 ---
 
-## 4. Most Common Configuration Changes During Development
+## 4. Common Configuration Changes
 
 Register markers, tune coverage thresholds, or exclude lines with these
-settings.
+settings:
 
 ### A. Registering Custom Test Markers
 
-When adding markers (e.g. `@pytest.mark.integration`), register them in
+When adding markers (for example, `@pytest.mark.integration`), register them in
 `pytest.ini` to avoid errors under `strict = true`:
 
 ```ini
@@ -210,7 +209,7 @@ markers =
 
 ### B. Adjusting Coverage Thresholds
 
-To adjust minimum branch coverage requirement in `.coveragerc`:
+To adjust the minimum branch coverage requirement in `.coveragerc`:
 
 ```ini
 [report]
@@ -232,59 +231,60 @@ exclude_also =
 
 Python 3.10+ introduced `EncodingWarning` (PEP 597) to identify calls to `open()`
 and text streams that omit an explicit encoding argument. In Zenith, all test
-tasks execute with `PYTHONWARNDEFAULTENCODING=1`. Paired with
-`default::EncodingWarning` and `error::EncodingWarning:<package_name>.*` under
-`filterwarnings` in `pytest.ini`, any missing `encoding="utf-8"` in first-party
-code is treated as a fatal failure while preventing unpinned third-party plugin
+tasks execute with `PYTHONWARNDEFAULTENCODING=1`.
+Under `filterwarnings` in `pytest.ini`, `default::EncodingWarning` and
+`error::EncodingWarning:<package_name>.*` turn missing `encoding="utf-8"` in
+first-party code into a fatal failure. They also prevent unpinned third-party plugin
 warnings from breaking CI.
 
 ### E. Distribution Artifact Testing (`poe test-dist`)
 
 Running `pytest` directly against `src/` can mask missing files in
 `pyproject.toml` package data, broken `py.typed` markers, or distribution
-compilation errors. `uv run poe test-dist` executes
-`python scripts/verify_wheel.py --run-tests`, which:
+compilation errors. `uv run poe test-dist` runs
+`python scripts/verify_wheel.py --run-tests`. This script:
 
-1. Builds a standalone `.whl` package via `uv build --wheel`.
-2. Provisions a temporary, isolated virtual environment.
+1. Builds a `.whl` package with `uv build --wheel`.
+2. Creates a temporary, isolated virtual environment.
 3. Installs the compiled `.whl` and test dependencies.
-4. Executes the full `pytest` suite against the installed distribution with
+4. Runs the full `pytest` suite against the installed distribution with
    `python -I -m pytest` (`src/` omitted from `sys.path`).
 
 ---
 
 ## 5. Agent Test Engineering & Anti-Slop Standards
 
-Follow these strict engineering rules when authoring or refactoring tests:
+Follow these engineering rules when authoring or refactoring tests:
 
 1. **One Test File Per Unit Under Test, Not Per Change/PR**:
    Always place new tests in the canonical `tests/test_<module>.py` file for the
    unit under test. Never create grab-bag test files named after a bug ticket,
-   PR, or refactor (e.g. `test_issue_123.py` or `test_new_validation.py`), which
-   fragment module coverage. Keep single-use helper classes/functions inline
-   inside the test function; extract to module level only when shared by 3+
-   tests.
+   PR, or refactor (for example, `test_issue_123.py` or `test_new_validation.py`), which
+   fragment module coverage. Keep single-use helper classes or functions inline
+   inside the test function. Extract them to module level only when shared by
+   3 or more tests.
 2. **Behavior-Sentence Naming & Single Behavior Per Test**:
    Test names must state the observable behavior (`test_<action>_when_<condition>`
-   or `test_<subject>_<expected_outcome>`). Each test should verify one behavior
+   or `test_<subject>_<expected_outcome>`). Each test must verify one behavior
    following clear Arrange / Act / Assert separation.
-3. **The Hollow-Proof Check & Transformation vs. Pass-Through Rule**:
+3. **The Hollow-Proof Test & Transformation vs. Pass-Through Rule**:
    Before finalizing a test, ask: *"What production bug could pass this test?"*
-   - If a hardcoded return value would pass, tighten the assertion.
+   - If a hardcoded return value passes the test, tighten the assertion.
    - Assert **transformed/computed outputs**, not echoed pass-through inputs
-     (e.g. asserting `result.name == "foo"` when `name="foo"` was passed in only
+     (for example, asserting `result.name == "foo"` when you pass `name="foo"` only
      tests assignment, not business logic).
    - Never weaken or delete an existing assertion just to make a failing test
      pass.
 4. **Provenance Docstrings on Regression Tests**:
-   Every test added for a bug fix must include a concise provenance docstring so
-   future contributors or agents do not delete or weaken it during refactoring:
+   Every test added for a bug fix must include a concise provenance docstring.
+   This docstring prevents future contributors or agents from deleting or weakening
+   the test during refactoring:
 
    ```python
    def test_empty_identifier_raises_value_error() -> None:
        """Bug: whitespace-only identifiers bypassed length validation.
        Root cause: len() was checked before strip().
-       Fix: normalize identifier via strip() prior to validation.
+       Fix: normalize identifier with strip() before validation.
        """
    ```
 
@@ -297,22 +297,20 @@ Follow these strict engineering rules when authoring or refactoring tests:
    event loop, and `pytest-run-parallel` for PEP 703 free-threading stress
    testing.
 6. **Fresh-Process Import-Graph Budget Testing**:
-   To verify PEP 562 lazy imports (`_lazy.py`) or ensure top-level entry points
-   do not eagerly import heavy optional dependencies (such as CLI frameworks),
-   spawn a clean `subprocess.run([sys.executable, "-c", ...])` and assert that
-   deferred modules are absent from `sys.modules`.
+   Verify PEP 562 lazy imports (`_lazy.py`) to keep entry points fast and lean.
+   Spawn a clean `subprocess.run([sys.executable, "-c", ...])`.
+   Assert that deferred modules are absent from `sys.modules`.
 7. **Union & Registry Sync Tripwire Tests**:
-   Whenever runtime registries, dispatch tables, or CLI option lists mirror a
-   static `Literal` or `Union` type alias, add a reflection tripwire test using
-   `typing.get_args()` (e.g. `assert set(REGISTRY) == set(get_args(ActionType))`)
-   so adding a variant to the type without registering its runtime handler fails
-   immediately in `pytest`.
+   Runtime registries or CLI option lists often mirror a static `Literal` or `Union` type alias.
+   Add a reflection tripwire test using `typing.get_args()`
+   (for example, `assert set(REGISTRY) == set(get_args(ActionType))`).
+   Adding a variant without registering its runtime handler then fails immediately in `pytest`.
 
 ---
 
 ## 6. Plugin Reference Guides
 
-For in-depth guides, options, and advanced configurations for each plugin:
+See guides for each plugin:
 
 - [pytest-xdist](references/pytest-xdist.md): Parallel execution and worker
   distribution.
@@ -326,3 +324,4 @@ For in-depth guides, options, and advanced configurations for each plugin:
   snapshots.
 - [hypothesis](references/hypothesis.md): Property-based testing and generative
   strategies.
+

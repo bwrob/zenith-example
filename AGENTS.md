@@ -79,8 +79,9 @@ Before editing code or running tasks, ensure a clean, isolated environment:
 - **Scope Hierarchy**: When exploring subdirectories, check for nested `AGENTS.md` or
   `CLAUDE.md` files; localized instructions take precedence within their scope.
 - **Workflow & Tool Guidance**: Consult `.agents/skills/` for lifecycle workflow skills
-  (`project-setup`, `code-review`, `git-workflow`, `changelog-writing`, `adr`,
-  `skill-creator`) and tool-specific guidance (`tool-*/SKILL.md`, `python-style-guide`).
+  (`asd-ste100`, `project-setup`, `code-review`, `git-workflow`, `changelog-writing`,
+  `adr`, `skill-creator`) and tool-specific guidance (`tool-*/SKILL.md`,
+  `python-style-guide`).
 
 ## Architecture & Code Design
 

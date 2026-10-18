@@ -1,6 +1,6 @@
 ---
 description: >-
-  Authoritative guide for rumdl Markdown linter and formatter in Rust.
+  Guide for rumdl Markdown linter and formatter in Rust.
   Use when checking, formatting, and linting Markdown documentation and embedded code blocks.
   Triggers: rumdl, markdown, lint-md, format-md, rumdl.toml.
 name: tool-rumdl
@@ -10,12 +10,11 @@ version: 1.0.0
 
 # rumdl Markdown Linter & Formatter (`tool-rumdl`)
 
-`rumdl` is an extremely fast markdown linter and formatter written in Rust. It
-enforces consistent, polished markdown style across READMEs, API docs, and
-guides, and features integrated code-block tools that automatically format and
-lint embedded Python code snippets using Ruff.
+`rumdl` is a fast markdown linter and formatter written in Rust. It enforces
+consistent markdown style across documentation and guides. It also formats
+and lints embedded Python code snippets using Ruff.
 
-In Zenith projects, `rumdl` enforces strict GitHub Flavored Markdown (GFM)
+Zenith projects configure `rumdl` to enforce GitHub Flavored Markdown (GFM)
 rules with an 88-character line limit.
 
 ---
@@ -31,7 +30,7 @@ uv run rumdl fmt                       # Format all markdown files and code
 uv run rumdl fmt path/to/doc.md        # Format a specific markdown file
 ```
 
-In Zenith, task aliases are wired into Poe:
+Zenith wires task aliases into Poe:
 
 ```bash
 uv run poe lint-md                     # Runs rumdl check
@@ -40,9 +39,9 @@ uv run poe format-md                   # Runs rumdl fmt
 
 ---
 
-## 2. Configuration & Where It Lives
+## 2. Configuration Location
 
-`rumdl` is configured via **`rumdl.toml`** at the project root:
+Configure `rumdl` through **`rumdl.toml`** at the project root:
 
 ```toml
 flavor = "gfm"
@@ -86,14 +85,14 @@ command = ["ruff", "format", "--line-length=79", "-"]
 
 ---
 
-## 3. Most Common Configuration Changes During Development
+## 3. Common Configuration Changes During Development
 
 Adjust allowed HTML tags, line lengths, and rule exclusions with these
 settings.
 
 ### A. Allowing Additional HTML Elements (MD033)
 
-If you embed custom HTML tags (e.g. `<details>`, `<summary>`, `<video>`):
+If you embed custom HTML tags (for example, `<details>`, `<summary>`, `<video>`):
 
 ```toml
 [MD033]
@@ -142,12 +141,12 @@ When using template expressions or custom syntax tags inside fences:
 
 ---
 
-## 4. Key Markdown Rules to Remember
+## 4. Important Markdown Rules
 
-When authoring markdown in Zenith:
+Follow these markdown conventions:
 
-1. **Lists must have blank lines before them (MD032)**.
-2. **No trailing punctuation on headings (MD026)**.
-3. **Surround code fences with blank lines (MD031)**.
+1. **Put blank lines before lists (MD032)**.
+2. **Do not put trailing punctuation on headings (MD026)**.
+3. **Put blank lines before and after code fences (MD031)**.
 4. **Always specify fence languages (MD040)**: Use ```` ```python ````,
    ```` ```bash ````, ```` ```mermaid ````, never bare ```` ``` ````.

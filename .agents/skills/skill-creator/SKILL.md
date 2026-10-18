@@ -1,46 +1,45 @@
 ---
 description: >-
-  Authoritative workflow and standards for designing, architecting, and creating modular agent skills in Zenith repositories.
-  Enforces progressive disclosure, structured directories for complex skills (templates/, examples/, references/, scripts/), external template separation, and lean SKILL.md authoring.
-  Use when creating, architecting, refactoring, or modularizing agent skills.
+  Workflow and standards for creating modular agent skills in Zenith repositories.
+  Enforces progressive disclosure, structured directories, external template separation,
+  and ASD-STE100 writing standards. Use when creating, refactoring, or modularizing agent skills.
   Triggers: create skill, new skill, add skill, author skill, modular skill, skill template.
 name: skill-creator
 version: 1.0.0
 ---
 
-
 # Agent Skill Creator (`skill-creator`)
 
-This skill establishes the architectural standards, directory conventions, and
-authoring workflows for creating high-performance agent skills in Zenith projects.
+This skill defines the standards, directory conventions, and workflows
+to create agent skills in Zenith projects.
 
-Agent skills extend coding assistants with specialized runbooks, domain workflows,
-and tool knowledge. They operate under **progressive disclosure**: only the skill's
-`name` and `description` are loaded into initial context, while the full content is
-read only when activated.
+Agent skills extend coding assistants with specialized runbooks, workflows,
+and tool knowledge. They operate under **progressive disclosure**.
+The runner loads only the skill `name` and `description` into initial context.
+It reads the full content only when activated.
 
 ---
 
 ## 1. Skill Complexity Tiering
 
-Choose the appropriate structural tier based on the skill's complexity:
+Choose the structure based on skill complexity:
 
 ### Tier A: Simple Skill (Single File)
-- **When to Use**: Straightforward procedures, tool cheat-sheets, or concise workflows
-  requiring under 100–150 lines of instructions without heavy boilerplate.
-- **Structure**: A single `SKILL.md` file located at `.agents/skills/<name>/SKILL.md`.
-- **Constraint**: Do not create subdirectories for simple single-page instructions.
+- **When to Use**: Straightforward procedures, tool guides, or concise workflows
+  under 100–150 lines without boilerplate.
+- **Structure**: A single `SKILL.md` file at `.agents/skills/<name>/SKILL.md`.
+- **Constraint**: Do not create subdirectories for single-page instructions.
 
 ### Tier B: Complex Skill (Structured Directory)
-- **When to Use**: Workflows involving document/code templates, detailed reference manuals,
-  multi-file examples, or automation helper scripts.
+- **When to Use**: Workflows with templates, reference manuals, multi-file examples,
+  or helper scripts.
 - **Structure**: An organized directory following the canonical pattern:
   ```text
   .agents/skills/<name>/
-  ├── SKILL.md          # Required: Lean core workflow, decision logic & frontmatter
+  ├── SKILL.md          # Required: Lean core workflow, decision logic, and frontmatter
   ├── templates/        # Required if templates exist: External templates in separate files
-  ├── examples/         # Optional: Multi-file code recipes or concrete implementations
-  ├── references/       # Optional: Lengthy technical manuals, specifications, cheat-sheets
+  ├── examples/         # Optional: Multi-file recipes or concrete implementations
+  ├── references/       # Optional: Technical manuals, specifications, and cheat-sheets
   └── scripts/          # Optional: Executable automation or validation scripts
   ```
 
@@ -48,72 +47,80 @@ Choose the appropriate structural tier based on the skill's complexity:
 
 ## 2. Hard Architectural Rules
 
-### Rule 1: Templates Must Live in Separate Files
-- **Never embed large templates inline**: Do not include multi-screen document skeletons,
-  boilerplate code templates, config files, or report formats directly inside `SKILL.md`.
-- **Place in `templates/`**: Store every template in a dedicated file under `templates/`
-  (e.g., `templates/changelog.md`, `templates/review_output.md`).
-- **Relative Linking**: Link to the template file from `SKILL.md` using relative Markdown
-  links: `[templates/SKILL_TEMPLATE.md](./templates/SKILL_TEMPLATE.md)`.
+### Rule 1: Place Templates in Dedicated Files
+- **Never embed large templates inline**: Do not include document skeletons, boilerplate
+  code, config files, or report formats directly in `SKILL.md`.
+- **Store in `templates/`**: Place each template in a file under `templates/`
+  (for example, `templates/changelog.md` or `templates/review_output.md`).
+- **Use relative links**: Link to the template file from `SKILL.md` using relative
+  Markdown links: `[templates/SKILL_TEMPLATE.md](./templates/SKILL_TEMPLATE.md)`.
 
-### Rule 2: Lengthy References & Multi-File Examples in Dedicated Directories
-- **References (`references/`)**: Detailed technical manuals, third-party plugin lists,
-  or deep API specifications must be split into focused documents (e.g.,
-  `references/hypothesis.md`, `references/declarative_primitives.md`).
-- **Examples (`examples/`)**: Complete application recipes, sample CLI scripts, or
-  multi-file demonstration patterns belong in `examples/<name>.py` rather than inline
-  code blocks.
+### Rule 2: Move Lengthy References and Examples to Subdirectories
+- **References (`references/`)**: Split technical manuals, plugin lists, or API
+  specifications into separate documents (such as `references/hypothesis.md`).
+- **Examples (`examples/`)**: Store complete recipes, sample scripts, or multi-file
+  demonstrations in `examples/` instead of inline code blocks.
 
-### Rule 3: Progressive Disclosure & Lean `SKILL.md`
-- Keep `SKILL.md` focused strictly on **triggers, decision paths, and core step-by-step
-  instructions**.
-- The model should be able to read `SKILL.md` in a single pass without consuming excess
-  context window. Sub-files are read on demand when the specific step requires them.
+### Rule 3: Maintain Progressive Disclosure and Lean `SKILL.md`
+- Focus `SKILL.md` on triggers, decision paths, and core step-by-step instructions.
+- Ensure the model can read `SKILL.md` in one pass. Read sub-files on demand.
 
-### Rule 4: Zero Slop & Compressed Writing
-- Avoid conversational filler, chatty introductions, or obvious language explanations.
-- Use imperative, concise instructions, high-density Markdown tables, and exact shell
-  commands.
+### Rule 4: Write in Simplified Technical English (ASD-STE100)
+- Follow the [asd-ste100](../asd-ste100/SKILL.md) skill when authoring prose.
+- Write short, unambiguous, active-voice sentences.
+- Keep procedural sentences under 20 words. Keep descriptive sentences under 25 words.
+- Do not use semicolons, phrasal verbs, nominalizations, or marketing adjectives.
+- Run the STE linter to verify compliance:
+  ```bash
+  uv run python .agents/skills/asd-ste100/scripts/ste-lint.py .agents/skills/<name>/SKILL.md
+  ```
 
 ---
 
 ## 3. Skill Creation Workflow
 
-Follow these steps when creating a new skill:
+Follow these steps to create a new skill:
 
-### Step 1: Determine Scope & Tier
-1. Identify the workflow's trigger conditions and boundaries.
-2. Determine if it is a Tier A (single `SKILL.md`) or Tier B (structured directory).
+### Step 1: Determine Scope and Tier
+1. Identify workflow trigger conditions and boundaries.
+2. Choose Tier A (single `SKILL.md`) or Tier B (structured directory).
 3. If Tier B, initialize the directory layout:
    ```bash
-   mkdir -p .agents/skills/<name>/{templates,examples,references,scripts}
+   mkdir -p zenith-example/.agents/skills/<name>/{templates,examples,references,scripts}
    ```
 
-### Step 2: Author Frontmatter & Core Instructions
-1. Copy [templates/SKILL_TEMPLATE.md](./templates/SKILL_TEMPLATE.md) to `.agents/skills/<name>/SKILL.md`.
-2. Craft an authoritative YAML frontmatter block:
-   - **`name`**: Lowercase, hyphenated (e.g., `changelog-writing`, `git-workflow`).
-   - **`description`**: Third-person summary stating *what* the skill does and *when* to
-     use it, including explicit keywords and triggers.
+### Step 2: Author Frontmatter and Core Instructions
+1. Copy [templates/SKILL_TEMPLATE.md](./templates/SKILL_TEMPLATE.md) to
+   `zenith-example/.agents/skills/<name>/SKILL.md`.
+2. Craft the YAML frontmatter block:
+   - **`name`**: Lowercase, hyphenated (for example, `changelog-writing`).
+   - **`description`**: Summary stating *what* the skill does and *when* to use it,
+     including explicit triggers.
+3. Write clear, step-by-step instructions following ASD-STE100 standards.
 
 ### Step 3: Extract Templates and References
-1. Extract any file templates into `templates/<filename>`.
-2. Extract any deep reference tables or bulky manuals into `references/<filename>`.
+1. Extract file templates into `templates/<filename>`.
+2. Extract reference tables or manuals into `references/<filename>`.
 3. Extract complete code examples into `examples/<filename>`.
-4. Link all extracted assets from `SKILL.md` using relative links.
+4. Link all extracted assets from `SKILL.md` with relative links.
 
-### Step 4: Synchronize & Register
-1. If the skill applies to generated projects:
-   - Copy the skill directory to `zenith-example/.agents/skills/<name>/`.
-   - Add the skill name to the workflow skills list in `AGENTS.md` and
-     `zenith-example/AGENTS.md`.
-   - Add the skill existence assertion to `tests/test_template.py`.
-2. If the skill is Zenith repo-specific (e.g., `inspect-module-setup`), maintain it only in
-   the root `.agents/skills/`.
-
-### Step 5: Verify Formatting & Tests
-1. Verify pre-commit hooks and tests:
+### Step 4: Synchronize and Register
+1. Maintain shared skills in `zenith-example/.agents/skills/<name>/`.
+2. Run skill synchronization to create relative symlinks in `.agents/skills/<name>/`:
    ```bash
-   uv run pre-commit run --all-files
-   uv run pytest tests/test_template.py
+   uv run poe sync-skills
    ```
+3. If the skill is repo-only (such as `inspect-module-setup`), create it directly in
+   `.agents/skills/<name>/` and omit it from the template.
+4. Add the skill to the skills list in `AGENTS.md` and `zenith-example/AGENTS.md`.
+5. Add the skill existence assertion to `tests/test_template.py`.
+
+### Step 5: Verify Formatting and Tests
+Run the full verification suite:
+```bash
+uv run python .agents/skills/asd-ste100/scripts/ste-lint.py .agents/skills/<name>/SKILL.md
+uv run poe check-skills
+uv run poe sync-skills-check
+uv run poe code-quality
+```
+

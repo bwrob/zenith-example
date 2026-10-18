@@ -1,6 +1,6 @@
 ---
 description: >-
-  Authoritative guide for zizmor GitHub Actions security static analyzer.
+  Guide for zizmor GitHub Actions security static analyzer.
   Use when auditing CI/CD workflows for security vulnerabilities, secrets leakage, or script injection.
   Triggers: zizmor, security, github actions, workflows, ci security.
 name: tool-zizmor
@@ -10,13 +10,13 @@ version: 1.0.0
 
 # zizmor GitHub Actions Security Static Analyzer (`tool-zizmor`)
 
-`zizmor` is a high-performance static security analysis tool for GitHub Actions
-workflows, written in Rust. It audits CI/CD pipelines for critical security
+`zizmor` is a fast static security analysis tool for GitHub Actions
+workflows, written in Rust. It audits CI/CD pipelines for security
 vulnerabilities, including script injection, untrusted code execution, cache
 poisoning, credential exposure, and dangerous trigger configurations.
 
-In Zenith projects, `zizmor` guarantees that workflow pipelines adhere to least-privilege
-principles and defense-in-depth supply-chain security standards.
+Zenith projects use `zizmor` to check that workflow pipelines follow
+least-privilege principles and supply-chain security standards.
 
 ---
 
@@ -37,9 +37,9 @@ uv run poe code-quality
 
 ---
 
-## 2. Configuration & Where It Lives
+## 2. Configuration Location
 
-Zizmor is configured via **`.zizmor.yml`** at the project root:
+Configure Zizmor through **`.zizmor.yml`** at the project root:
 
 ```yaml
 rules:
@@ -47,17 +47,17 @@ rules:
     disable: true
 ```
 
-### Key Rules Checked:
+### Important Rules Checked:
 - **`dangerous-triggers`**: Flags insecure triggers such as `pull_request_target`.
 - **`cache-poisoning`**: Detects enabled caches in release/publish pipelines that could be manipulated.
 - **`artipacked`**: Detects missing `persist-credentials: false` in `actions/checkout`.
-- **`unpinned-uses`**: Audits whether action references are locked to specific versions or immutable commit SHAs.
+- **`unpinned-uses`**: Audits whether action references lock to specific versions or immutable commit SHAs.
 
 ---
 
 ## 3. Suppression Patterns
 
-When a workflow requires a specific trigger or configuration for legitimate reasons (e.g. metadata-only inspection on `pull_request_target`), use inline comment annotations:
+When a workflow requires a specific trigger or configuration (such as metadata inspection on `pull_request_target`), use inline comment annotations:
 
 ```yaml
 on:

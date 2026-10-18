@@ -10,15 +10,15 @@
 
 ## Context & Problem Statement
 
-[Describe the context and problem statement. What technical challenge or architectural trade-off requires resolution? What forces, requirements, and constraints apply?]
+[Describe the context and problem statement. What technical challenge or architectural trade-off requires a solution? What forces, requirements, and constraints apply?]
 
 ---
 
 ## Decision Drivers
 
-- [Driver 1, e.g., strict static type checking with Pyrefly]
-- [Driver 2, e.g., zero runtime overhead or sub-millisecond import time]
-- [Driver 3, e.g., modular layer boundary enforcement via Tach]
+- [Driver 1, for example, strict static type checking with Pyrefly]
+- [Driver 2, for example, zero runtime overhead or sub-millisecond import time]
+- [Driver 3, for example, modular layer boundary enforcement via Tach]
 
 ---
 
@@ -47,7 +47,7 @@
 
 ## Decision Outcome
 
-Chosen option: **"Option [X]: [Name of option]"**, because [justification, e.g., only option that satisfies driver 1 and driver 2 without introducing circular dependencies].
+Chosen option: **"Option [X]: [Name of option]"**, because [justification, for example, only option that satisfies driver 1 and driver 2 without introducing circular dependencies].
 
 ### Positive Consequences
 
@@ -64,4 +64,6 @@ Chosen option: **"Option [X]: [Name of option]"**, because [justification, e.g.,
 
 - **Tach Layers**: [How this decision affects `tach.toml` modules or layer definitions]
 - **Static Typing**: [Impact on Pyrefly type contracts, Protocols, or generic parameters]
-- **Testing Strategy**: [How this architectural invariant is verified in automated tests]
+- **Testing Strategy**: [How automated tests check this architectural invariant]
+
+

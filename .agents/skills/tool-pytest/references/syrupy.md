@@ -14,7 +14,7 @@ uv run pytest --snapshot-update       # Update snapshots with current output
 uv run pytest --snapshot-warn-unused  # Warn if snapshots exist with no test
 ```
 
-In Zenith, snapshot management is wired into Poe:
+In Zenith, manage snapshots through Poe:
 
 ```bash
 uv run poe test-snapshot-update       # Re-record snapshots after changes
@@ -60,7 +60,8 @@ def test_multiple_outputs(snapshot):
 - **Commit snapshot files**: Always commit `tests/__snapshots__/*.ambr` to
   version control alongside test code.
 - **Review diffs carefully**: Never run `uv run poe test-snapshot-update`
-  blindly. Inspect `git diff` to ensure changes in snapshots are intended.
-- **Spell-checker exclusion**: Ensure `*.ambr` is included in `extend-exclude`
-  in `typos.toml`, as serialized hash IDs can trigger false-positive spelling
+  blindly. Inspect `git diff` to check that snapshot changes are intentional.
+- **Spell-checker exclusion**: Include `*.ambr` in `extend-exclude` in
+  `typos.toml`, as serialized hash IDs can trigger false-positive spelling
+
   warnings.

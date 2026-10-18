@@ -1,9 +1,9 @@
 # hypothesis Reference
 
 `hypothesis` is an advanced property-based testing framework for Python. Instead
-of testing hardcoded examples, `hypothesis` generates hundreds of randomized,
-adversarial inputs to discover edge cases, then automatically *shrinks* failing
-inputs to their minimal reproducible form.
+of testing hardcoded examples, `hypothesis` generates randomized inputs
+to discover edge cases. It then automatically shrinks failing inputs to their
+minimal reproducible form.
 
 ## 1. Core Syntax & Invariant Testing
 
@@ -42,10 +42,9 @@ types:
 
 When `hypothesis` encounters an assertion failure:
 
-1. **Shrinking**: It iteratively prunes and simplifies the input (e.g. reducing
-   a 1000-character string with unicode to `""` or `" "`) to isolate the exact
-   trigger.
-2. **Database Cache**: Failing inputs are stored in `.hypothesis/examples/`.
+1. **Shrinking**: It prunes and simplifies failing inputs to isolate the
+   exact trigger. For example, it reduces large strings to `""` or `" "`.
+2. **Database Cache**: Hypothesis stores failing inputs in `.hypothesis/examples/`.
    Subsequent test runs re-test previously failing inputs first before exploring
    new random space.
 

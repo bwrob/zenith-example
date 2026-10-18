@@ -1,6 +1,6 @@
 ---
 description: >-
-  Authoritative guide for Typst layout engine for SVG logos and docs.
+  Guide for Typst layout engine for SVG logos and docs.
   Use when authoring vector assets, logotypes, diagram layouts, and rendered SVG assets.
   Triggers: typst, vector, svg, logo, typesetting.
 name: tool-typst
@@ -10,12 +10,12 @@ version: 1.0.0
 
 # Typst Layout Engine (`tool-typst`)
 
-`typst` is a modern, blazing-fast typesetting and document layout engine
+`typst` is a fast typesetting and document layout engine
 written in Rust. It combines the expressive power of LaTeX with the ergonomics
 and instant re-compilation of modern design systems.
 
-In Zenith projects, `typst` is used as a vector graphics engine to compile
-pristine SVG logotypes and branding assets directly from code.
+Zenith projects use `typst` as a vector graphics engine to compile
+SVG logotypes and branding assets directly from code.
 
 ---
 
@@ -31,7 +31,7 @@ uv run typst watch input.typ output.svg   # Live recompile on file change
 uv run typst fonts                        # List all available fonts
 ```
 
-In Zenith, the asset build task is automated via Poe:
+Zenith automates the asset build task via Poe:
 
 ```bash
 uv run poe docs-logo                      # Compiles python-logo.typ -> .svg
@@ -80,7 +80,7 @@ automatic sizing:
 
 ---
 
-## 3. Most Common Configuration Changes During Development
+## 3. Common Configuration Changes During Development
 
 Customize fonts, tracking, layouts, and shapes with these common patterns.
 
@@ -123,15 +123,15 @@ To compose shapes, icons, and text together:
 
 ---
 
-## 4. Best Practices & Troubleshooting
+## 4. Guidelines and Troubleshooting
 
-Keep these points in mind when creating assets with Typst:
+Follow these guidelines when you create assets with Typst:
 
 - **Transparent Backgrounds**: Always set `fill: none` on `#set page` so
-  exported SVGs blend seamlessly into both light and dark mode docs.
-- **Font Availability**: If a font is missing in CI environments, Typst
+  exported SVGs display cleanly in both light and dark mode docs.
+- **Font Availability**: If a font is absent in CI environments, Typst
   falls back to the next font in your fallback list. Use standard system
   fonts (`DejaVu Sans`) as final fallbacks.
-- **Typos Exclusion**: Remember to exclude generated `.svg` files in
-  `typos.toml`, as SVG glyph hashes can trigger false positive spelling
+- **Typos Exclusion**: Exclude generated `.svg` files in
+  `typos.toml` because SVG glyph hashes can trigger false-positive spelling
   errors.

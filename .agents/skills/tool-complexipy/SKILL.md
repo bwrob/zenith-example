@@ -1,28 +1,27 @@
 ---
 description: >-
-  Authoritative guide for complexipy cognitive complexity analyzer in Python.
+  Guide for complexipy cognitive complexity analyzer in Python.
   Use when checking, refactoring, or reducing cognitive and cyclomatic complexity.
   Triggers: complexipy, complexity, cognitive complexity, cyclomatic complexity.
 name: tool-complexipy
 version: 1.0.0
 ---
 
-
 # complexipy Cognitive Complexity Analyzer (`tool-complexipy`)
 
-`complexipy` is an ultra-fast cognitive complexity analyzer for Python code
-written in Rust. Unlike legacy cyclomatic complexity (which merely counts
-branches), **cognitive complexity** measures how much mental effort is
-required for a human to read, understand, and reason about a function.
+`complexipy` is a cognitive complexity analyzer for Python written in Rust.
+Legacy cyclomatic complexity only counts branches.
+In contrast, **cognitive complexity** measures the mental effort
+a reader needs to understand and maintain a function.
 
-In Zenith projects, `complexipy` enforces a strict ceiling of **$\le 10$**
+In Zenith projects, `complexipy` enforces a ceiling of **$\le 10$**
 cognitive complexity per function across all source code.
 
 ---
 
 ## 1. Core CLI Commands
 
-Analyze cognitive complexity across the repository or for specific files.
+Analyze cognitive complexity across the repository or for specific files:
 
 ```bash
 uv run complexipy src tests              # Check src and tests
@@ -31,7 +30,7 @@ uv run complexipy src -c 10              # Run with custom limit
 uv run complexipy src --output-csv       # Export analysis to CSV
 ```
 
-In Zenith, the canonical invocation is managed via Poe:
+In Zenith, run the check through Poe:
 
 ```bash
 uv run poe complexity                    # Runs complexipy src tests
@@ -39,9 +38,9 @@ uv run poe complexity                    # Runs complexipy src tests
 
 ---
 
-## 2. Configuration & Where It Lives
+## 2. Configuration Location
 
-`complexipy` is configured via **`complexipy.toml`** at the project root:
+Configure `complexipy` in `complexipy.toml` at the project root:
 
 ```toml
 # Maximum cognitive complexity allowed per function (Zenith strict threshold)
@@ -60,7 +59,7 @@ exclude = [
 
 ---
 
-## 3. How Cognitive Complexity is Calculated
+## 3. How Cognitive Complexity Increments
 
 Cognitive complexity increments when code breaks the reader's linear flow:
 
@@ -137,14 +136,13 @@ def dispatch_action(action: str, payload: Payload) -> Result:
 
 ---
 
-## 5. Most Common Configuration Changes During Development
+## 5. Common Configuration Changes
 
-Adjust threshold limits and exclusions in `complexipy.toml` using these
-patterns.
+Adjust thresholds and exclusions in `complexipy.toml`:
 
 ### A. Adjusting Complexity Threshold
 
-While Zenith recommends keeping threshold $\le 10$ for maintainability:
+Zenith recommends a threshold of $\le 10$ for maintainability:
 
 ```toml
 max_complexity = 12
@@ -160,3 +158,4 @@ exclude = [
     "tests/fixtures",
 ]
 ```
+

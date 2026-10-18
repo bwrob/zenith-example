@@ -1,29 +1,27 @@
 ---
 description: >-
-  Authoritative guide for Meta Pyrefly static type checker in Python 3.12+.
+  Guide for Meta Pyrefly static type checker in Python 3.12+.
   Use when type checking, configuring types, fixing type errors, or optimizing generic models.
   Triggers: pyrefly, type check, static typing, pyrefly.toml, types.
 name: tool-pyrefly
 version: 1.0.0
 ---
 
-
 # Pyrefly Static Type Checker (`tool-pyrefly`)
 
-`pyrefly` is Meta's next-generation, high-performance static type checker and
-Language Server Protocol (LSP) for Python, written in Rust. It enforces strict
-type safety, full generic verification, and zero implicit `Any` types with
-exceptional speed.
+`pyrefly` is a static type checker and Language Server Protocol (LSP)
+for Python, written in Rust. It enforces strict type safety, generic checking,
+and zero implicit `Any` types.
 
-In Zenith projects, `pyrefly` is configured with the `strict` preset mode to
-guarantee complete type coverage across the codebase.
+Zenith projects configure `pyrefly` with the `strict` preset mode to
+guarantee type coverage across the codebase.
 
 ---
 
 ## 1. Core CLI Commands
 
-Use these commands to verify static typing across the project or in single
-modules.
+Use these commands to check static typing across the project or in single
+modules:
 
 ```bash
 uv run pyrefly check                      # Check entire project config
@@ -34,10 +32,9 @@ uv run pyrefly init                       # Generate pyrefly.toml config
 
 ---
 
-## 2. Configuration & Where It Lives
+## 2. Configuration Location
 
-Pyrefly is configured through **`pyrefly.toml`** at the project root using
-`kebab-case` keys:
+Configure Pyrefly in `pyrefly.toml` at the project root with `kebab-case` keys:
 
 ```toml
 # Only respect explicit # pyrefly: ignore[...] comments (bans bare # type: ignore)
@@ -60,15 +57,15 @@ search-path = ["src"]
 
 ---
 
-## 3. Most Common Configuration Changes During Development
+## 3. Common Configuration Changes
 
 Adjust type checking rules and module search paths using these standard
-patterns.
+patterns:
 
 ### A. Suppressing Type Errors on a Specific Line
 
-Because `enabled-ignores = ["pyrefly"]` is active, generic `# type: ignore`
-comments are ignored. Always use `# pyrefly: ignore[error-code]`:
+Because `enabled-ignores = ["pyrefly"]` is active, Pyrefly ignores generic
+`# type: ignore` comments. Use `# pyrefly: ignore[error-code]`:
 
 ```python
 # Suppress a specific error code
@@ -80,12 +77,12 @@ data = legacy_payload.parse()  # pyrefly: ignore[bad-arg, missing-attribute]
 
 > [!NOTE]
 > Always specify the exact error code inside brackets. Never use bare
-> ignores. To automatically strip stale ignore comments across the codebase,
+> ignores. To remove stale ignore comments across the codebase,
 > run `uv run pyrefly check --remove-unused-ignores`.
 
 ### B. Handling Untyped or Heavy Third-Party Imports
 
-When a third-party dependency lacks type stubs (`py.typed`) or has broken/slow
+When a third-party dependency lacks type stubs (`py.typed`) or has slow
 internal annotations:
 
 1. **Ignore missing imports** (`ignore-missing-imports`):
@@ -96,8 +93,7 @@ internal annotations:
    ]
    ```
 
-2. **Skip following imports into heavy packages** (`replace-imports-with-any`,
-   Pyrefly's equivalent of Mypy's `follow_imports = "skip"`):
+2. **Skip following imports into heavy packages** (`replace-imports-with-any`):
 
    ```toml
    replace-imports-with-any = [
@@ -113,8 +109,8 @@ internal annotations:
 
 ### C. Per-Directory Rule Overrides (`[[sub-config]]`)
 
-To relax specific error codes in a subdirectory (such as `tests/**` or thin C
-extension wrappers) while keeping `src/**` at full strictness:
+To relax specific error codes in a subdirectory (such as `tests/**`)
+while keeping `src/**` at full strictness:
 
 ```toml
 [[sub-config]]
@@ -150,11 +146,11 @@ preset = "recommended"
 
 ## 4. Modern Python 3.12+ Typing Patterns for Pyrefly
 
-Write idiomatically typed code using modern standard library features.
+Write typed code with standard library features:
 
 ### Native Generics (PEP 695)
 
-Always use Python 3.12+ type parameter syntax instead of legacy `TypeVar`:
+Use Python 3.12+ type parameter syntax instead of legacy `TypeVar`:
 
 ```python
 # Correct (PEP 695)
@@ -188,11 +184,12 @@ class Greeter(Protocol):
 
 ## 5. Best Practices & Troubleshooting
 
-Keep the following tips in mind when type checking code:
+Follow these guidelines when type checking code:
 
 - **Check frequently with Poe**: Run `uv run poe type-check` before
   committing code.
 - **Avoid `typing.Any`**: Use specific union types, generics, or `object`
   with narrowing (`isinstance`).
 - **Missing `py.typed`**: If an installed library warns of missing types,
-  install its stub package (e.g., `uv add --dev types-requests`).
+  install its stub package (for example, `uv add --dev types-requests`).
+
