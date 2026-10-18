@@ -2,15 +2,21 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
+from hypothesis import given, strategies as st
+
+from zenith_example.core import get_greeting
+
+if TYPE_CHECKING:
+    from syrupy.assertion import SnapshotAssertion
+
 from unittest.mock import patch
 
 import pytest
-from hypothesis import given, strategies as st
-from syrupy.assertion import SnapshotAssertion
 
 import zenith_example
 from zenith_example import _lazy
-from zenith_example.core import get_greeting
 
 
 def test_get_greeting_default() -> None:
