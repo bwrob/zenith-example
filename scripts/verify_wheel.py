@@ -191,6 +191,13 @@ def verify_in_venv(
 import importlib
 import sys
 
+if sys.platform == "win32":
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+
 modules = [m for m in sys.argv[1].split(",") if m]
 entry_points = [e for e in sys.argv[2].split(",") if e]
 
@@ -232,6 +239,8 @@ if failed:
     result = subprocess.run(
         [
             str(python_exe),
+            "-X",
+            "utf8",
             "-I",
             "-c",
             test_code,
