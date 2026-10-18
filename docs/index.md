@@ -153,3 +153,12 @@ print(f"Docs built with Python {sys.version.split()[0]} via markdown-exec!")
 - Review the [API Reference](reference.md) for module details.
 - Consult [Architecture Decision Records (ADRs)](adr/index.md) for key design choices.
 - Review the [Changelog](changelog.md) for release history.
+
+---
+
+<p align="center">
+  <sub>
+    Built with the <a href="https://github.com/bwrob/zenith">Zenith</a> template
+    by <a href="https://bwrob.dev">bwrob</a>.
+  </sub>
+</p>

@@ -208,3 +208,12 @@ Inline equations like $E = mc^2$ and $\Omega(n)$ are supported out of the box.
 ## License
 
 Distributed under the MIT License. See [LICENSE](LICENSE) for details.
+
+---
+
+<p align="center">
+  <sub>
+    Built with the <a href="https://github.com/bwrob/zenith">Zenith</a> template
+    by <a href="https://bwrob.dev">bwrob</a>.
+  </sub>
+</p>
