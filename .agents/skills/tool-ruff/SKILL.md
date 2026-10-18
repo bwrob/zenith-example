@@ -76,6 +76,7 @@ extend-exclude = [
 [lint]
 # Enable all rules by default (Zenith strict preset)
 select = ["ALL"]
+future-annotations = true
 
 # Globally ignored rules with explicit rationale
 ignore = [
@@ -106,13 +107,14 @@ runtime-evaluated-decorators = [
     "pydantic.validate_call",
 ]
 
-# Consolidate aliased imports from the same module
+# Consolidate aliased imports and require future annotations across all files
 [lint.isort]
 combine-as-imports = true
-
+required-imports = ["from __future__ import annotations"]
 
 # Per-file rule relaxations
 [lint.per-file-ignores]
+"**/*.pyi" = ["I002", "PYI044"]
 "tests/*" = [
     "S101",    # Use of assert detected (standard in pytest)
     "PLR2004", # Magic value used in comparison
@@ -205,6 +207,25 @@ fixes for rules that Ruff marks as unsafe:
 ```toml
 [lint]
 extend-safe-fixes = ["UP006", "UP035"]
+```
+
+### F. Future Annotations Enforcement
+
+Zenith requires `from __future__ import annotations` in all Python source
+files through `lint.isort.required-imports`. Ruff triggers rule `I002` if this
+import is missing:
+
+```bash
+uv run ruff check --fix .  # Automatically inserts the required import
+```
+
+Stub files (`.pyi`) must not include future annotations. Rule `PYI044`
+forbids this import in stub files. `ruff.toml` ignores rules `I002` and `PYI044`
+for stub files:
+
+```toml
+[lint.per-file-ignores]
+"**/*.pyi" = ["I002", "PYI044"]
 ```
 
 ---

@@ -128,6 +128,14 @@
     cmd  = "pyrefly check"
     help = "Strict static type checking with Pyrefly."
 
+[tasks.type-coverage]
+    cmd  = "pyrefly coverage check src --fail-under 100 --strict"
+    help = "Enforce 100% strict type coverage and completeness with Pyrefly."
+
+[tasks.type-coverage-report]
+    cmd  = "pyrefly coverage report src"
+    help = "Generate JSON type coverage and completeness report with Pyrefly."
+
 [tasks.complexity]
     cmd  = "complexipy src tests"
     help = "Verify cognitive complexity limits with complexipy."
@@ -176,6 +184,7 @@
         "lint-md",
         "typos",
         "type-check",
+        "type-coverage",
         "complexity",
 
         "zizmor",

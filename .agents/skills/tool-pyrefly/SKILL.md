@@ -20,19 +20,69 @@ guarantee type coverage across the codebase.
 
 ## 1. Core CLI Commands
 
-Use these commands to check static typing across the project or in single
-modules:
+Use these commands to check static typing and type completeness across the
+project:
 
 ```bash
-uv run pyrefly check                      # Check entire project config
-uv run pyrefly check path/to/file.py      # Check a specific file or module
-uv run pyrefly check --output-format json # Output machine-readable JSON
-uv run pyrefly init                       # Generate pyrefly.toml config
+uv run pyrefly check                                         # Check entire project config
+uv run pyrefly check path/to/file.py                         # Check a specific file or module
+uv run pyrefly coverage check src --fail-under 100 --strict  # Enforce 100% strict type coverage
+uv run pyrefly coverage check src --public-only              # Check public API completeness
+uv run pyrefly coverage report src > coverage.json           # Generate JSON coverage report
+uv run pyrefly check --output-format json                    # Output machine-readable JSON
+uv run pyrefly init                                          # Generate pyrefly.toml config
 ```
 
 ---
 
-## 2. Configuration Location
+## 2. Type Coverage and Completeness Enforcement
+
+`pyrefly coverage` measures and enforces type annotation coverage across your
+codebase. It provides two subcommands:
+
+- **`pyrefly coverage check`**: Fails when coverage falls below a specified
+  threshold. Zenith uses this as an automated CI and code-quality gate.
+- **`pyrefly coverage report`**: Emits a structured JSON report with per-module
+  and per-symbol coverage metrics.
+
+### How Pyrefly Measures Coverage
+
+Pyrefly counts coverage over **typables**:
+- Function parameters
+- Function return types
+- Module-level variables
+- Class attributes
+
+Each typable has one of three states:
+1. **Typed**: Annotated, and the resolved type contains no `Any`.
+2. **Any**: Annotated, but the resolved type contains `Any`.
+3. **Untyped**: No type annotation is present.
+
+Zenith uses the `--strict` flag. Under `--strict`, any annotation that resolves
+to `Any` counts as untyped. Only sound, concrete types count as covered.
+
+Only public symbols count toward coverage: names without a leading underscore,
+plus anything declared in `__all__`. Pyrefly automatically excludes `self` and
+`cls` method parameters.
+
+With `--public-only`, Pyrefly checks only symbols reachable from public
+modules through re-export chains (PEP 561 public API type completeness).
+
+### Poe Tasks for Type Coverage
+
+Zenith provides two pre-configured Poe tasks:
+
+```bash
+uv run poe type-coverage         # Enforce 100% strict coverage on src/
+uv run poe type-coverage-report  # Generate JSON report for inspection
+```
+
+`type-coverage` executes automatically in the `uv run poe code-quality`
+pipeline.
+
+---
+
+## 3. Configuration Location
 
 Configure Pyrefly in `pyrefly.toml` at the project root with `kebab-case` keys:
 
@@ -57,7 +107,7 @@ search-path = ["src"]
 
 ---
 
-## 3. Common Configuration Changes
+## 4. Common Configuration Changes
 
 Adjust type checking rules and module search paths using these standard
 patterns:
@@ -144,7 +194,7 @@ preset = "recommended"
 
 ---
 
-## 4. Modern Python 3.12+ Typing Patterns for Pyrefly
+## 5. Modern Python 3.12+ Typing Patterns for Pyrefly
 
 Write typed code with standard library features:
 
@@ -182,12 +232,12 @@ class Greeter(Protocol):
 
 ---
 
-## 5. Best Practices & Troubleshooting
+## 6. Best Practices & Troubleshooting
 
 Follow these guidelines when type checking code:
 
-- **Check frequently with Poe**: Run `uv run poe type-check` before
-  committing code.
+- **Check frequently with Poe**: Run `uv run poe type-check` and
+  `uv run poe type-coverage` before committing code.
 - **Avoid `typing.Any`**: Use specific union types, generics, or `object`
   with narrowing (`isinstance`).
 - **Missing `py.typed`**: If an installed library warns of missing types,

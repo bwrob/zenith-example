@@ -1,5 +1,7 @@
 """Demonstration and showcase repository instantiated from the Zenith template."""
 
+from __future__ import annotations
+
 from typing import TYPE_CHECKING
 
 from zenith_example._lazy import accessors

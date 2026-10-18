@@ -1,5 +1,7 @@
 """Core functions for zenith-example."""
 
+from __future__ import annotations
+
 
 def get_greeting(name: str) -> str:
     """Return a personalized greeting message.

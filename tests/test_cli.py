@@ -1,5 +1,7 @@
 """Unit tests for the command-line interface."""
 
+from __future__ import annotations
+
 import pytest
 from typer.testing import CliRunner
 

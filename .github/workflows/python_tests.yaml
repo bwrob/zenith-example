@@ -50,6 +50,9 @@ jobs:
             - name: 🐍 Run pyrefly static type checker
               run: uv run poe type-check
 
+            - name: 🔍 Run pyrefly type coverage and completeness check
+              run: uv run poe type-coverage
+
             - name: 🧮 Run complexipy complexity check
               run: uv run poe complexity
 

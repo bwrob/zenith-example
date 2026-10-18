@@ -1,5 +1,7 @@
 """Entry point for running zenith-example via `python -m zenith_example`."""
 
+from __future__ import annotations
+
 from zenith_example.cli import app, main
 
 __all__ = ["app", "main"]

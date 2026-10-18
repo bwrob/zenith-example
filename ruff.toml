@@ -3,6 +3,7 @@ line-length = 88
 
 [lint]
     exclude = [ ".venv", "site", "dist", "scripts", ".agents" ]
+    future-annotations = true
     ignore = [
         "blank-line-before-class",
         "COM",
@@ -35,9 +36,10 @@ line-length = 88
 
     [lint.isort]
         combine-as-imports = true
-
+        required-imports   = [ "from __future__ import annotations" ]
 
     [lint.per-file-ignores]
+        "**/*.pyi" = [ "missing-required-import", "future-annotations-in-stub" ]
         "src/*/__init__.py" = [ "non-empty-init-module" ]
         "src/*/cli.py" = [
             "boolean-default-value-positional-argument",
