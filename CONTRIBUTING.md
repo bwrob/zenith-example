@@ -39,7 +39,7 @@ cd zenith-example
 uv sync
 
 # Install git pre-commit hooks
-uv run pre-commit install
+uv run prek install
 ```
 
 ---
@@ -90,7 +90,7 @@ verification gate passes cleanly:
 ```bash
 uv run poe test
 uv run poe code-quality
-uv run pre-commit run --all-files
+uv run prek run --all-files
 ```
 
 Pull requests will run the full CI matrix across Linux, macOS, and Windows.

@@ -101,13 +101,13 @@ uv run poe code-quality
 # Verify unit tests and coverage
 uv run poe test
 
-# Verify all pre-commit hooks pass
-uv run pre-commit run --all-files
+# Verify all git hooks pass via prek
+uv run prek run --all-files
 ```
 
 > [!IMPORTANT]
 > **Always Re-Read Files Modified by Hooks**:
-> If formatters or pre-commit hooks change files on disk, re-read those files before you make further edits.
+> If formatters or prek hooks change files on disk, re-read those files before you make further edits.
 > This step prevents edit collisions from shifted line numbers.
 
 ---

@@ -130,8 +130,8 @@ uv run poe test
 # 4. Verify wheel packaging in isolated virtual environment
 uv run poe verify-wheel
 
-# 5. Verify all git pre-commit hooks pass
-uv run pre-commit run --all-files
+# 5. Verify all git hooks pass via prek
+uv run prek run --all-files
 ```
 
 ---

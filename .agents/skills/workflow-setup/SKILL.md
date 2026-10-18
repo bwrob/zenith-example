@@ -57,12 +57,12 @@ uv sync
 
 This command creates `.venv/` and syncs all packages defined in `uv.lock`.
 
-### Step 2: Install Pre-Commit Hooks
+### Step 2: Install Git Prek Hooks
 
-Install git pre-commit hooks to run verification before commits:
+Install git hooks via prek to run verification before commits:
 
 ```bash
-uv run pre-commit install
+uv run prek install
 ```
 
 ### Step 3: Run Baseline Quality Verification
@@ -126,11 +126,11 @@ If you must refresh the dependency cache from PyPI:
 uv sync --refresh
 ```
 
-### Pre-Commit Hook Cache Issues
+### Prek Hook Cache Issues
 
-To reset pre-commit hook environments:
+To reset prek hook environments:
 
 ```bash
-uv run pre-commit clean
-uv run pre-commit install --install-hooks
+uv run prek clean
+uv run prek install --install-hooks
 ```

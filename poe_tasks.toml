@@ -97,12 +97,12 @@
     help = "Verify TOML configuration file formatting with Taplo without modifying files."
 
 [tasks.format-yaml]
-    cmd  = "pre-commit run prettier --all-files"
-    help = "Format YAML files with Prettier."
+    cmd  = "prek run prettier --all-files"
+    help = "Format YAML files with Prettier via prek."
 
 [tasks.format-css]
-    cmd  = "pre-commit run prettier-css --all-files"
-    help = "Format CSS stylesheets with Prettier."
+    cmd  = "prek run prettier-css --all-files"
+    help = "Format CSS stylesheets with Prettier via prek."
 
 [tasks.lint-md]
     cmd  = "rumdl check"
@@ -163,8 +163,8 @@
         "ruff format",
         "taplo format",
         "rumdl fmt",
-        "pre-commit run prettier --all-files",
-        "pre-commit run prettier-css --all-files",
+        "prek run prettier --all-files",
+        "prek run prettier-css --all-files",
         "typos -w",
     ]
 

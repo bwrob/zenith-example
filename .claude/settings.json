@@ -11,7 +11,7 @@
             "Bash(uv run typos:*)",
             "Bash(uv run taplo:*)",
             "Bash(uv run zizmor:*)",
-            "Bash(uv run pre-commit:*)"
+            "Bash(uv run prek:*)"
         ],
         "deny": [
             "Bash(rm -rf /*)",

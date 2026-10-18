@@ -74,25 +74,26 @@ exclude = [
 
 ---
 
-## 3. Pre-Commit Integration
+## 3. Prek Integration
 
-Pre-commit includes Taplo in `.pre-commit-config.yaml` to prevent committing unformatted TOML files:
+Prek includes Taplo in `prek.toml` to prevent committing unformatted TOML files:
 
-```yaml
-  - repo: https://github.com/ComPWA/taplo-pre-commit
-    rev: v0.9.3
-    hooks:
-      - id: taplo-format
-        name: "⚙️ taplo · Format TOML files"
+```toml
+[[repos]]
+repo = "https://github.com/ComPWA/taplo-pre-commit"
+rev = "v0.9.3"
+hooks = [
+    { id = "taplo-format", name = "⚙️ taplo · Format TOML files" },
+]
 ```
 
 ---
 
 ## 4. Common Troubleshooting
 
-### Unformatted TOML in CI or Pre-commit
+### Unformatted TOML in CI or Prek
 
-If CI or pre-commit flags an unformatted TOML file (for example, `cosmic-ray.toml`):
+If CI or prek flags an unformatted TOML file (for example, `cosmic-ray.toml`):
 
 ```bash
 uv run poe fix

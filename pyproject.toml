@@ -47,6 +47,7 @@
 [dependency-groups]
     dev = [
         "poethepoet>=0.42.0",
+        "prek>=0.5.5",
         { include-group = "test" },
         { include-group = "lint" },
         { include-group = "docs" },
@@ -62,7 +63,7 @@
     lint = [
         "complexipy>=8.0.0",
         "griffe>=1.5.0",
-        "pre-commit>=4.5.0",
+        "prek>=0.5.5",
         "pyrefly>=1.3.0",
         "ruff>=0.17.0",
         "rumdl>=0.2.75",

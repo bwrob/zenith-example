@@ -130,3 +130,15 @@
 [data-md-color-scheme="slate"] .md-typeset pre > code {
     border: 1px solid var(--color-obsidian-700);
 }
+
+/* Scrollable showcase for tool configurations */
+.config-block pre,
+.config-scroll pre,
+.scrollable-code pre,
+.md-typeset h2#configuration-in-zenith + p + .highlight pre,
+.md-typeset h2#configuration-in-zenith + p + .tabbed-set .highlight pre,
+.md-typeset h2#configuration-in-zenith + .highlight pre {
+    max-height: 24rem;
+    overflow-y: auto;
+    scrollbar-width: thin;
+}

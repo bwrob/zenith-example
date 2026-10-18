@@ -12,25 +12,25 @@ version: 1.0.0
 `prettier` is a code formatter. In Zenith repositories, Prettier
 enforces 4-space indentation and 88-character line lengths.
 It applies uniform bracket spacing and quote styling to YAML manifests
-(`.github/workflows/*.yaml`, `.pre-commit-config.yaml`) and CSS stylesheets
+(`.github/workflows/*.yaml`) and CSS stylesheets
 (`docs/stylesheets/*.css`).
 
 ---
 
 ## 1. Core CLI Commands
 
-Format and check YAML and CSS files with pre-commit or Poe tasks:
+Format and check YAML and CSS files with prek or Poe tasks:
 
 ```bash
-uv run pre-commit run prettier --all-files      # Format all YAML manifests
-uv run pre-commit run prettier-css --all-files  # Format all CSS stylesheets
+uv run prek run prettier --all-files      # Format all YAML manifests
+uv run prek run prettier-css --all-files  # Format all CSS stylesheets
 ```
 
 Zenith wires task aliases into Poe:
 
 ```bash
-uv run poe format-yaml       # Runs pre-commit run prettier --all-files
-uv run poe format-css        # Runs pre-commit run prettier-css --all-files
+uv run poe format-yaml       # Runs prek run prettier --all-files
+uv run poe format-css        # Runs prek run prettier-css --all-files
 uv run poe fix               # Auto-fixes Python, TOML, Markdown, YAML, CSS, and typos
 uv run poe code-quality      # Full quality pipeline including YAML and CSS checks
 ```
@@ -57,4 +57,4 @@ proseWrap: "preserve"
 
 - **Preserve Template Syntax**: When Jinja conditionals appear in YAML or CSS, use quotes or comments to protect syntax.
 - **Run Through Poe**: Use `uv run poe fix` or `uv run poe code-quality` to format YAML and CSS. These tasks do not require global Node.js or npm.
-- **Pre-commit Integration**: Prettier runs during `git commit` through the `mirrors-prettier` hook in `.pre-commit-config.yaml`.
+- **Prek Integration**: Prettier runs during `git commit` through the `mirrors-prettier` hook in `prek.toml`.
