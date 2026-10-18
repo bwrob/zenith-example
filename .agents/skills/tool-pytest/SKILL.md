@@ -16,7 +16,7 @@ Zenith equips `pytest` with these testing tools:
 - **Visual Progress & Fast Feedback**: `pytest-sugar` for real-time progress.
 - **Snapshot Testing**: `syrupy` for clean, declarative snapshot assertions.
 - **Property-Based Testing**: `hypothesis` for generative edge-case discovery.
-- **Branch Coverage**: `pytest-cov` enforcing an 80%+ coverage threshold.
+- **Branch Coverage**: `pytest-cov` enforcing 100% statement and branch coverage.
 
 ---
 

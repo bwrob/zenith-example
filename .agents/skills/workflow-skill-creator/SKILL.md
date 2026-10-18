@@ -2,15 +2,15 @@
 description: >-
   Workflow and standards for creating modular agent skills in Zenith repositories.
   Enforces progressive disclosure, structured directories, external template separation,
-  and ASD-STE100 writing standards. Use when creating, refactoring, or modularizing agent skills.
+  standard prefix taxonomy, and ASD-STE100 writing standards. Use when creating, refactoring, or modularizing agent skills.
   Triggers: create skill, new skill, add skill, author skill, modular skill, skill template.
-name: skill-creator
+name: workflow-skill-creator
 version: 1.0.0
 ---
 
-# Agent Skill Creator (`skill-creator`)
+# Agent Skill Creator (`workflow-skill-creator`)
 
-This skill defines the standards, directory conventions, and workflows
+This skill defines the standards, directory conventions, prefix taxonomy, and workflows
 to create agent skills in Zenith projects.
 
 Agent skills extend coding assistants with specialized runbooks, workflows,
@@ -20,14 +20,30 @@ It reads the full content only when activated.
 
 ---
 
-## 1. Skill Complexity Tiering
+## 1. Skill Prefix Taxonomy & Grouping
 
-Choose the structure based on skill complexity:
+Every skill in a Zenith project must belong to one of four standardized prefix groups:
+
+| Prefix | Domain & Scope | Examples |
+|---|---|---|
+| **`tool-*`** | **Tool Mechanics & Syntax**<br/>Runbooks and syntax guides for specific external tools, compilers, linters, or libraries. | `tool-uv`, `tool-ruff`, `tool-pytest`, `tool-tach`, `tool-docker`, `tool-fastapi`. |
+| **`workflow-*`** | **Lifecycle & Multi-Step Procedures**<br/>Operational processes, version control, release ceremonies, audits, and checklists. | `workflow-git`, `workflow-code-review`, `workflow-changelog`, `workflow-adr`, `workflow-setup`. |
+| **`guide-*`** | **Engineering Conventions & Style**<br/>Invariants, coding paradigms, architecture patterns, and technical writing rules. | `guide-python`, `guide-ste100`, `guide-api-design`. |
+| **`domain-*`** | **Reserved: Project Business Logic**<br/>**Reserved exclusively for the author of the instantiated project.** Documents business rules, domain models, and application workflows. | `domain-billing`, `domain-auth`, `domain-data-pipeline`. |
+
+> [!IMPORTANT]
+> The `domain-*` prefix is strictly reserved for the end user and project author. The Zenith template includes zero `domain-*` skills out-of-the-box so the application namespace remains completely unpolluted.
+
+---
+
+## 2. Skill Complexity Tiering
+
+Select the structure based on skill complexity:
 
 ### Tier A: Simple Skill (Single File)
 - **When to Use**: Straightforward procedures, tool guides, or concise workflows
   under 100–150 lines without boilerplate.
-- **Structure**: A single `SKILL.md` file at `.agents/skills/<name>/SKILL.md`.
+- **Structure**: A single `SKILL.md` file at `.agents/skills/<prefix>-<name>/SKILL.md`.
 - **Constraint**: Do not create subdirectories for single-page instructions.
 
 ### Tier B: Complex Skill (Structured Directory)
@@ -35,7 +51,7 @@ Choose the structure based on skill complexity:
   or helper scripts.
 - **Structure**: An organized directory following the canonical pattern:
   ```text
-  .agents/skills/<name>/
+  .agents/skills/<prefix>-<name>/
   ├── SKILL.md          # Required: Lean core workflow, decision logic, and frontmatter
   ├── templates/        # Required if templates exist: External templates in separate files
   ├── examples/         # Optional: Multi-file recipes or concrete implementations
@@ -45,7 +61,7 @@ Choose the structure based on skill complexity:
 
 ---
 
-## 2. Hard Architectural Rules
+## 3. Hard Architectural Rules
 
 ### Rule 1: Place Templates in Dedicated Files
 - **Never embed large templates inline**: Do not include document skeletons, boilerplate
@@ -66,34 +82,34 @@ Choose the structure based on skill complexity:
 - Ensure the model can read `SKILL.md` in one pass. Read sub-files on demand.
 
 ### Rule 4: Write in Simplified Technical English (ASD-STE100)
-- Follow the [asd-ste100](../asd-ste100/SKILL.md) skill when authoring prose.
+- Follow the [guide-ste100](../guide-ste100/SKILL.md) skill when authoring prose.
 - Write short, unambiguous, active-voice sentences.
 - Keep procedural sentences under 20 words. Keep descriptive sentences under 25 words.
 - Do not use semicolons, phrasal verbs, nominalizations, or marketing adjectives.
 - Run the STE linter to verify compliance:
   ```bash
-  uv run python .agents/skills/asd-ste100/scripts/ste-lint.py .agents/skills/<name>/SKILL.md
+  uv run python .agents/skills/guide-ste100/scripts/ste-lint.py .agents/skills/<name>/SKILL.md
   ```
 
 ---
 
-## 3. Skill Creation Workflow
+## 4. Skill Creation Workflow
 
 Follow these steps to create a new skill:
 
-### Step 1: Determine Scope and Tier
-1. Identify workflow trigger conditions and boundaries.
-2. Choose Tier A (single `SKILL.md`) or Tier B (structured directory).
+### Step 1: Select Prefix Group and Tier
+1. Select one of the 4 valid prefixes: `tool-`, `workflow-`, `guide-`, or `domain-`.
+2. Select Tier A (single `SKILL.md`) or Tier B (structured directory).
 3. If Tier B, initialize the directory layout:
    ```bash
-   mkdir -p zenith-example/.agents/skills/<name>/{templates,examples,references,scripts}
+   mkdir -p zenith-example/.agents/skills/<prefix>-<name>/{templates,examples,references,scripts}
    ```
 
 ### Step 2: Author Frontmatter and Core Instructions
 1. Copy [templates/SKILL_TEMPLATE.md](./templates/SKILL_TEMPLATE.md) to
-   `zenith-example/.agents/skills/<name>/SKILL.md`.
+   `zenith-example/.agents/skills/<prefix>-<name>/SKILL.md`.
 2. Craft the YAML frontmatter block:
-   - **`name`**: Lowercase, hyphenated (for example, `changelog-writing`).
+   - **`name`**: Lowercase, hyphenated with prefix (for example, `workflow-changelog` or `domain-billing`).
    - **`description`**: Summary stating *what* the skill does and *when* to use it,
      including explicit triggers.
 3. Write clear, step-by-step instructions following ASD-STE100 standards.
@@ -105,20 +121,20 @@ Follow these steps to create a new skill:
 4. Link all extracted assets from `SKILL.md` with relative links.
 
 ### Step 4: Synchronize and Register
-1. Maintain shared skills in `zenith-example/.agents/skills/<name>/`.
-2. Run skill synchronization to create relative symlinks in `.agents/skills/<name>/`:
+1. Maintain shared skills in `zenith-example/.agents/skills/<prefix>-<name>/`.
+2. Run skill synchronization to create relative symlinks in `.agents/skills/<prefix>-<name>/`:
    ```bash
    uv run poe sync-skills
    ```
-3. If the skill is repo-only (such as `inspect-module-setup`), create it directly in
-   `.agents/skills/<name>/` and omit it from the template.
+3. If the skill is repo-only (such as `workflow-inspect-repo`), create it directly in
+   `.agents/skills/<prefix>-<name>/` and omit it from the template.
 4. Add the skill to the skills list in `AGENTS.md` and `zenith-example/AGENTS.md`.
 5. Add the skill existence assertion to `tests/test_template.py`.
 
 ### Step 5: Verify Formatting and Tests
 Run the full verification suite:
 ```bash
-uv run python .agents/skills/asd-ste100/scripts/ste-lint.py .agents/skills/<name>/SKILL.md
+uv run python .agents/skills/guide-ste100/scripts/ste-lint.py .agents/skills/<name>/SKILL.md
 uv run poe check-skills
 uv run poe sync-skills-check
 uv run poe code-quality

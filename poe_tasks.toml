@@ -109,7 +109,7 @@
     help = "Lint markdown documentation with rumdl."
 
 [tasks.lint-ste]
-    cmd  = "python .agents/skills/asd-ste100/scripts/ste-lint.py .agents/skills"
+    cmd  = "python .agents/skills/guide-ste100/scripts/ste-lint.py .agents/skills"
     help = "Lint agent skills against ASD-STE100 structural rules."
 
 [tasks.format-md]

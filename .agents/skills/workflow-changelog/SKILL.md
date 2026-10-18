@@ -5,11 +5,11 @@ description: >
   Git commit ranges, Semantic Versioning, PR inspection via gh CLI, and contributor
   attribution. Use when updating docs/changelog.md, preparing releases, drafting
   release notes, or logging user-facing changes.
-name: changelog-writing
+name: workflow-changelog
 version: 1.0.0
 ---
 
-# Changelog & Release Notes Workflow (`changelog-writing`)
+# Changelog & Release Notes Workflow (`workflow-changelog`)
 
 This skill defines standards and procedures to maintain
 project changelogs and author source-checked release notes.

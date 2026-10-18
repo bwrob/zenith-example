@@ -8,11 +8,11 @@ description: >
   or prepare a machine for contributing. Do not use for routine code editing
   or individual test runs.
 disable-model-invocation: true
-name: project-setup
+name: workflow-setup
 version: 1.0.0
 ---
 
-# Project Setup & Bootstrap (`project-setup`)
+# Project Setup & Bootstrap (`workflow-setup`)
 
 This skill defines the process to set up, configure, and fix
 a local development environment for a Zenith Python project.

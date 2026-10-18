@@ -1,5 +1,5 @@
 ---
-name: asd-ste100
+name: guide-ste100
 description: >-
   Use when an agent must parse text without human review.
   Applies to tool descriptions, error messages, inter-agent instructions, system prompts, and status reports.
@@ -8,7 +8,7 @@ description: >-
 version: 0.5.0
 ---
 
-# Simplified Technical English (ASD-STE100)
+# Simplified Technical English (`guide-ste100`)
 
 <!-- ste-lint-disable -->
 > [!NOTE]
@@ -25,10 +25,10 @@ Delegate mechanical checks to the deterministic standard-library linter and fixe
 
 ```bash
 # 1. Automatically fix contractions, Latin abbreviations, and unapproved phrases in-place
-uv run python .agents/skills/asd-ste100/scripts/ste-lint.py --fix path/to/document.md
+uv run python .agents/skills/guide-ste100/scripts/ste-lint.py --fix path/to/document.md
 
 # 2. Check for remaining structural violations (sentence length, semicolons, modals, paragraph size)
-uv run python .agents/skills/asd-ste100/scripts/ste-lint.py path/to/document.md
+uv run python .agents/skills/guide-ste100/scripts/ste-lint.py path/to/document.md
 ```
 
 Options: `--fix` (apply safe 1:1 rewrites in-place), `--json` (structured output), `--baseline N` (tolerate N violations), `--disable <rules>` (silence rules), `--list-rules` (show all 17 rules), `--selftest`.

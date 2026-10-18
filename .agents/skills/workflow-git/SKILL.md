@@ -4,11 +4,11 @@ description: >
   projects. Enforces AI disclosure checklists, testing plans, and clean commit
   hygiene. Use when creating branches, preparing commits, staging files, authoring
   commit messages, or creating pull requests.
-name: git-workflow
+name: workflow-git
 version: 1.0.0
 ---
 
-# Git Workflow & Pull Request Standards (`git-workflow`)
+# Git Workflow & Pull Request Standards (`workflow-git`)
 
 This skill defines branch management, conventional commit
 formatting, and pull request standards for Zenith repositories.

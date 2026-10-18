@@ -4,11 +4,11 @@ description: >
   architecture, and AI policy standards before submitting changes or opening a PR.
   Use when asked to review code, conduct pre-PR audits, check compliance with
   AI_POLICY.md, check architectural boundaries, or check typing precision.
-name: code-review
+name: workflow-code-review
 version: 1.0.0
 ---
 
-# Pre-Flight Code Review (`code-review`)
+# Pre-Flight Code Review (`workflow-code-review`)
 
 This skill defines the code review protocol for Zenith Python repositories.
 It establishes the quality gates that all code changes must satisfy before merge.
@@ -46,7 +46,7 @@ It establishes the quality gates that all code changes must satisfy before merge
    - **False-Positive Suppression Filter**:
      Omit speculative nitpicks and hypothetical race conditions without a concrete trigger path.
      Skip issues enforced by automated CI gates unless currently failing.
-     Omit stylistic preferences not codified in `python-style-guide`.
+     Omit stylistic preferences not codified in `guide-python`.
      If you cannot ground a finding in a failing input or an explicit rule, leave it out.
 
 ---
@@ -75,7 +75,7 @@ Review changes across six dimensions:
   (`griffe check`) without introducing unannounced breaking changes to public
   signatures?
 
-### 3. Type Precision & Python 3.12+ Standards (`python-style-guide`)
+### 3. Type Precision & Python 3.12+ Standards (`guide-python`)
 
 - [ ] **PEP 695 Generics**: Does code use modern `def func[T]()` and `type Alias = ...`
   syntax instead of legacy `TypeVar` or `TypeAlias`?

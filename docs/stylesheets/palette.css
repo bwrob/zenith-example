@@ -1,52 +1,64 @@
 /**
  * Zenith Documentation Global Color Palette (palette.css)
  *
- * Defines global named color tokens ordered strictly by hue and tone.
- * Minimized to only the colors actively referenced by the documentation themes.
+ * Defines global named design tokens derived from the Zenith Star Emblem
+ * (assets/zenith-star.svg):
+ * - Radiant Zenith Cyan / Starlight Azure (guiding starbeams & apex core)
+ * - Deep Cosmic Obsidian Void (abyssal space medallion & deep surfaces)
+ * - Celestial Silver & Navigation Slate (astrolabe coordinate rings & typography)
+ * - Starlight Ice (crystalline facet highlights)
+ *
+ * Ordered strictly by hue family and tonal lightness.
  */
 
 :root {
     /* -------------------------------------------------------------------------
-       Blues (Typst logo #387eb8 steel sapphire blue & tints/shades)
+       Zenith Cyans & Starlight Azures (#38bdf8 star bloom & #0284c7 diamond facet)
        ------------------------------------------------------------------------- */
-    --color-blue-700: #29608d;
-    --color-blue-500: #387eb8;
-    --color-blue-400: #5294cc;
-    --color-blue-300: #74c7ec;
+    --color-cyan-900: #0c4a6e;
+    --color-cyan-800: #075985;
+    --color-cyan-700: #0369a1;
+    --color-cyan-600: #0284c7;
+    --color-cyan-500: #0ea5e9;
+    --color-cyan-400: #38bdf8;
+    --color-cyan-300: #7dd3fc;
+    --color-cyan-200: #bae6fd;
+    --color-cyan-100: #e0f2fe;
+    --color-cyan-50: #f0f9ff;
+    --color-cyan-soft: rgba(56, 189, 248, 0.12);
+    --color-cyan-glow: rgba(56, 189, 248, 0.25);
+    --color-cyan-border: rgba(56, 189, 248, 0.35);
 
     /* -------------------------------------------------------------------------
-       Ambers (Typst logo #ffc331 warm amber gold & accessible shade)
+       Cosmic Obsidian & Space Void (#020408, #080c14, #0f172a from spaceVoid)
        ------------------------------------------------------------------------- */
-    --color-amber-600: #d99f16;
-    --color-amber-400: #ffc331;
-    --color-amber-soft: rgba(255, 195, 49, 0.15);
+    --color-obsidian-950: #020408;
+    --color-obsidian-900: #080c14;
+    --color-obsidian-850: #0b1120;
+    --color-obsidian-850-translucent: rgba(11, 17, 32, 0.82);
+    --color-obsidian-800: #0f172a;
+    --color-obsidian-750: #162032;
+    --color-obsidian-700: #1e293b;
 
     /* -------------------------------------------------------------------------
-       Indigos (Catppuccin Mocha midnight dark tones)
+       Celestial Silver & Navigation Slates (#cbd5e1 facetSilver & rings)
        ------------------------------------------------------------------------- */
-    --color-indigo-950: #11111b;
-    --color-indigo-900: #181825;
-    --color-indigo-850: #1e1e2e;
-    --color-indigo-850-translucent: rgba(30, 30, 46, 0.75);
-    --color-indigo-800: #313244;
+    --color-slate-900: #0f172a;
+    --color-slate-800: #1e293b;
+    --color-slate-700: #334155;
+    --color-slate-600: #475569;
+    --color-slate-500: #64748b;
+    --color-slate-400: #94a3b8;
+    --color-slate-300: #cbd5e1;
+    --color-slate-200: #e2e8f0;
+    --color-slate-100: #f1f5f9;
+    --color-slate-50: #f8fafc;
+    --color-slate-50-translucent: rgba(248, 250, 252, 0.85);
 
     /* -------------------------------------------------------------------------
-       Lavenders (Catppuccin Mocha soft text & muted tones)
+       Starlight Ice & Crystalline Highlights
        ------------------------------------------------------------------------- */
-    --color-lavender-700: #6c7086;
-    --color-lavender-400: #a6adc8;
-    --color-lavender-100: #cdd6f4;
-    --color-lavender-100-translucent: rgba(205, 214, 244, 0.7);
-
-    /* -------------------------------------------------------------------------
-       Slates (Catppuccin Latte warm neutral & text tones)
-       ------------------------------------------------------------------------- */
-    --color-slate-800: #4c4f69;
-    --color-slate-600: #6c6f85;
-    --color-slate-400: #9ca0b0;
-    --color-slate-300: #ccd0da;
-    --color-slate-200: #dce0e8;
-    --color-slate-100: #e6e9ef;
-    --color-slate-50: #eff1f5;
-    --color-slate-50-translucent: rgba(239, 241, 245, 0.75);
+    --color-star-white: #ffffff;
+    --color-star-ice: #f0f9ff;
+    --color-star-ice-translucent: rgba(240, 249, 255, 0.7);
 }

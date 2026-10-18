@@ -27,16 +27,38 @@ Serve documentation locally or compile production static sites.
 
 ```bash
 uv run zensical serve                  # Start live-reloading dev server
+uv run zensical serve -a 0.0.0.0:8000  # Bind to custom IP and port
+uv run zensical serve -o               # Open browser preview automatically
 uv run zensical build                  # Build static site into site/
 uv run zensical build --strict --clean # Production build with strict checks
 ```
 
-Zenith wires documentation tasks into Poe:
+Zenith connects documentation tasks to Poe:
 
 ```bash
-uv run poe docs-serve                  # Runs zensical serve
-uv run poe docs-build                  # Runs zensical build --strict --clean
+uv run poe docs-serve                  # Start live-reloading server (zensical serve)
+uv run poe docs-build                  # Build production site (zensical build --strict --clean)
 ```
+
+### Live Development Server (`zensical serve`)
+
+The `zensical serve` command starts an HTTP development server with a built-in
+file watchdog:
+
+- **Instant Live Reloading**: The server monitors `docs/`, `zensical.toml`, assets,
+  and stylesheets. It rebuilds pages in milliseconds when files change and updates
+  connected browser sessions through WebSocket.
+- **Network Interface & Port (`-a, --dev-addr`)**: The default address is
+  `localhost:8000`. Specify a different IP address or port:
+  ```bash
+  uv run zensical serve -a 127.0.0.1:8080
+  ```
+- **Automatic Browser Preview (`-o, --open`)**: Opens the documentation
+  preview in your default system browser when the server starts.
+- **Agent Workflow Notice**: When a human developer runs `uv run poe docs-serve`,
+  AI coding agents must not execute rebuild commands (`zensical build`). The live
+  watchdog updates changed pages automatically. Agents must only execute
+  `uv run poe docs-build` during final pre-flight verification.
 
 ---
 
@@ -232,11 +254,11 @@ Zenith styles Zensical documentation with a modular two-file CSS architecture
 located in `docs/stylesheets/`:
 
 - **`palette.css`**: Defines global color tokens on `:root` organized by hue and
-  lightness. It uses the Catppuccin palette (Latte for light, Mocha for dark),
-  harmonized with the Typst logo colors (`#387eb8` blue and `#ffc331` gold).
-- **`custom.css`**: Maps these design tokens to Zensical's theme variables.
+  lightness. It uses colors from the Zenith star emblem: radiant cyan (`#38bdf8`),
+  guiding azure (`#0284c7`), and cosmic obsidian void (`#080c14`).
+- **`custom.css`**: Maps these design tokens to Zensical theme variables.
   It sets primary and accent colors for default and slate schemes,
-  shifting the dark hue into midnight indigo.
+  and shifts the dark hue to 212 degrees for deep space contrast.
 
 ---
 

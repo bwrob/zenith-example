@@ -4,11 +4,11 @@ description: >-
   Enforces the MADR decision format, numbering sequences, status lifecycles, and architectural invariants.
   Use when proposing new architectural choices, documenting significant design decisions, superseding prior decisions, or updating docs/adr/.
   Triggers: adr, architecture decision record, architectural decision, record decision, create adr, document architecture, new adr.
-name: adr
+name: workflow-adr
 version: 1.0.0
 ---
 
-# Architecture Decision Records (`adr`)
+# Architecture Decision Records (`workflow-adr`)
 
 This skill provides the process to author, number, evaluate, and update
 Architecture Decision Records (ADRs) in Zenith projects.
