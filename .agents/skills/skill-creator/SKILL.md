@@ -123,4 +123,3 @@ uv run poe check-skills
 uv run poe sync-skills-check
 uv run poe code-quality
 ```
-

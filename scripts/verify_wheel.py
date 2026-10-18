@@ -135,6 +135,7 @@ def create_isolated_environment(tmp_dir: Path) -> Path:
             check=True,
             capture_output=True,
             text=True,
+            encoding="utf-8",
         )
     else:
         import venv
@@ -167,6 +168,7 @@ def install_wheel_in_env(python_exe: Path, wheel_path: Path) -> None:
             check=True,
             capture_output=True,
             text=True,
+            encoding="utf-8",
         )
     else:
         subprocess.run(
@@ -174,6 +176,7 @@ def install_wheel_in_env(python_exe: Path, wheel_path: Path) -> None:
             check=True,
             capture_output=True,
             text=True,
+            encoding="utf-8",
         )
 
 
@@ -238,6 +241,7 @@ if failed:
         cwd=str(cwd),
         capture_output=True,
         text=True,
+        encoding="utf-8",
     )
     if result.stdout:
         print(result.stdout.strip())
@@ -279,6 +283,7 @@ def run_distribution_tests(
             check=True,
             capture_output=True,
             text=True,
+            encoding="utf-8",
         )
     else:
         subprocess.run(
@@ -292,6 +297,7 @@ def run_distribution_tests(
             check=True,
             capture_output=True,
             text=True,
+            encoding="utf-8",
         )
 
     tests_dir = project_root / "tests"
@@ -324,6 +330,7 @@ def run_distribution_tests(
         env=env,
         capture_output=True,
         text=True,
+        encoding="utf-8",
     )
     if result.stdout:
         print(result.stdout.strip())

@@ -65,5 +65,3 @@ Chosen option: **"Option [X]: [Name of option]"**, because [justification, for e
 - **Tach Layers**: [How this decision affects `tach.toml` modules or layer definitions]
 - **Static Typing**: [Impact on Pyrefly type contracts, Protocols, or generic parameters]
 - **Testing Strategy**: [How automated tests check this architectural invariant]
-
-

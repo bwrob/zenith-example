@@ -73,4 +73,3 @@ __all__ = [
     "SynonymRotationRule",
     "get_rules",
 ]
-

@@ -324,4 +324,3 @@ See guides for each plugin:
   snapshots.
 - [hypothesis](references/hypothesis.md): Property-based testing and generative
   strategies.
-

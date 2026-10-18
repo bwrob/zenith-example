@@ -27,9 +27,8 @@ Zenith supports both **`mutmut`** and **`cosmic-ray`**, each optimized for disti
 
 ```toml
 [tool.mutmut]
-paths_to_mutate = "src/"
-runner          = "pytest"
-tests_dir       = "tests/"
+runner       = "pytest"
+source_paths = ["src/"]
 ```
 
 ### Essential Commands

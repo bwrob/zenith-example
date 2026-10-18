@@ -145,4 +145,3 @@ Always include:
 - Executive verdict (`APPROVE` or `CHANGES REQUESTED`).
 - Verification gate outcomes (`poe code-quality`, `poe test`, `poe verify-wheel`).
 - Prioritized findings with concrete `file:line` locations and failing inputs or violated rules.
-

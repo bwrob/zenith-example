@@ -6,47 +6,47 @@
  */
 
 :root {
-  /* -------------------------------------------------------------------------
+    /* -------------------------------------------------------------------------
        Blues (Typst logo #387eb8 steel sapphire blue & tints/shades)
        ------------------------------------------------------------------------- */
-  --color-blue-700: #29608d;
-  --color-blue-500: #387eb8;
-  --color-blue-400: #5294cc;
-  --color-blue-300: #74c7ec;
+    --color-blue-700: #29608d;
+    --color-blue-500: #387eb8;
+    --color-blue-400: #5294cc;
+    --color-blue-300: #74c7ec;
 
-  /* -------------------------------------------------------------------------
+    /* -------------------------------------------------------------------------
        Ambers (Typst logo #ffc331 warm amber gold & accessible shade)
        ------------------------------------------------------------------------- */
-  --color-amber-600: #d99f16;
-  --color-amber-400: #ffc331;
-  --color-amber-soft: rgba(255, 195, 49, 0.15);
+    --color-amber-600: #d99f16;
+    --color-amber-400: #ffc331;
+    --color-amber-soft: rgba(255, 195, 49, 0.15);
 
-  /* -------------------------------------------------------------------------
+    /* -------------------------------------------------------------------------
        Indigos (Catppuccin Mocha midnight dark tones)
        ------------------------------------------------------------------------- */
-  --color-indigo-950: #11111b;
-  --color-indigo-900: #181825;
-  --color-indigo-850: #1e1e2e;
-  --color-indigo-850-translucent: rgba(30, 30, 46, 0.75);
-  --color-indigo-800: #313244;
+    --color-indigo-950: #11111b;
+    --color-indigo-900: #181825;
+    --color-indigo-850: #1e1e2e;
+    --color-indigo-850-translucent: rgba(30, 30, 46, 0.75);
+    --color-indigo-800: #313244;
 
-  /* -------------------------------------------------------------------------
+    /* -------------------------------------------------------------------------
        Lavenders (Catppuccin Mocha soft text & muted tones)
        ------------------------------------------------------------------------- */
-  --color-lavender-700: #6c7086;
-  --color-lavender-400: #a6adc8;
-  --color-lavender-100: #cdd6f4;
-  --color-lavender-100-translucent: rgba(205, 214, 244, 0.7);
+    --color-lavender-700: #6c7086;
+    --color-lavender-400: #a6adc8;
+    --color-lavender-100: #cdd6f4;
+    --color-lavender-100-translucent: rgba(205, 214, 244, 0.7);
 
-  /* -------------------------------------------------------------------------
+    /* -------------------------------------------------------------------------
        Slates (Catppuccin Latte warm neutral & text tones)
        ------------------------------------------------------------------------- */
-  --color-slate-800: #4c4f69;
-  --color-slate-600: #6c6f85;
-  --color-slate-400: #9ca0b0;
-  --color-slate-300: #ccd0da;
-  --color-slate-200: #dce0e8;
-  --color-slate-100: #e6e9ef;
-  --color-slate-50: #eff1f5;
-  --color-slate-50-translucent: rgba(239, 241, 245, 0.75);
+    --color-slate-800: #4c4f69;
+    --color-slate-600: #6c6f85;
+    --color-slate-400: #9ca0b0;
+    --color-slate-300: #ccd0da;
+    --color-slate-200: #dce0e8;
+    --color-slate-100: #e6e9ef;
+    --color-slate-50: #eff1f5;
+    --color-slate-50-translucent: rgba(239, 241, 245, 0.75);
 }

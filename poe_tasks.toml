@@ -65,7 +65,7 @@
 [tasks.test-mutation-cosmic]
     help = "Run distributed mutation testing with cosmic-ray."
     sequence = [
-        { script = "shutil:rmtree('session.sqlite', ignore_errors=1)" },
+        "_clean-cosmic",
         { cmd = "cosmic-ray init cosmic-ray.toml session.sqlite" },
         { cmd = "cosmic-ray exec session.sqlite" },
         { cmd = "cr-report session.sqlite" },
@@ -149,7 +149,7 @@
 [tasks.fix]
     default_item_type = "cmd"
     help = "Auto-fix linting and formatting issues."
-    ignore_fail = "return_non_zero"
+    ignore_fail = "return_zero"
     sequence = [
         "ruff check --fix",
         "ruff format",
@@ -224,10 +224,13 @@
     script = "shutil:rmtree('.temp', ignore_errors=1)"
 
 [tasks._clean-mutation]
-    script = "shutil:rmtree('.mutmut-cache', ignore_errors=1)"
+    sequence = [
+        { script = "shutil:rmtree('.mutmut-cache', ignore_errors=1)" },
+        { script = "shutil:rmtree('mutants', ignore_errors=1)" },
+    ]
 
 [tasks._clean-cosmic]
-    script = "shutil:rmtree('session.sqlite', ignore_errors=1)"
+    cmd = "python -c \"import pathlib; pathlib.Path('session.sqlite').unlink(missing_ok=True)\""
 
 [tasks.clean]
     help = "Remove build artifacts, cache directories, and test coverage outputs."

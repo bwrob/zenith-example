@@ -192,4 +192,3 @@ Follow these guidelines when type checking code:
   with narrowing (`isinstance`).
 - **Missing `py.typed`**: If an installed library warns of missing types,
   install its stub package (for example, `uv add --dev types-requests`).
-

@@ -139,5 +139,3 @@ Before committing changelog updates:
 1. Check Markdown formatting with `uv run rumdl check docs/changelog.md`.
 2. Build documentation site with `uv run poe docs-build` to check navigation and links.
 3. Check the drafted entries for active voice and accurate contributor handles.
-
-

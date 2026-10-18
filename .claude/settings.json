@@ -1,20 +1,21 @@
 {
-  "permissions": {
-    "allow": [
-      "Bash(uv run poe:*)",
-      "Bash(uv run pytest:*)",
-      "Bash(uv run ruff:*)",
-      "Bash(uv run pyrefly:*)",
-      "Bash(uv run complexipy:*)",
-      "Bash(uv run tach:*)",
-      "Bash(uv run rumdl:*)",
-      "Bash(uv run typos:*)",
-      "Bash(uv run zizmor:*)",
-      "Bash(uv run pre-commit:*)"
-    ],
-    "deny": [
-      "Bash(rm -rf /*)",
-      "Bash(git push --force:*)"
-    ]
-  }
+    "permissions": {
+        "allow": [
+            "Bash(uv run poe:*)",
+            "Bash(uv run pytest:*)",
+            "Bash(uv run ruff:*)",
+            "Bash(uv run pyrefly:*)",
+            "Bash(uv run complexipy:*)",
+            "Bash(uv run tach:*)",
+            "Bash(uv run rumdl:*)",
+            "Bash(uv run typos:*)",
+            "Bash(uv run taplo:*)",
+            "Bash(uv run zizmor:*)",
+            "Bash(uv run pre-commit:*)"
+        ],
+        "deny": [
+            "Bash(rm -rf /*)",
+            "Bash(git push --force:*)"
+        ]
+    }
 }

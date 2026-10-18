@@ -4,8 +4,10 @@
     ]
 
     [default.extend-words]
-        CPY  = "CPY"
-        Ines = "Ines"
+        CPY    = "CPY"
+        Ines   = "Ines"
+        ment   = "ment"
+        utiliz = "utiliz"
 
 [files]
     extend-exclude = [ "*.ambr", "*.min.js", "*.svg", "build", "dist", "site" ]

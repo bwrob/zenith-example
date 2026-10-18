@@ -106,4 +106,3 @@ When a new ADR replaces an earlier decision:
 1. In the **new ADR**: add a reference in Context (`Supersedes [ADR-0002](0002-...).md`).
 2. In the **old ADR**: update status to `Superseded by [ADR-000X](000X-...).md`.
 3. Update the status badges in `docs/adr/index.md`.
-

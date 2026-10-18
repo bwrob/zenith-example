@@ -268,4 +268,3 @@ def dispatch(action: Action) -> None:
   (`` `value` ``), never RST double backticks (```` ``value`` ````).
 - **Executable Doctests**: Include `>>>` doctest examples in pure functions when appropriate.
   Automated tests check these doctests via `pytest --doctest-modules`.
-

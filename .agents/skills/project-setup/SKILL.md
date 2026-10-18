@@ -134,4 +134,3 @@ To reset pre-commit hook environments:
 uv run pre-commit clean
 uv run pre-commit install --install-hooks
 ```
-

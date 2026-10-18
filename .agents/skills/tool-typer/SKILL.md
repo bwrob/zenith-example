@@ -55,21 +55,21 @@ def process(
 ```python
 @app.command()
 def deploy(
-    # Optional Flag / Option with short and long flags
-    verbose: Annotated[
-        bool,
-        typer.Option("--verbose", "-v", help="Enable verbose logging output."),
-    ] = False,
     # Required Option
     token: Annotated[
         str,
         typer.Option("--token", "-t", help="API authentication token."),
     ],
+    # Optional Flag / Option with short and long flags
+    verbose: Annotated[
+        bool,
+        typer.Option("--verbose", "-v", help="Enable verbose logging output."),
+    ] = False,
     # Multi-value option
     tags: Annotated[
-        list[str],
+        list[str] | None,
         typer.Option("--tag", help="Deployment tags to associate."),
-    ] = [],
+    ] = None,
 ) -> None:
     ...
 ```

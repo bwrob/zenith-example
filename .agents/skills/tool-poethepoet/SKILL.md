@@ -331,4 +331,3 @@ Follow these engineering conventions when editing poe tasks:
   manually.
 - **Inspect discovery**: Run `uv run poe --help` to check that tasks parse and
   documentation displays correctly.
-

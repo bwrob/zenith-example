@@ -44,4 +44,3 @@ in `./templates/` instead of embedding large inline blocks.>
 uv run python .agents/skills/asd-ste100/scripts/ste-lint.py .agents/skills/<skill-name>/SKILL.md
 uv run <verification-command>
 ```
-

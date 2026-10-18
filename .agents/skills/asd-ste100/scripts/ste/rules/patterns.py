@@ -103,7 +103,7 @@ UNAPPROVED_WORD_RULE = PatternRule(
     id="unapproved-word",
     severity=Severity.HARD,
     pattern=re.compile(
-        r"\b(utiliz(?:e|es|ed|ing|ation)|commenc(?:e|es|ed|ing|ement)|"
+        r"\b(utiliz(?:e|es|ed|ing|ation)|commenc(?:e|es|ed|ing|ement)|"  # spellchecker:disable-line
         r"ascertain(?:s|ed|ing)?|endeavor(?:s|ed|ing)?|"
         r"facilitat(?:e|es|ed|ing)|replenish(?:es|ed|ing)?|"
         r"procure(?:s|d|ing)?|procurement|rectif(?:y|ies|ied|ying)|"
@@ -156,7 +156,7 @@ NOMINALIZATION_RULE = PatternRule(
     severity=Severity.HARD,
     pattern=re.compile(
         r"\b(perform|performs|performed|conduct|conducts|conducted|carry out|carries out|carried out)"
-        r"\s+(?:(?:a|an|the)\s+)?\w+(?:tion|sion|ment|ance|ence|ysis)\b",
+        r"\s+(?:(?:a|an|the)\s+)?\w+(?:tion|sion|ment|ance|ence|ysis)\b",  # spellchecker:disable-line
         re.IGNORECASE,
     ),
     message="Action frozen into a noun. Use the verb (analyze, not perform an analysis of).",
@@ -219,4 +219,3 @@ PATTERN_RULES: tuple[PatternRule, ...] = (
     BANNED_MODAL_RULE,
     TRAILING_CONDITION_RULE,
 )
-

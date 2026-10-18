@@ -69,4 +69,3 @@ def format_json(
         "score": score,
     }
     return json.dumps(payload, indent=2)
-
