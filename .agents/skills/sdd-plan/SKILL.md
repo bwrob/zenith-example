@@ -1,13 +1,13 @@
 ---
-name: workflow-sdd-plan
+name: sdd-plan
 description: >-
   Translates functional specifications into technical implementation plans.
   Defines component architectures, layer boundaries, interface contracts, and atomic task breakdowns.
   Triggers: plan implementation, sdd plan, technical plan, task breakdown, architecture plan.
-version: 1.0.0
+version: 1.1.0
 ---
 
-# Technical Implementation Planning (`workflow-sdd-plan`)
+# Technical Implementation Planning (`sdd-plan`)
 
 This skill translates approved functional specifications into actionable technical plans.
 It establishes component boundaries, typing contracts, and atomic tasks before code execution starts.
@@ -85,7 +85,7 @@ For each task:
 ### Step 6: Verify User Alignment
 
 Present `.specs/<feature-id>/plan.md` to the user.
-Secure explicit approval before starting `workflow-sdd-implement`.
+Secure explicit approval before starting `sdd-implement`.
 
 ---
 

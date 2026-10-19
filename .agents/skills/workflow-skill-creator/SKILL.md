@@ -22,10 +22,11 @@ It reads the full content only when activated.
 
 ## 1. Skill Prefix Taxonomy & Grouping
 
-Every skill in a Zenith project must belong to one of four standardized prefix groups:
+Every skill in a Zenith project must belong to one of five standardized prefix groups:
 
 | Prefix | Domain & Scope | Examples |
 |---|---|---|
+| **`sdd-*`** | **Spec-Driven Development Suite**<br/>End-to-end specification authoring, technical planning, TDD implementation, and quality review. | `sdd`, `sdd-spec`, `sdd-plan`, `sdd-implement`, `sdd-review`. |
 | **`tool-*`** | **Tool Mechanics & Syntax**<br/>Runbooks and syntax guides for specific external tools, compilers, linters, or libraries. | `tool-uv`, `tool-ruff`, `tool-pytest`, `tool-tach`, `tool-docker`, `tool-fastapi`. |
 | **`workflow-*`** | **Lifecycle & Multi-Step Procedures**<br/>Operational processes, version control, release ceremonies, audits, and checklists. | `workflow-git`, `workflow-code-review`, `workflow-changelog`, `workflow-adr`, `workflow-setup`. |
 | **`guide-*`** | **Engineering Conventions & Style**<br/>Invariants, coding paradigms, architecture patterns, and technical writing rules. | `guide-python`, `guide-ste100`, `guide-api-design`. |

@@ -31,4 +31,4 @@ Your primary responsibility is to translate an approved `.specs/<feature-id>/spe
 
 ## Required Output Artifact
 
-Create `.specs/<feature-id>/plan.md` following the template in `.agents/skills/workflow-sdd-plan/templates/plan.md`.
+Create `.specs/<feature-id>/plan.md` following the template in `.agents/skills/sdd-plan/templates/plan.md`.

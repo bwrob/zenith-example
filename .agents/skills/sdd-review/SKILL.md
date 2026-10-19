@@ -1,13 +1,13 @@
 ---
-name: workflow-sdd-review
+name: sdd-review
 description: >-
   Audits implemented code against functional specifications and quality invariants.
   Verifies acceptance criteria, tests for regressions, and audits for scope creep.
   Triggers: sdd review, verify spec, audit implementation, spec conformance, sdd convergence.
-version: 1.0.0
+version: 1.1.0
 ---
 
-# Specification Conformance Review (`workflow-sdd-review`)
+# Specification Conformance Review (`sdd-review`)
 
 This skill defines the audit protocol to verify implemented code against functional specifications in Zenith projects.
 It verifies that delivered code satisfies all acceptance criteria without introducing scope creep or regressions.
@@ -64,24 +64,46 @@ Copy the template [templates/review.md](./templates/review.md) to `.specs/<featu
 Run the automated traceability validator [scripts/check_traceability.py](./scripts/check_traceability.py):
 
 ```bash
-uv run python .agents/skills/workflow-sdd-review/scripts/check_traceability.py .specs/<feature-id>/spec.md
+uv run python .agents/skills/sdd-review/scripts/check_traceability.py .specs/<feature-id>/spec.md
 ```
 
 1. Inspect the output to verify that every requirement links to a passing test.
 2. Embed the generated matrix into `.specs/<feature-id>/review.md`.
 
-### Step 4: Audit Scope Boundaries
+### Step 4: Audit Scope Boundaries with Smart Diff Chunking
 
-Inspect modified files for unauthorized additions:
-- Verify that no out-of-scope capabilities exist.
-- Verify that no dead code or uncalled helper functions exist.
+Inspect the diff volume to determine the review strategy:
+
+```bash
+git diff --shortstat main...HEAD -- . ':!.specs'
+```
+
+1. **Standard Mode (300 Lines or Fewer)**:
+   Inspect the entire diff in a single pass:
+   ```bash
+   git diff main...HEAD -- . ':!.specs'
+   ```
+2. **Iterative Review Mode (More Than 300 Lines)**:
+   When changes exceed 300 lines, review each modified file individually to prevent context saturation:
+   - List all modified files:
+     ```bash
+     git diff --name-only main...HEAD -- . ':!.specs'
+     ```
+   - Inspect and evaluate each modified file individually:
+     ```bash
+     git diff main...HEAD -- <file-path>
+     ```
+   - Collect findings per file into working memory before you synthesize the final report.
+3. **Inspect Scope Boundaries**:
+   - Verify that no out-of-scope capabilities exist.
+   - Verify that no dead code or uncalled helper functions exist.
 
 ### Step 5: Verify Public API Diffs with Griffe
 
 Run the public API inspection script [scripts/check_public_api.py](./scripts/check_public_api.py):
 
 ```bash
-uv run python .agents/skills/workflow-sdd-review/scripts/check_public_api.py --plan .specs/<feature-id>/plan.md
+uv run python .agents/skills/sdd-review/scripts/check_public_api.py --plan .specs/<feature-id>/plan.md
 ```
 
 1. Inspect the output to verify that Griffe reports zero breaking changes.
@@ -117,7 +139,7 @@ If the review verdict is **Changes Requested**:
      - **Scope**: [Description of changes and files affected]
      - **Verification Gate**: `uv run poe test`
    ```
-4. Hand over execution to `workflow-sdd-implement` to resolve fixes with TDD.
+4. Hand over execution to `sdd-implement` to resolve fixes with TDD.
 
 ---
 

@@ -1,13 +1,13 @@
 ---
-name: workflow-sdd-implement
+name: sdd-implement
 description: >-
   Executes implementation plans using disciplined Test-Driven Development (TDD).
   Runs red-green-refactor loops, verifies quality gates per task, and stops on drift.
   Triggers: sdd implement, execute plan, run tasks, tdd implementation, sdd coding.
-version: 1.0.0
+version: 1.1.0
 ---
 
-# Test-Driven Implementation (`workflow-sdd-implement`)
+# Test-Driven Implementation (`sdd-implement`)
 
 This skill defines the process to execute technical implementation plans in Zenith projects.
 It enforces sequential task execution, Test-Driven Development (TDD), and per-task verification gates.
@@ -117,7 +117,37 @@ After tests pass, commit the code changes and record the commit hash:
    git add .specs/<feature-id>/plan.md
    git commit -m "docs(plan): complete task N (<sha>)"
    ```
-5. Proceed to the next task until all tasks are complete.
+5. Proceed to the next task in the phase.
+
+### Step 7: Execute Phase Checkpoint Protocol
+
+When you complete the final task in a Phase:
+
+1. **Verify Module Test Coverage**:
+   Inspect modified files under `src/` since the previous checkpoint:
+   ```bash
+   git diff --name-only <prev-checkpoint-sha|main> HEAD -- 'src/*'
+   ```
+   Verify that each modified module has a corresponding unit test file in `tests/`.
+2. **Execute Quality Gates**:
+   Run the test suite and quality verification:
+   ```bash
+   uv run poe test
+   uv run poe code-quality
+   ```
+3. **Generate Manual Verification Recipe**:
+   Create a step-by-step manual test recipe for developer inspection (for example, a CLI invocation or REPL call with expected output).
+4. **Stop for Developer Approval**:
+   Present the manual verification recipe. Pause for developer confirmation before you start the next phase, unless `--autonomous` or `/goal` is active.
+5. **Record Phase Checkpoint**:
+   Obtain the latest commit hash (`git rev-parse --short HEAD`).
+   Update the phase heading in `.specs/<feature-id>/plan.md` to record the checkpoint:
+   `### Phase <N>: [Name] [checkpoint: <sha>]`.
+   Commit the plan update:
+   ```bash
+   git add .specs/<feature-id>/plan.md
+   git commit -m "docs(plan): record checkpoint for phase <N> (<sha>)"
+   ```
 
 ---
 

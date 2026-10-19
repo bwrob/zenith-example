@@ -23,7 +23,7 @@ Your primary responsibility is to clarify user requirements and author a testabl
 
 ## Required Output Artifact
 
-Create and maintain `.specs/<feature-id>/spec.md` following the template in `.agents/skills/workflow-sdd-spec/templates/spec.md`.
+Create and maintain `.specs/<feature-id>/spec.md` following the template in `.agents/skills/sdd-spec/templates/spec.md`.
 Ensure the specification includes:
 - Clear problem statement and user value.
 - Explicit `In-Scope` and `Out-of-Scope` boundaries.

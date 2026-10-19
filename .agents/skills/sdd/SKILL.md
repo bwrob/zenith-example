@@ -1,13 +1,13 @@
 ---
-name: workflow-sdd
+name: sdd
 description: >-
   Coordinates the Spec-Driven Development (SDD) lifecycle from feature conception to verification.
   Orchestrates specification authoring, planning, implementation, and review using artifact boundaries and subagents.
   Triggers: sdd, spec driven dev, spec-driven development, feature spec, execute sdd, sdd runbook.
-version: 1.1.0
+version: 1.2.0
 ---
 
-# Spec-Driven Development Orchestrator (`workflow-sdd`)
+# Spec-Driven Development Orchestrator (`sdd`)
 
 This skill orchestrates the end-to-end Spec-Driven Development (SDD) lifecycle for Zenith projects.
 It coordinates specification, planning, implementation, and review across dedicated subagents or sequential phases.
@@ -77,7 +77,7 @@ Follow these steps to develop a feature:
 
 ### Step 2: Author the Specification
 
-Activate the `workflow-sdd-spec` skill.
+Activate the `sdd-spec` skill.
 If using subagents, invoke the `sdd-specifier` subagent.
 Interview the user to resolve ambiguities.
 Generate `.specs/<feature-id>/spec.md`.
@@ -89,7 +89,7 @@ Generate `.specs/<feature-id>/spec.md`.
 
 ### Step 3: Author the Implementation Plan
 
-Activate the `workflow-sdd-plan` skill.
+Activate the `sdd-plan` skill.
 If using subagents, invoke the `sdd-planner` subagent.
 Read `.specs/<feature-id>/spec.md`.
 Define component interactions, public contracts, and atomic tasks under 100 lines each.
@@ -102,7 +102,7 @@ Generate `.specs/<feature-id>/plan.md`.
 
 ### Step 4: Execute Implementation via TDD
 
-Activate the `workflow-sdd-implement` skill.
+Activate the `sdd-implement` skill.
 If using subagents, invoke the `sdd-implementer` subagent.
 Iterate through the tasks in `.specs/<feature-id>/plan.md` sequentially.
 For each task:
@@ -119,12 +119,12 @@ For each task:
 
 ### Step 5: Review Specification Conformance & Public API
 
-Activate the `workflow-sdd-review` skill.
+Activate the `sdd-review` skill.
 If using subagents, invoke the `sdd-reviewer` subagent.
 Compare the implemented diff against `.specs/<feature-id>/spec.md`.
 Run public API verification:
 ```bash
-uv run python .agents/skills/workflow-sdd-review/scripts/check_public_api.py --plan .specs/<feature-id>/plan.md
+uv run python .agents/skills/sdd-review/scripts/check_public_api.py --plan .specs/<feature-id>/plan.md
 ```
 Generate `.specs/<feature-id>/review.md`.
 
@@ -146,7 +146,7 @@ After verification tasks pass, submit the pull request following `workflow-git`.
 After pull request approval, archive the specification with [scripts/archive_feature.py](./scripts/archive_feature.py):
 
 ```bash
-uv run python .agents/skills/workflow-sdd/scripts/archive_feature.py <feature-id>
+uv run python .agents/skills/sdd/scripts/archive_feature.py <feature-id>
 ```
 
 This command moves artifacts from `.specs/<feature-id>/` into `docs/specs/<feature-id>/`.

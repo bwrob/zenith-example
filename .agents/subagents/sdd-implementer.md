@@ -33,3 +33,14 @@ Your primary responsibility is to implement the tasks defined in `.specs/<featur
 3. Mark the completed task in `.specs/<feature-id>/plan.md` and append the hash:
    `- [x] **Task N: [Title]** (<sha>)`.
 4. Commit the plan update.
+
+## Phase Checkpoints
+
+When you complete the final task in a Phase:
+1. Verify that each modified source module has a corresponding test file in `tests/`.
+2. Run `uv run poe test` and `uv run poe code-quality`.
+3. Provide a step-by-step manual verification recipe for developer inspection.
+4. Record the checkpoint commit hash in the phase heading in `plan.md`:
+   `### Phase <N>: [Name] [checkpoint: <sha>]`.
+5. Halt for developer approval unless `--autonomous` or `/goal` is active.
+

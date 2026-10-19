@@ -67,7 +67,10 @@ class ExampleServiceProtocol(Protocol):
 Execute tasks in dependency order. Keep every task under 50 to 100 lines of change.
 When a task passes verification and you commit the code, mark as complete and append the short commit hash:
 `- [x] **Task 1: [Task Title]** (<sha>)`.
+When a phase completes, record the checkpoint commit in the phase heading:
+`### Phase 1: [Phase Name] [checkpoint: <sha>]`.
 
+### Phase 1: Foundation
 - [ ] **Task 1: [Task Title]**
   - **Scope**: [Description of changes and files affected]
   - **Verification Gate**: `uv run poe test tests/test_<module>.py`
@@ -76,6 +79,7 @@ When a task passes verification and you commit the code, mark as complete and ap
   - **Scope**: [Description of changes and files affected]
   - **Verification Gate**: `uv run poe test tests/test_<module>.py`
 
+### Phase 2: Integration & Verification
 - [ ] **Task 3: [Task Title]**
   - **Scope**: [Description of changes and files affected]
   - **Verification Gate**: `uv run poe test`

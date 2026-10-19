@@ -337,7 +337,7 @@
   git checkout -b "feature/$feature_id" 2>/dev/null || git checkout "feature/$feature_id" 2>/dev/null || true
   mkdir -p ".specs/$feature_id"
   if [ ! -f ".specs/$feature_id/spec.md" ]; then
-    cp ".agents/skills/workflow-sdd-spec/templates/spec.md" ".specs/$feature_id/spec.md"
+    cp ".agents/skills/sdd-spec/templates/spec.md" ".specs/$feature_id/spec.md"
     echo "✓ Initialized '.specs/$feature_id/spec.md'"
   else
     echo "ℹ '.specs/$feature_id/spec.md' already exists, preserving file."
@@ -354,7 +354,7 @@
   set -euo pipefail
   mkdir -p ".specs/$feature_id"
   if [ ! -f ".specs/$feature_id/plan.md" ]; then
-    cp ".agents/skills/workflow-sdd-plan/templates/plan.md" ".specs/$feature_id/plan.md"
+    cp ".agents/skills/sdd-plan/templates/plan.md" ".specs/$feature_id/plan.md"
     echo "✓ Initialized '.specs/$feature_id/plan.md'"
   else
     echo "ℹ '.specs/$feature_id/plan.md' already exists, preserving file."
@@ -370,7 +370,7 @@
   set -euo pipefail
   mkdir -p ".specs/$feature_id"
   if [ ! -f ".specs/$feature_id/review.md" ]; then
-    cp ".agents/skills/workflow-sdd-review/templates/review.md" ".specs/$feature_id/review.md"
+    cp ".agents/skills/sdd-review/templates/review.md" ".specs/$feature_id/review.md"
     echo "✓ Initialized '.specs/$feature_id/review.md'"
   else
     echo "ℹ '.specs/$feature_id/review.md' already exists, preserving file."
@@ -381,28 +381,28 @@
     args = [
         { name = "feature_id", positional = true, required = true, help = "Feature identifier" },
     ]
-    cmd = "python .agents/skills/workflow-sdd-spec/scripts/check_spec.py .specs/$feature_id/spec.md"
+    cmd = "python .agents/skills/sdd-spec/scripts/check_spec.py .specs/$feature_id/spec.md"
     help = "Validate specification structural invariants against SDD rules."
 
 [tasks.sdd-check-api]
     args = [
         { name = "feature_id", positional = true, required = true, help = "Feature identifier" },
     ]
-    cmd = "python .agents/skills/workflow-sdd-review/scripts/check_public_api.py --plan .specs/$feature_id/plan.md"
+    cmd = "python .agents/skills/sdd-review/scripts/check_public_api.py --plan .specs/$feature_id/plan.md"
     help = "Check public API diffs with Griffe against the implementation plan."
 
 [tasks.sdd-check-traceability]
     args = [
         { name = "feature_id", positional = true, required = true, help = "Feature identifier" },
     ]
-    cmd = "python .agents/skills/workflow-sdd-review/scripts/check_traceability.py .specs/$feature_id/spec.md"
+    cmd = "python .agents/skills/sdd-review/scripts/check_traceability.py .specs/$feature_id/spec.md"
     help = "Verify requirement-to-test traceability matrix."
 
 [tasks.sdd-archive]
     args = [
         { name = "feature_id", positional = true, required = true, help = "Feature identifier" },
     ]
-    cmd = "python .agents/skills/workflow-sdd/scripts/archive_feature.py $feature_id"
+    cmd = "python .agents/skills/sdd/scripts/archive_feature.py $feature_id"
     help = "Archive approved feature specification into permanent docs/specs/."
 
 [tasks.sdd-revert]
@@ -410,7 +410,7 @@
         { name = "feature_id", positional = true, required = true, help = "Feature identifier" },
         { name = "sha", default = "", help = "Optional commit SHA to revert" },
     ]
-    cmd = "python .agents/skills/workflow-sdd/scripts/revert_task.py $feature_id $sha"
+    cmd = "python .agents/skills/sdd/scripts/revert_task.py $feature_id $sha"
     help = "Revert a task commit and reset its status in .specs/<feature-id>/plan.md."
 
 [tasks.sdd-verify]

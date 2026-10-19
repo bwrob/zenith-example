@@ -1,13 +1,13 @@
 ---
-name: workflow-sdd-spec
+name: sdd-spec
 description: >-
   Authors and clarifies functional specifications in Spec-Driven Development.
   Captures user stories, scope boundaries, and acceptance criteria in EARS format without implementation details.
   Triggers: write spec, author spec, sdd spec, feature specification, clarify requirements.
-version: 1.0.0
+version: 1.1.0
 ---
 
-# Feature Specification Authoring (`workflow-sdd-spec`)
+# Feature Specification Authoring (`sdd-spec`)
 
 This skill defines the process to author and clarify functional specifications in Zenith projects.
 It captures observable behavior, boundary limits, and testable acceptance criteria before code design begins.
@@ -85,7 +85,7 @@ Add concrete Given/When/Then scenarios for every functional requirement:
 ### Step 6: Verify User Approval
 
 Present the completed `.specs/<feature-id>/spec.md` to the user.
-Secure explicit user approval before proceeding to `workflow-sdd-plan`.
+Secure explicit user approval before proceeding to `sdd-plan`.
 
 ---
 
@@ -94,7 +94,7 @@ Secure explicit user approval before proceeding to `workflow-sdd-plan`.
 Run the automated specification quality linter [scripts/check_spec.py](./scripts/check_spec.py):
 
 ```bash
-uv run python .agents/skills/workflow-sdd-spec/scripts/check_spec.py .specs/<feature-id>/spec.md
+uv run python .agents/skills/sdd-spec/scripts/check_spec.py .specs/<feature-id>/spec.md
 ```
 
 Verify that the specification satisfies these criteria:
