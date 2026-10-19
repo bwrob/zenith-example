@@ -72,6 +72,7 @@ venv.bak/
 .pyrefly/
 .tach_cache/
 .temp/
+.specs/
 
 # IDEs & Editors
 .idea/

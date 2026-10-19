@@ -1,0 +1,111 @@
+---
+name: workflow-sdd-implement
+description: >-
+  Executes implementation plans using disciplined Test-Driven Development (TDD).
+  Runs red-green-refactor loops, verifies quality gates per task, and stops on drift.
+  Triggers: sdd implement, execute plan, run tasks, tdd implementation, sdd coding.
+version: 1.0.0
+---
+
+# Test-Driven Implementation (`workflow-sdd-implement`)
+
+This skill defines the process to execute technical implementation plans in Zenith projects.
+It enforces sequential task execution, Test-Driven Development (TDD), and per-task verification gates.
+
+---
+
+## 1. Core Principles & Execution Invariants
+
+1. **Strict Sequential Execution**:
+   Execute tasks one at a time in the exact sequence declared in `.specs/<feature-id>/plan.md`.
+   Do not batch tasks or jump ahead.
+2. **Red-Green-Refactor Cycle**:
+   For every task, follow three discrete phases:
+   - **Red**: Author failing unit tests that assert the acceptance criteria.
+   - **Green**: Write the minimal production code necessary to pass the tests.
+   - **Refactor**: Clean up the implementation while preserving passing tests.
+3. **Hermetic Task Verification**:
+   Execute the verification command defined in the task before marking it complete.
+   Never proceed to the next task while current tests fail.
+4. **Complexity Reset Rule**:
+   If an implementation requires layered workarounds or complex type suppressions, stop immediately.
+   Re-evaluate the approach from first principles.
+5. **Drift Protocol**:
+   If an unhandled requirement emerges, pause code edits.
+   Update `.specs/<feature-id>/spec.md` and `.specs/<feature-id>/plan.md` before writing further code.
+
+---
+
+## 2. Subagent Profile: `sdd-implementer`
+
+When operating in multi-agent environments, invoke a dedicated `sdd-implementer` subagent:
+
+- **Role**: Software Engineer and TDD Implementer.
+- **Permissions**: Workspace file edits and hermetic command execution (`uv run ...`).
+- **Goal**: Implement all tasks from `.specs/<feature-id>/plan.md` with passing tests.
+
+---
+
+## 3. Implementation Procedure
+
+Follow these steps for each task in the plan:
+
+### Step 1: Select the Next Task
+
+Open `.specs/<feature-id>/plan.md`.
+Locate the first incomplete checkbox (`- [ ] **Task N: ...**`).
+Review the requirement ID, target files, and verification gate.
+
+### Step 2: Write Failing Tests (Red)
+
+Open or create the appropriate unit test file in `tests/test_<module>.py`.
+Write tests that assert the expected behavior defined in the specification.
+Run the test command to verify that tests fail for the expected reason:
+
+```bash
+uv run pytest tests/test_<module>.py
+```
+
+### Step 3: Implement Minimal Solution (Green)
+
+Implement the necessary dataclasses, protocols, or functions in `src/`.
+Write only the code needed to satisfy the failing tests.
+Run the test command again until all tests pass:
+
+```bash
+uv run pytest tests/test_<module>.py
+```
+
+### Step 4: Refactor and Format
+
+Refactor code to satisfy Zenith standards:
+- Ensure cognitive complexity remains at 10 or less.
+- Ensure type annotations satisfy Pyrefly strict mode.
+- Apply auto-fixers and formatters:
+
+```bash
+uv run poe fix
+```
+
+### Step 5: Execute Task Verification Gate
+
+Run the full verification command declared in the task:
+
+```bash
+uv run poe test
+```
+
+### Step 6: Update Plan Progress
+
+If tests pass, mark the task complete in `.specs/<feature-id>/plan.md` (`- [x] **Task N: ...**`).
+Proceed to the next task until all tasks are complete.
+
+---
+
+## 4. Verification & Quality Gate
+
+Verify that the implementation satisfies these criteria:
+
+1. All task checkboxes in `.specs/<feature-id>/plan.md` show complete status.
+2. The entire test suite passes with 100% branch coverage.
+3. Auto-formatters and linters report zero errors.

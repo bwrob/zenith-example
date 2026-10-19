@@ -322,3 +322,97 @@
 [tasks.sync-skills]
     cmd  = "uvx library-skills --all -y"
     help = "Synchronize agent skills from installed library dependencies via library-skills."
+
+    # ------------------------------------------------------------------------------
+    # Spec-Driven Development (SDD)
+    # ------------------------------------------------------------------------------
+
+[tasks.sdd-new]
+    args = [
+        { name = "feature_id", positional = true, required = true, help = "Feature identifier (e.g. user-auth)" },
+    ]
+    help = "Initialize git branch and .specs/<feature-id>/spec.md from template."
+    shell = """
+  set -euo pipefail
+  git checkout -b "feature/$feature_id" 2>/dev/null || git checkout "feature/$feature_id" 2>/dev/null || true
+  mkdir -p ".specs/$feature_id"
+  if [ ! -f ".specs/$feature_id/spec.md" ]; then
+    cp ".agents/skills/workflow-sdd-spec/templates/spec.md" ".specs/$feature_id/spec.md"
+    echo "✓ Initialized '.specs/$feature_id/spec.md'"
+  else
+    echo "ℹ '.specs/$feature_id/spec.md' already exists, preserving file."
+  fi
+  echo "✓ On branch 'feature/$feature_id'"
+"""
+
+[tasks.sdd-plan]
+    args = [
+        { name = "feature_id", positional = true, required = true, help = "Feature identifier" },
+    ]
+    help = "Initialize .specs/<feature-id>/plan.md from template."
+    shell = """
+  set -euo pipefail
+  mkdir -p ".specs/$feature_id"
+  if [ ! -f ".specs/$feature_id/plan.md" ]; then
+    cp ".agents/skills/workflow-sdd-plan/templates/plan.md" ".specs/$feature_id/plan.md"
+    echo "✓ Initialized '.specs/$feature_id/plan.md'"
+  else
+    echo "ℹ '.specs/$feature_id/plan.md' already exists, preserving file."
+  fi
+"""
+
+[tasks.sdd-review]
+    args = [
+        { name = "feature_id", positional = true, required = true, help = "Feature identifier" },
+    ]
+    help = "Initialize .specs/<feature-id>/review.md from template."
+    shell = """
+  set -euo pipefail
+  mkdir -p ".specs/$feature_id"
+  if [ ! -f ".specs/$feature_id/review.md" ]; then
+    cp ".agents/skills/workflow-sdd-review/templates/review.md" ".specs/$feature_id/review.md"
+    echo "✓ Initialized '.specs/$feature_id/review.md'"
+  else
+    echo "ℹ '.specs/$feature_id/review.md' already exists, preserving file."
+  fi
+"""
+
+[tasks.sdd-check-spec]
+    args = [
+        { name = "feature_id", positional = true, required = true, help = "Feature identifier" },
+    ]
+    cmd = "python .agents/skills/workflow-sdd-spec/scripts/check_spec.py .specs/$feature_id/spec.md"
+    help = "Validate specification structural invariants against SDD rules."
+
+[tasks.sdd-check-api]
+    args = [
+        { name = "feature_id", positional = true, required = true, help = "Feature identifier" },
+    ]
+    cmd = "python .agents/skills/workflow-sdd-review/scripts/check_public_api.py --plan .specs/$feature_id/plan.md"
+    help = "Check public API diffs with Griffe against the implementation plan."
+
+[tasks.sdd-check-traceability]
+    args = [
+        { name = "feature_id", positional = true, required = true, help = "Feature identifier" },
+    ]
+    cmd = "python .agents/skills/workflow-sdd-review/scripts/check_traceability.py .specs/$feature_id/spec.md"
+    help = "Verify requirement-to-test traceability matrix."
+
+[tasks.sdd-archive]
+    args = [
+        { name = "feature_id", positional = true, required = true, help = "Feature identifier" },
+    ]
+    cmd = "python .agents/skills/workflow-sdd/scripts/archive_feature.py $feature_id"
+    help = "Archive approved feature specification into permanent docs/specs/."
+
+[tasks.sdd-verify]
+    args = [
+        { name = "feature_id", positional = true, required = true, help = "Feature identifier" },
+    ]
+    help = "Run complete SDD convergence verification (spec check, API diff, traceability, tests)."
+    sequence = [
+        { ref = "sdd-check-spec $feature_id" },
+        { ref = "sdd-check-api $feature_id" },
+        { ref = "sdd-check-traceability $feature_id" },
+        { ref = "test" },
+    ]
