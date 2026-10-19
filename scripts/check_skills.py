@@ -4,15 +4,16 @@
 Ensures each skill adheres to the Zenith skill standard:
 - Directory contains SKILL.md.
 - Valid YAML frontmatter with `name` matching directory and non-empty `description`.
-- Internal links to templates/, references/, and examples/ resolve to actual files.
+- Internal links to templates/, references/, examples/, scripts/ resolve to actual files.
+- Optional/auto-detected documentation coverage in docs/skills/*.md.
 """
 
 from __future__ import annotations
 
 import argparse
-from pathlib import Path
 import re
 import sys
+from pathlib import Path
 
 
 def parse_frontmatter(content: str) -> dict[str, str]:
@@ -84,12 +85,18 @@ def validate_skill(skill_dir: Path) -> list[str]:
     # Validate description
     desc = frontmatter.get("description")
     if not desc:
-        errors.append(f"{skill_dir.name}/SKILL.md: missing 'description' in frontmatter")
+        errors.append(
+            f"{skill_dir.name}/SKILL.md: missing 'description' in frontmatter"
+        )
     elif len(desc) < 20:
-        errors.append(f"{skill_dir.name}/SKILL.md: description is too brief (min 20 chars)")
+        errors.append(
+            f"{skill_dir.name}/SKILL.md: description is too brief (min 20 chars)"
+        )
 
     # Validate internal file links (e.g. [templates/...](./templates/...))
-    link_pattern = re.compile(r"\[([^\]]+)\]\((\./(templates|references|examples)/[^\)]+)\)")
+    link_pattern = re.compile(
+        r"\[([^\]]+)\]\((\./(templates|references|examples|scripts)/[^\)]+)\)"
+    )
     for match in link_pattern.finditer(content):
         rel_target = match.group(2).lstrip("./")
         target_path = skill_dir / rel_target
@@ -101,14 +108,55 @@ def validate_skill(skill_dir: Path) -> list[str]:
     return errors
 
 
+def validate_docs_coverage(skill_names: list[str], docs_dir: Path) -> list[str]:
+    """Validate that every skill is documented in the documentation directory."""
+    if not docs_dir.is_dir():
+        return [f"Docs directory not found: {docs_dir}"]
+
+    doc_files = sorted(docs_dir.glob("*.md"))
+    if not doc_files:
+        return [f"No markdown documentation files found in {docs_dir}"]
+
+    combined_docs: dict[Path, str] = {}
+    for doc_file in doc_files:
+        try:
+            combined_docs[doc_file] = doc_file.read_text(encoding="utf-8")
+        except OSError as exc:
+            return [f"Failed to read {doc_file}: {exc}"]
+
+    missing: list[str] = []
+    for skill in skill_names:
+        pattern = re.compile(rf"\b{re.escape(skill)}\b")
+        found = any(pattern.search(text) for text in combined_docs.values())
+        if not found:
+            missing.append(
+                f"Skill '{skill}' is not documented in any file under {docs_dir}"
+            )
+
+    return missing
+
+
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Validate agent skills structural invariants.")
+    parser = argparse.ArgumentParser(
+        description="Validate agent skills structural invariants and documentation coverage."
+    )
     parser.add_argument(
         "skills_dir",
         nargs="?",
         type=Path,
         default=Path(".agents/skills"),
         help="Path to .agents/skills directory (default: .agents/skills)",
+    )
+    parser.add_argument(
+        "--docs-dir",
+        type=Path,
+        default=None,
+        help="Path to documentation directory to verify all skills are documented (auto-detected if docs/skills exists)",
+    )
+    parser.add_argument(
+        "--no-docs-check",
+        action="store_true",
+        help="Skip checking documentation coverage even if docs directory exists",
     )
     args = parser.parse_args(argv)
 
@@ -138,6 +186,23 @@ def main(argv: list[str] | None = None) -> int:
                 print(f"      - {err}", file=sys.stderr)
         else:
             print(f"  ✓ {s_dir.name}")
+
+    docs_dir: Path | None = args.docs_dir
+    if docs_dir is None and not args.no_docs_check:
+        candidate = skills_dir.parent.parent / "docs" / "skills"
+        if candidate.is_dir():
+            docs_dir = candidate
+
+    if docs_dir is not None and not args.no_docs_check:
+        skill_names = [d.name for d in skill_subdirs]
+        print(f"\n📚 Validating documentation coverage in {docs_dir}...")
+        doc_errs = validate_docs_coverage(skill_names, docs_dir)
+        if doc_errs:
+            failed = True
+            for err in doc_errs:
+                print(f"  ✗ {err}", file=sys.stderr)
+        else:
+            print(f"  ✓ All {len(skill_names)} skill(s) documented in {docs_dir.name}/")
 
     if failed:
         print("\n❌ Skill validation failed with errors.", file=sys.stderr)
