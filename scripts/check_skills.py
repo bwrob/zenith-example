@@ -16,6 +16,45 @@ import sys
 from pathlib import Path
 
 
+def _handle_key_value(
+    line: str,
+    metadata: dict[str, str],
+    current_key: str | None,
+    multiline_buf: list[str],
+) -> tuple[str, list[str]]:
+    """Handle a key: value line in YAML frontmatter."""
+    if current_key and multiline_buf:
+        metadata[current_key] = " ".join(multiline_buf).strip()
+    key, val = line.split(":", 1)
+    new_key = key.strip()
+    val_clean = val.strip().strip("'\"")
+    if val_clean in (">", ">-", "|", "|-"):
+        return new_key, []
+    if val_clean:
+        metadata[new_key] = val_clean
+    return new_key, []
+
+
+def _process_yaml_line(
+    line: str,
+    metadata: dict[str, str],
+    current_key: str | None,
+    multiline_buf: list[str],
+) -> tuple[str | None, list[str]]:
+    """Process a single line of YAML frontmatter."""
+    trimmed = line.strip()
+    if not trimmed or trimmed.startswith("#"):
+        return current_key, multiline_buf
+
+    if ":" in line and not line.startswith((" ", "\t")):
+        return _handle_key_value(line, metadata, current_key, multiline_buf)
+
+    if current_key:
+        multiline_buf.append(trimmed)
+
+    return current_key, multiline_buf
+
+
 def parse_frontmatter(content: str) -> dict[str, str]:
     """Parse simple YAML frontmatter between leading `---` markers."""
     if not content.startswith("---"):
@@ -31,23 +70,9 @@ def parse_frontmatter(content: str) -> dict[str, str]:
     multiline_buf: list[str] = []
 
     for line in raw_yaml.splitlines():
-        trimmed = line.strip()
-        if not trimmed or trimmed.startswith("#"):
-            continue
-
-        if ":" in line and not line.startswith(" ") and not line.startswith("\t"):
-            if current_key and multiline_buf:
-                metadata[current_key] = " ".join(multiline_buf).strip()
-                multiline_buf = []
-            key, val = line.split(":", 1)
-            current_key = key.strip()
-            val_clean = val.strip().strip("'\"")
-            if val_clean in (">", ">-", "|", "|-"):
-                multiline_buf = []
-            elif val_clean:
-                metadata[current_key] = val_clean
-        elif current_key:
-            multiline_buf.append(trimmed)
+        current_key, multiline_buf = _process_yaml_line(
+            line, metadata, current_key, multiline_buf
+        )
 
     if current_key and multiline_buf:
         metadata[current_key] = " ".join(multiline_buf).strip()
@@ -136,6 +161,49 @@ def validate_docs_coverage(skill_names: list[str], docs_dir: Path) -> list[str]:
     return missing
 
 
+def _validate_all_skills(skill_subdirs: list[Path]) -> bool:
+    """Validate all individual skill directories. Return True if any errors occur."""
+    failed = False
+    for s_dir in skill_subdirs:
+        errs = validate_skill(s_dir)
+        if errs:
+            failed = True
+            print(f"  ✗ {s_dir.name}:")
+            for err in errs:
+                print(f"      - {err}", file=sys.stderr)
+        else:
+            print(f"  ✓ {s_dir.name}")
+    return failed
+
+
+def _check_docs_coverage(
+    args: argparse.Namespace, skills_dir: Path, skill_subdirs: list[Path]
+) -> bool:
+    """Verify documentation coverage if docs directory is present. Return True on error."""
+    if args.no_docs_check:
+        return False
+
+    docs_dir = args.docs_dir
+    if docs_dir is None:
+        candidate = skills_dir.parent.parent / "docs" / "skills"
+        if candidate.is_dir():
+            docs_dir = candidate
+
+    if docs_dir is None:
+        return False
+
+    skill_names = [d.name for d in skill_subdirs]
+    print(f"\n📚 Validating documentation coverage in {docs_dir}...")
+    doc_errs = validate_docs_coverage(skill_names, docs_dir)
+    if doc_errs:
+        for err in doc_errs:
+            print(f"  ✗ {err}", file=sys.stderr)
+        return True
+
+    print(f"  ✓ All {len(skill_names)} skill(s) documented in {docs_dir.name}/")
+    return False
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         description="Validate agent skills structural invariants and documentation coverage."
@@ -174,37 +242,11 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     total_skills = len(skill_subdirs)
-    failed = False
-
     print(f"🔍 Validating {total_skills} agent skill(s) in {skills_dir}...")
-    for s_dir in skill_subdirs:
-        errs = validate_skill(s_dir)
-        if errs:
-            failed = True
-            print(f"  ✗ {s_dir.name}:")
-            for err in errs:
-                print(f"      - {err}", file=sys.stderr)
-        else:
-            print(f"  ✓ {s_dir.name}")
+    skills_failed = _validate_all_skills(skill_subdirs)
+    docs_failed = _check_docs_coverage(args, skills_dir, skill_subdirs)
 
-    docs_dir: Path | None = args.docs_dir
-    if docs_dir is None and not args.no_docs_check:
-        candidate = skills_dir.parent.parent / "docs" / "skills"
-        if candidate.is_dir():
-            docs_dir = candidate
-
-    if docs_dir is not None and not args.no_docs_check:
-        skill_names = [d.name for d in skill_subdirs]
-        print(f"\n📚 Validating documentation coverage in {docs_dir}...")
-        doc_errs = validate_docs_coverage(skill_names, docs_dir)
-        if doc_errs:
-            failed = True
-            for err in doc_errs:
-                print(f"  ✗ {err}", file=sys.stderr)
-        else:
-            print(f"  ✓ All {len(skill_names)} skill(s) documented in {docs_dir.name}/")
-
-    if failed:
+    if skills_failed or docs_failed:
         print("\n❌ Skill validation failed with errors.", file=sys.stderr)
         return 1
 
