@@ -65,6 +65,8 @@ class ExampleServiceProtocol(Protocol):
 ## 5. Atomic Task Breakdown
 
 Execute tasks in dependency order. Keep every task under 50 to 100 lines of change.
+When a task passes verification and you commit the code, mark as complete and append the short commit hash:
+`- [x] **Task 1: [Task Title]** (<sha>)`.
 
 - [ ] **Task 1: [Task Title]**
   - **Scope**: [Description of changes and files affected]

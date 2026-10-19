@@ -95,10 +95,29 @@ Run the full verification command declared in the task:
 uv run poe test
 ```
 
-### Step 6: Update Plan Progress
+### Step 6: Commit and Record Task Progress
 
-If tests pass, mark the task complete in `.specs/<feature-id>/plan.md` (`- [x] **Task N: ...**`).
-Proceed to the next task until all tasks are complete.
+After tests pass, commit the code changes and record the commit hash:
+
+1. Stage and commit the implementation code following `workflow-git`:
+   ```bash
+   git add <modified-files>
+   git commit -m "<type>(<scope>): <task summary>"
+   ```
+2. Obtain the short commit hash:
+   ```bash
+   git rev-parse --short HEAD
+   ```
+3. Update `.specs/<feature-id>/plan.md`:
+   - Change the task checkbox from `[ ]` to `[x]`.
+   - Append the short commit hash in parentheses:
+     `- [x] **Task N: [Title]** (<sha>)`
+4. Commit the plan update:
+   ```bash
+   git add .specs/<feature-id>/plan.md
+   git commit -m "docs(plan): complete task N (<sha>)"
+   ```
+5. Proceed to the next task until all tasks are complete.
 
 ---
 

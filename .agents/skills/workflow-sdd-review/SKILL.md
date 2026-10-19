@@ -104,6 +104,21 @@ Set the final review verdict in `.specs/<feature-id>/review.md`:
 - If all acceptance criteria pass and no quality violations exist, declare **Approved**.
 - If requirements are missing or quality gates fail, declare **Changes Requested** with actionable feedback.
 
+### Step 8: Append Review Fixes Phase to Plan (When Changes Requested)
+
+If the review verdict is **Changes Requested**:
+
+1. Identify required code or test fixes from the findings.
+2. Formulate atomic remediation tasks.
+3. Append a `Review Fixes` phase to `.specs/<feature-id>/plan.md`:
+   ```markdown
+   ## Phase <N>: Review Fixes
+   - [ ] **Fix 1: [Short Title]**
+     - **Scope**: [Description of changes and files affected]
+     - **Verification Gate**: `uv run poe test`
+   ```
+4. Hand over execution to `workflow-sdd-implement` to resolve fixes with TDD.
+
 ---
 
 ## 4. Verification & Quality Gate

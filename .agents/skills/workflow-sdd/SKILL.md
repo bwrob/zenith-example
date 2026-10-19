@@ -166,7 +166,26 @@ For small features or bug fixes under 150 lines of change, use Fast-Path SDD:
 
 ---
 
-## 6. Verification & Quality Gate
+## 6. Rollback & Task Reversion
+
+If an implemented task introduces defects or fails review, revert it with [scripts/revert_task.py](./scripts/revert_task.py):
+
+```bash
+# Revert the most recently completed task
+uv run poe sdd-revert <feature-id>
+
+# Revert a specific commit SHA
+uv run poe sdd-revert <feature-id> <commit-sha>
+```
+
+This protocol:
+1. Reverts the Git commit cleanly with `git revert --no-edit`.
+2. Resets the task checkbox from `[x]` back to `[ ]` in `.specs/<feature-id>/plan.md`.
+3. Commits the plan update.
+
+---
+
+## 7. Verification & Quality Gate
 
 Verify that the feature meets all project quality standards:
 

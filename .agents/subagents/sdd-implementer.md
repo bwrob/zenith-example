@@ -28,4 +28,8 @@ Your primary responsibility is to implement the tasks defined in `.specs/<featur
 
 ## Progress Tracking
 
-Mark each completed task checkbox in `.specs/<feature-id>/plan.md` (`- [x] **Task N: ...**`).
+1. Commit task code changes following `workflow-git`.
+2. Obtain the short commit hash (`git rev-parse --short HEAD`).
+3. Mark the completed task in `.specs/<feature-id>/plan.md` and append the hash:
+   `- [x] **Task N: [Title]** (<sha>)`.
+4. Commit the plan update.

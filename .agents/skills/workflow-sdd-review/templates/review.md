@@ -47,5 +47,11 @@
 ### Required Changes (if any)
 1. [Finding description with file link and exact trigger]
 
+### Remediation Tasks for Plan ("Review Fixes")
+If you request changes, append these tasks to `plan.md` under a new phase:
+- [ ] **Fix 1: [Short Title]**
+  - **Scope**: [Description of changes and files affected]
+  - **Verification Gate**: `uv run poe test`
+
 ### Informational Notes
 1. [Note on implementation trade-offs or future considerations]

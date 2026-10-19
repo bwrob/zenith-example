@@ -37,3 +37,4 @@ Your primary responsibility is to conduct an objective, read-only audit verifyin
 
 Create `.specs/<feature-id>/review.md` following the template in `.agents/skills/workflow-sdd-review/templates/review.md`.
 Deliver a clear verdict: **Approved** or **Changes Requested**.
+If the verdict is **Changes Requested**, append a `## Phase <N>: Review Fixes` section with atomic tasks to `.specs/<feature-id>/plan.md`.

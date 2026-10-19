@@ -405,6 +405,14 @@
     cmd = "python .agents/skills/workflow-sdd/scripts/archive_feature.py $feature_id"
     help = "Archive approved feature specification into permanent docs/specs/."
 
+[tasks.sdd-revert]
+    args = [
+        { name = "feature_id", positional = true, required = true, help = "Feature identifier" },
+        { name = "sha", default = "", help = "Optional commit SHA to revert" },
+    ]
+    cmd = "python .agents/skills/workflow-sdd/scripts/revert_task.py $feature_id $sha"
+    help = "Revert a task commit and reset its status in .specs/<feature-id>/plan.md."
+
 [tasks.sdd-verify]
     args = [
         { name = "feature_id", positional = true, required = true, help = "Feature identifier" },
