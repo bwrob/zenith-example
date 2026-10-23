@@ -10,4 +10,4 @@
         utiliz = "utiliz"
 
 [files]
-    extend-exclude = [ "*.ambr", "*.min.js", "*.svg", "build", "dist", "site" ]
+    extend-exclude = ["*.ambr", "*.min.js", "*.svg", "build", "dist", "site"]

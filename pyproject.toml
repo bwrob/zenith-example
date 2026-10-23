@@ -1,5 +1,5 @@
 [project]
-    authors = [ { name = "bwrob", email = "contact@bwrob.dev" } ]
+    authors = [{ name = "bwrob", email = "contact@bwrob.dev" }]
     classifiers = [
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
@@ -17,12 +17,12 @@
         "Typing :: Typed",
     ]
 
-    dependencies = [ "rich>=14.0.0", "typer>=0.16.0" ]
+    dependencies = ["rich>=14.0.0", "typer>=0.16.0"]
 
     description = "Demonstration and showcase repository instantiated from the Zenith template."
 
     license       = "MIT"
-    license-files = [ "LICENSE" ]
+    license-files = ["LICENSE"]
 
     name            = "zenith-example"
     readme          = "README.md"
@@ -42,7 +42,7 @@
 
 [build-system]
     build-backend = "uv_build"
-    requires      = [ "uv_build>=0.12.7,<0.14.0" ]
+    requires      = ["uv_build>=0.12.7,<0.14.0"]
 
 [dependency-groups]
     dev = [
@@ -62,6 +62,7 @@
     ]
     lint = [
         "complexipy>=8.0.0",
+        "deptry>=0.25.1",
         "griffe>=1.5.0",
         "prek>=0.5.5",
         "pyrefly>=1.3.0",
@@ -72,7 +73,7 @@
         "typos>=1.30.0",
         "zizmor>=1.23.0",
     ]
-    mutation = [ "cosmic-ray>=8.7.0", "mutmut>=3.8.0" ]
+    mutation = ["cosmic-ray>=8.7.0", "mutmut>=3.8.0"]
     test = [
         "hypothesis>=6.125.0",
         "poethepoet>=0.42.0",
@@ -85,7 +86,7 @@
     ]
 
 [tool.uv]
-    default-groups = [ "dev", "test", "lint", "docs", "mutation" ]
+    default-groups = ["dev", "test", "lint", "docs", "mutation"]
     package        = true
     # Supply-chain protection buffer against zero-day compromised upstream releases.
     # Uncomment to exclude packages published in the last N days during resolution
@@ -110,7 +111,7 @@
 
 [tool.mutmut]
     runner       = "pytest"
-    source_paths = [ "src/" ]
+    source_paths = ["src/"]
 
 [tool.poe]
     include = "poe_tasks.toml"

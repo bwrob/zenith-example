@@ -1,7 +1,8 @@
 # API Reference
 
-This page documents the public API of **Zenith Example**, automatically generated from
-source code docstrings via **mkdocstrings** and **griffe** static AST analysis.
+This page documents the public API of **Zenith Example**, automatically
+generated from source code docstrings via **mkdocstrings** and **griffe** static AST
+analysis.
 
 The primary entry point is [`get_greeting`](#core-module). Signatures automatically
 cross-reference parameter types, link to official Python documentation inventories, and
@@ -14,8 +15,6 @@ render collapsible backlink trees indicating which pages reference each symbol.
 ## CLI Module
 
 ::: zenith_example.cli
-
----
 
 ## AI & LLM Documentation Indexing
 

@@ -128,7 +128,7 @@
         pymdownx.tasklist.custom_checkbox = true
         pymdownx.tilde = {}
         toc.permalink = true
-        zensical.extensions.preview.targets.include = [ "*" ]
+        zensical.extensions.preview.targets.include = ["*"]
 
     [project.plugins.gh-admonitions]
 
@@ -151,12 +151,12 @@
         default_handler = "python"
 
         [project.plugins.mkdocstrings.handlers.python]
-            inventories                                   = [ "https://docs.python.org/3/objects.inv" ]
+            inventories                                   = ["https://docs.python.org/3/objects.inv"]
             options.annotations_path                      = "brief"
             options.backlinks                             = "tree"
             options.docstring_options.ignore_init_summary = true
             options.docstring_style                       = "numpy"
-            options.extensions                            = [ "griffe_warnings_deprecated" ]
+            options.extensions                            = ["griffe_warnings_deprecated"]
             options.line_length                           = 88
             options.members_order                         = "source"
             options.merge_init_into_class                 = true
@@ -176,4 +176,4 @@
             options.summary                               = true
             options.type_parameter_headings               = true
             options.unwrap_annotated                      = true
-            paths                                         = [ "src" ]
+            paths                                         = ["src"]

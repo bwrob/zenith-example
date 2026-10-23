@@ -1,5 +1,5 @@
 [cosmic-ray]
-    excluded-modules = [  ]
+    excluded-modules = []
     module-path      = "src/zenith_example"
     test-command     = "pytest"
     timeout          = 15.0

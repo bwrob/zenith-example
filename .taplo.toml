@@ -9,7 +9,7 @@ exclude = [
 
 [formatting]
     align_entries   = true
-    compact_arrays  = false
+    compact_arrays  = true
     compact_entries = false
     indent_entries  = true
     indent_string   = "    "

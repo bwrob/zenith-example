@@ -1,21 +1,26 @@
 # Security Policy
 
+This policy explains which project versions receive security fixes and how to report a
+vulnerability.
+
 ## Supported Versions
 
-Only the latest release of **Zenith Example** receives active security updates and
-vulnerability patches.
+Only the latest release of **Zenith Example** receives active security
+updates and vulnerability patches.
 
-| Version | Supported          |
-| :------ | :----------------- |
-| `0.1.0.x`  | :white_check_mark: |
-| `< 0.1.0`  | :x:                |
+| Version                        | Supported          |
+| :----------------------------- | :----------------- |
+| `0.1.0.x` | :white_check_mark: |
+| `< 0.1.0` | :x:                |
 
-We officially support and test against Python `3.13` and later.
+We officially support and test against Python `3.13` and
+later.
 
 ## Reporting a Vulnerability
 
-The **Zenith Example** team takes the security of our software seriously. If you believe
-you have discovered a vulnerability, please report it responsibly:
+The **Zenith Example** team takes the security of our software
+seriously. If you believe you have discovered a vulnerability, please report it
+responsibly:
 
 > [!CAUTION]
 > **Do not report security vulnerabilities through public GitHub issues or
@@ -29,8 +34,8 @@ you have discovered a vulnerability, please report it responsibly:
    - Provide a detailed summary, proof of concept (PoC), and impact assessment.
 
 2. **Direct Security Contact**:
-   - If GitHub Private Reporting is unavailable, send an email to **bwrob** at
-     [contact@bwrob.dev](mailto:contact@bwrob.dev) with the subject line
+   - If GitHub Private Reporting is unavailable, send an email to
+     **bwrob** at [contact@bwrob.dev](mailto:contact@bwrob.dev) with the subject line
      `[SECURITY] Zenith Example Vulnerability Report`.
    - Please include reproduction steps, affected environment/versions, and any proposed
      mitigation.

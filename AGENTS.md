@@ -12,7 +12,7 @@ of defense against technical debt, architectural drift, and low-quality contribu
 enforcing end-to-end type safety, clean public abstractions, comprehensive test
 coverage, and accurate documentation.
 
-## Pre-flight Checks
+## Pre-Flight Checks
 
 Before editing code or running tasks, ensure a clean, isolated environment:
 
@@ -68,7 +68,7 @@ Before editing code or running tasks, ensure a clean, isolated environment:
   - **Claude Code**: `CLAUDE.md` symlink (`ln -s AGENTS.md CLAUDE.md`) and
     `.claude/settings.json` (pre-authorizing hermetic `uv run poe:*` commands).
   - **OpenAI Codex CLI**: `.codex/config.toml` (auto-discovering `AGENTS.md` and setting
-    `workspace-write` sandbox).
+    the `workspace-write` sandbox) and `.codex/agents/*.toml` (project subagents).
   - **Google Gemini CLI & Antigravity**: `.gemini/settings.json`
     (`contextFileName: "AGENTS.md"`).
   - **GitHub Copilot**: `.github/copilot-instructions.md` referencing `AGENTS.md`.
@@ -90,8 +90,8 @@ Refer to `.agents/skills/guide-python/SKILL.md` for complete guidelines.
 
 - **Python Version**: Python 3.13+.
 - **Imports**: Use canonical absolute imports exclusively
-  (`from zenith_example.module import ...`). Relative imports are strictly banned via
-  Ruff (`ban-relative-imports = "all"`).
+  (`from zenith_example.module import ...`). Relative imports are
+  strictly banned via Ruff (`ban-relative-imports = "all"`).
 - **Type Annotations**: Use modern PEP 695 type parameter syntax exclusively
   (`type Alias = ...`, `def func[T](...)`). Never use legacy `TypeVar` or
   `Optional`. Import collection abstractions from `collections.abc`.

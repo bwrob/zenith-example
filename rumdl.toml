@@ -1,15 +1,4 @@
-disable = [
-    "MD046",
-    "MD052",
-    "MD060",
-    "MD063",
-    "MD078",
-    "MD082",
-    "MD085",
-    "MD090",
-    "MD093",
-]
-enable = [ "ALL" ]
+enable = ["ALL"]
 exclude = [
     ".git",
     ".github",
@@ -22,10 +11,21 @@ exclude = [
     "site",
     "dist",
 ]
-extend-enable = [ "MD080", "MD083" ]
+extend-enable = ["MD063", "MD080", "MD083", "MD085", "MD090", "MD093"]
 flavor = "gfm"
 line-length = 88
 respect-gitignore = true
+
+[per-file-ignores]
+    # GFM treats this Zensical admonition as an indented code block.
+    "**/docs/getting-started.md" = ["MD046"]
+
+    # Cookiecutter values change table cell widths after rendering.
+    "**/SECURITY.md"       = ["MD060"]
+    "**/docs/adr/index.md" = ["MD060"]
+
+    # Keep standard Changelog headings and allow generated compare URLs to vary.
+    "**/docs/changelog.md" = ["MD013", "MD082"]
 
 # --- Code Block Tools (Format & Lint Python & JSON in Markdown) ---
 [code-block-tools]
@@ -43,21 +43,22 @@ respect-gitignore = true
         "{py}"     = "python"
 
     [code-block-tools.languages.python]
-        format = [ "ruff:format" ]
-        lint   = [ "ruff:check" ]
+        format = ["ruff:format"]
+        lint   = ["ruff:check"]
 
     [code-block-tools.languages.json]
-        format = [ "jq" ]
+        format = ["jq"]
 
     [code-block-tools.tools."ruff:format"]
-        command = [ "ruff", "format", "--line-length=79", "-" ]
+        command = ["ruff", "format", "-"]
 
     [code-block-tools.tools."ruff:check"]
         command = [
             "ruff",
             "check",
+            "--preview",
             "--output-format=concise",
-            "--ignore=INP001,F821,D,ANN,FBT,E402,B018,S101,TRY,EM,PL,N,ERA,S,EXE,RET,SIM,PTH,F841,B,E501,C4,FURB,PIE,RUF,UP,F401,F403,I,SLF,T201,T203,TC,CPY",
+            "--ignore=D,T201,missing-required-import",
             "-",
         ]
 
@@ -84,7 +85,7 @@ respect-gitignore = true
     maximum = 1
 
 [MD013]
-    code-block-line-length = 79
+    code-block-line-length = 88
     code-blocks            = true
     headings               = false
     line-length            = 88
@@ -147,4 +148,12 @@ respect-gitignore = true
     minimum-before = 1
 
 [MD059]
-    prohibited-texts = [ "click here", "here", "link", "read more" ]
+    prohibited-texts = ["click here", "here", "link", "read more"]
+
+[MD060]
+    aligned-delimiter = false
+    column-align      = "left"
+    enabled           = true
+    loose-last-column = false
+    pad-width         = 1
+    style             = "aligned"

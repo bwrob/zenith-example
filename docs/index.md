@@ -45,15 +45,15 @@ $ uv run zenith-example --help
 
 === "uv (Recommended)"
 
-    ```bash
-    uv add zenith-example
-    ```
+```bash
+uv add zenith-example
+```
 
 === "pip"
 
-    ```bash
-    pip install zenith-example
-    ```
+```bash
+pip install zenith-example
+```
 
 > [!TIP]
 > Always run project commands via `uv run poe <task>` or `uv run <command>`. This

@@ -15,7 +15,7 @@ consistent markdown style across documentation and guides. It also formats
 and lints embedded Python code snippets using Ruff.
 
 Zenith projects configure `rumdl` to enforce GitHub Flavored Markdown (GFM)
-rules with an 88-character line limit.
+rules with an 88-character line limit for prose and code blocks.
 
 ---
 
@@ -80,7 +80,7 @@ format = ["ruff:format"]
 lint   = ["ruff:check"]
 
 [code-block-tools.tools."ruff:format"]
-command = ["ruff", "format", "--line-length=79", "-"]
+command = ["ruff", "format", "-"]
 ```
 
 ---
@@ -104,13 +104,13 @@ allowed-elements = [
 
 ### B. Adjusting Line Length Restrictions (MD013)
 
-Zenith enforces an 88-character limit for narrative text and 79 for code
-blocks. To adjust or exempt specific constructs:
+Zenith enforces an 88-character limit for narrative text and code blocks. To
+adjust or exempt specific constructs:
 
 ```toml
 [MD013]
 line-length = 88
-code-block-line-length = 79
+code-block-line-length = 88
 headings = false       # Don't fail long section titles
 tables = false         # Don't wrap wide markdown tables
 math-blocks = false    # Don't break long LaTeX formulas

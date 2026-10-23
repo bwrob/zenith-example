@@ -6,17 +6,14 @@
 - **Consulted**: Maintainers
 - **Informed**: Contributors and Developers
 
----
-
 ## Context & Problem Statement
 
-As **Zenith Example** evolves, contributors and AI coding assistants make architectural
-and technical choices (e.g., modular layer boundaries, static type checking rules,
-dependency management, serialization contracts). Without a persistent record of the
-*context*, *alternatives evaluated*, and *trade-offs accepted*, future maintainers face
-technical drift or may inadvertently reverse intentional design decisions.
-
----
+As **Zenith Example** evolves, contributors and AI coding assistants
+make architectural and technical choices (e.g., modular layer boundaries, static type
+checking rules, dependency management, serialization contracts). Without a persistent
+record of the *context*, *alternatives evaluated*, and *trade-offs accepted*, future
+maintainers face technical drift or may inadvertently reverse intentional design
+decisions.
 
 ## Decision Drivers
 
@@ -27,8 +24,6 @@ technical drift or may inadvertently reverse intentional design decisions.
 - **Traceability**: Pair automated tool boundaries (like **Tach**) with human-readable
   justifications.
 
----
-
 ## Considered Options
 
 1. **Option 1**: Michael Nygard Architecture Decision Records (MADR) in Markdown under
@@ -36,11 +31,11 @@ technical drift or may inadvertently reverse intentional design decisions.
 2. **Option 2**: Ephemeral discussion threads in GitHub Issues or Pull Requests.
 3. **Option 3**: Unstructured notes in wiki or standalone README sections.
 
----
-
 ## Pros and Cons of the Options
 
-### Option 1: Architecture Decision Records (MADR) in `docs/adr/`
+The options below summarize the trade-offs considered for this decision.
+
+### Option 1: Architecture Decision Records (MADR)
 
 - :white_check_mark: **Good**: Version-controlled alongside source code in Git.
 - :white_check_mark: **Good**: Automatically integrated into Zensical documentation
@@ -62,8 +57,6 @@ technical drift or may inadvertently reverse intentional design decisions.
 - :x: **Bad**: Separated from git commit history and code review gating.
 - :x: **Bad**: Frequently becomes stale and out of sync with code changes.
 
----
-
 ## Decision Outcome
 
 Chosen option: **"Option 1: Michael Nygard Architecture Decision Records (MADR) in
@@ -78,11 +71,9 @@ with codebase evolution.
 - AI coding assistants can reference `docs/adr/` when evaluating proposed modifications.
 - Decisions undergo peer review via standard Pull Requests.
 
-### Negative Consequences / Trade-offs
+### Negative Consequences / Trade-Offs
 
 - Maintainers must ensure new architectural paradigms are accompanied by an ADR.
-
----
 
 ## Architecture & Boundary Compliance
 

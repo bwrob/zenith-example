@@ -199,9 +199,9 @@
 
 [tasks.dependencies]
     default_item_type = "cmd"
-    help              = "Validate modular architecture boundaries and external dependencies with Tach."
+    help              = "Check internal module boundaries with Tach and declared dependencies with Deptry."
     ignore_fail       = "return_non_zero"
-    sequence          = [ "tach check", "tach check-external" ]
+    sequence          = ["tach check", "deptry src"]
 
 [tasks.dependency-graph]
     cmd  = "tach show --mermaid -o docs/dependency_graph.mmd"

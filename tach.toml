@@ -7,14 +7,14 @@ exclude = [
     "**/.venv",
     "**/site",
 ]
-interfaces = [  ]
-source_roots = [ "src" ]
+interfaces = []
+source_roots = ["src"]
 
 exact                        = true
 forbid_circular_dependencies = true
 ignore_type_checking_imports = true
 
-layers = [ "cli", "core" ]
+layers = ["cli", "core"]
 
 respect_gitignore = true
 
@@ -24,17 +24,17 @@ respect_gitignore = true
 
 
 [[modules]]
-    depends_on = [  ]
+    depends_on = []
     layer      = "core"
     path       = "zenith_example"
 
 
 [[modules]]
-    depends_on = [ "zenith_example.cli" ]
+    depends_on = ["zenith_example.cli"]
     layer      = "cli"
     path       = "zenith_example.__main__"
 
 [[modules]]
-    depends_on = [  ]
+    depends_on = []
     layer      = "cli"
     path       = "zenith_example.cli"

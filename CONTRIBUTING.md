@@ -1,10 +1,8 @@
 # Contributing to Zenith Example
 
-Thank you for your interest in contributing to **Zenith Example**! We welcome
-contributions that maintain our high standards of type safety, performance, test
+Thank you for your interest in contributing to **Zenith Example**! We
+welcome contributions that maintain our high standards of type safety, performance, test
 coverage, and clean architecture.
-
----
 
 ## 1. Governance & AI Policy
 
@@ -16,8 +14,6 @@ coverage, and clean architecture.
   contributions.
 - **Agent Guidelines**: Coding agents working in this repository must follow the
   conventions defined in [AGENTS.md](AGENTS.md).
-
----
 
 ## 2. Development Setup
 
@@ -32,7 +28,8 @@ We standardize on **`uv`** for dependency and environment management.
 
 ```bash
 # Clone repository
-git clone https://github.com/bwrob/zenith-example.git
+git clone \
+  https://github.com/bwrob/zenith-example.git
 cd zenith-example
 
 # Synchronize all dependency groups inside managed virtual environment
@@ -42,23 +39,19 @@ uv sync
 uv run prek install
 ```
 
----
-
 ## 3. Development Workflow & Tasks
 
 Development commands are managed via **Poe the Poet**:
 
-| Task | Command | Purpose |
-| :--- | :--- | :--- |
-| **Run Tests** | `uv run poe test` | Run pytest suite with coverage measurement |
-| **Fast Tests** | `uv run poe test-fast` | Run tests in parallel across CPU cores |
+| Task                 | Command                   | Purpose                                                |
+| :------------------- | :------------------------ | :----------------------------------------------------- |
+| **Run Tests**        | `uv run poe test`         | Run pytest suite with coverage measurement             |
+| **Fast Tests**       | `uv run poe test-fast`    | Run tests in parallel across CPU cores                 |
 | **Run Quality Gate** | `uv run poe code-quality` | Run lint, format-check, types, complexity, typos, Tach |
-| **Auto-Fix** | `uv run poe fix` | Auto-format with Ruff, fix typos, format markdown |
-| **Type Check** | `uv run poe type-check` | Static type analysis with Pyrefly |
-| **Serve Docs** | `uv run poe docs-serve` | Launch live Zensical documentation preview |
-| **Interactive REPL** | `uv run poe repl` | Launch Python REPL with package pre-imported |
-
----
+| **Auto-Fix**         | `uv run poe fix`          | Auto-format with Ruff, fix typos, format markdown      |
+| **Type Check**       | `uv run poe type-check`   | Static type analysis with Pyrefly                      |
+| **Serve Docs**       | `uv run poe docs-serve`   | Launch live Zensical documentation preview             |
+| **Interactive REPL** | `uv run poe repl`         | Launch Python REPL with package pre-imported           |
 
 ## 4. Branching & Commit Hygiene
 
@@ -79,8 +72,6 @@ Development commands are managed via **Poe the Poet**:
   ```text
   Co-authored-by: Claude <noreply@anthropic.com>
   ```
-
----
 
 ## 5. Pre-Submission Verification Gate
 

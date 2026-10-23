@@ -4,5 +4,5 @@ read:
 lint-cmd: "uv run poe fix"
 auto-lint: true
 
-test-cmd: "uv run poe test-fast"
+test-cmd: "uv run poe test"
 auto-test: false

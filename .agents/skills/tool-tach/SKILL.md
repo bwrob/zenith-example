@@ -26,7 +26,6 @@ Use these commands to check boundaries, show trees, and generate reports.
 
 ```bash
 uv run tach check                  # Check internal module boundaries
-uv run tach check-external         # Check pyproject.toml external deps
 uv run tach check --exact          # Fail on unused module dependencies
 uv run tach show                   # Print terminal architecture tree
 uv run tach show --mermaid         # Export dependency graph in Mermaid
@@ -76,8 +75,9 @@ layer = "core"
 
 ## 3. Common Configuration Changes During Development
 
-Manage architectural layers, module dependencies, public interfaces, and external
-`pyproject.toml` dependency hygiene with these patterns.
+Manage architectural layers, module dependencies, and public interfaces with these
+patterns. Use Deptry for `pyproject.toml` dependency hygiene. The `dependencies` Poe
+task runs both Tach and Deptry.
 
 ### A. Adding a New Architectural Layer
 
@@ -125,32 +125,7 @@ expose = ["my_app.core.get_greeting", "my_app.core.GreetingConfig"]
 Any attempt to import an unexposed symbol from outside `my_app.core` will
 trigger a Tach interface violation error.
 
-### D. Checking External `pyproject.toml` Dependencies (`tach check-external`)
-
-`uv run poe dependencies` runs both `tach check` (internal layer boundaries) and
-`tach check-external` (external third-party dependency hygiene). `tach check-external`
-automatically catches:
-
-1. **Unused dependencies**: Packages declared in `[project.dependencies]` that the codebase
-   never imports in `src/` (controlled by `[rules] unused_external_dependencies = "error"`,
-   which is `"error"` by default).
-2. **Transitive or dev-only imports**: Importing an undeclared transitive
-   dependency (such as `click` via `typer`) or a dev dependency inside `src/`.
-
-A runtime dependency can load dynamically without direct imports in source code.
-It can also have non-standard metadata. In these cases, configure `[external]`
-in `tach.toml`:
-
-```toml
-[external]
-# Exclude dynamically loaded runtime packages from unused-dependency errors
-exclude = ["psycopg-binary", "uvicorn"]
-
-# Map PyPI distribution names to top-level import names if metadata is missing
-rename = ["pillow:PIL", "beautifulsoup4:bs4"]
-```
-
-### E. Exporting Mermaid Architecture Diagrams to Documentation
+### D. Exporting Mermaid Architecture Diagrams to Documentation
 
 Zenith defines a built-in task in `poe_tasks.toml` to export the current
 dependency graph directly as a Mermaid diagram:
@@ -161,7 +136,7 @@ uv run poe dependency-graph
 
 This generates `docs/dependency_graph.mmd`, which you can embed in docs.
 
-### F. Suppressing False Positives or Temporary Migration Exceptions
+### E. Suppressing False Positives or Temporary Migration Exceptions
 
 When transitioning legacy code or handling dynamic runtime imports, always provide
 an explicit architectural reason (enforced by `require_ignore_directive_reasons = "error"`):
@@ -185,8 +160,8 @@ from my_app.cli import (
 
 Follow these architecture guidelines:
 
-- **Check boundaries and external dependencies with Poe**: Always run `uv run poe dependencies`
-  before merging.
+- **Check boundaries with Poe**: Always run `uv run poe dependencies` before merging. The
+  task runs Tach for internal boundaries and Deptry for declared dependencies.
 - **Top-Down Only**: Imports must flow downwards through layers (`cli` $\to$
   `services` $\to$ `core`). Never allow `core` to import anything from `cli`.
 - **Acyclic Enforcement**: Tach prevents circular dependency

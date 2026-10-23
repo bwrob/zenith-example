@@ -19,11 +19,13 @@ uv add zenith-example
 Import the primary functions into your application:
 
 ```python
-from zenith_example import get_greeting
+from your_package import get_greeting
 
 message = get_greeting("Developer")
 print(message)
 ```
+
+Replace `your_package` with the generated package name.
 
 ## CLI Usage
 
@@ -58,7 +60,8 @@ $ uv run zenith-example --help
 Clone the project and synchronize development dependencies:
 
 ```bash
-git clone https://github.com/bwrob/zenith-example.git
+git clone \
+  https://github.com/bwrob/zenith-example.git
 cd zenith-example
 uv sync
 ```
@@ -75,9 +78,11 @@ uv run poe code-quality
 
 ???+ tip "Hermetic Task Execution"
 
-    Always invoke tasks using `uv run poe <task>`. Tasks inherit project
-    environment flags, strict encoding checks (`PYTHONUTF8=1`), and hermetic
-    virtual environments.
+```text
+Always invoke tasks using `uv run poe <task>`. Tasks inherit project
+environment flags, strict encoding checks (`PYTHONUTF8=1`), and hermetic
+virtual environments.
+```
 
 ??? example "Advanced Testing & Marker Options"
 
