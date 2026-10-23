@@ -29,8 +29,11 @@ Every record follows a defined status model:
 
 To propose a new decision:
 
-1. Review the [ADR skill](../../.agents/skills/workflow-adr/SKILL.md) for workflow
-   instructions.
+1. Review the [ADR skill][adr-skill] for workflow instructions.
 2. Copy [template.md](template.md) to `docs/adr/000X-<kebab-case-title>.md`.
 3. Submit a pull request detailing Context, Decision Drivers, Evaluated Options, and
    Consequences.
+
+<!-- rumdl-disable MD013 -->
+[adr-skill]: <https://github.com/bwrob/zenith-example/blob/main/.agents/skills/workflow-adr/SKILL.md>
+<!-- rumdl-enable MD013 -->
