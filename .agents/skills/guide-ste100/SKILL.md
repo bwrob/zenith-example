@@ -2,7 +2,8 @@
 name: guide-ste100
 description: >-
   Use when an agent must parse text without human review.
-  Applies to tool descriptions, error messages, inter-agent instructions, system prompts, and status reports.
+  Applies to agent skills and Python code docstrings.
+  Serves as a clarity suggestion, not an enforced rule, in user documentation.
   Triggers: disambiguate, STE100 rewrite, apply Simplified Technical English, plain-language rewrite, controlled-language rewrite, rewrite so an agent cannot misread the text.
   Not for creative or marketing copy.
 version: 0.5.0
@@ -18,6 +19,9 @@ version: 0.5.0
 ASD-STE100 is a controlled-language standard created for aerospace maintenance.
 It eliminates ambiguity so AI agents, translation pipelines, and technicians parse instructions without human intervention.
 Do not use this skill for creative or marketing text.
+
+> [!IMPORTANT]
+> **Enforcement Scope**: ASD-STE100 is strictly enforced for **agent skills** (`.agents/skills/`) and **Python docstrings**. It is not enforced as a rule in user-facing documentation (`docs/`), where it serves only as a suggestion for clear phrasing.
 
 ## Automated Verification & Fixing
 

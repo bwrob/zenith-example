@@ -98,6 +98,7 @@ Do not apply STE to:
 - Product announcements
 - Advocacy writing
 - Persuasive creative copy
+- User-facing documentation in `docs/` (STE serves as a clarity suggestion, not a rule)
 
 STE deliberately removes nuance, voice, and emotional appeal.
-Write marketing copy in your brand voice, then apply STE to technical documentation.
+Write marketing copy in your brand voice, then apply STE to agent skills and docstrings.

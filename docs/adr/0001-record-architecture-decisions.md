@@ -14,11 +14,11 @@ purpose: Record the architectural decision to document design choices using Arch
 ## Context & Problem Statement
 
 As **Zenith Example** evolves, contributors and AI coding assistants
-make architectural and technical choices (e.g., modular layer boundaries, static type
-checking rules, dependency management, serialization contracts). Without a persistent
-record of the *context*, *alternatives evaluated*, and *trade-offs accepted*, future
-maintainers face technical drift or may inadvertently reverse intentional design
-decisions.
+make architectural and technical choices (such as modular layer boundaries, static type
+checking rules, dependency management, and serialization contracts). Without a
+persistent record of the context, alternatives evaluated, and trade-offs accepted,
+future maintainers face technical drift and risk inadvertently reversing intentional
+design decisions.
 
 ## Decision Drivers
 

@@ -217,10 +217,10 @@ Follow this procedure when creating or editing documentation:
 
 ### Step 5: Audit & Self-Review
 1. Review the draft against [references/anti-slop-checklist.md](./references/anti-slop-checklist.md).
-2. Run the STE-100 linter to check sentence length and unapproved phrases:
-   ```bash
-   uv run python .agents/skills/guide-ste100/scripts/ste-lint.py docs/path/to/page.md
-   ```
+2. Ensure the tone is direct, active, and human-centered without hollow marketing buzzwords.
+3. Keep prose natural and readable.
+   > [!NOTE]
+   > **STE-100 Scope**: The ASD-STE100 standard is strictly enforced for **agent skills** (`.agents/skills/`) and **Python docstrings**, NOT user documentation (`docs/`). When authoring documentation, STE-100 principles (such as conciseness, active voice, and condition-before-instruction) serve as helpful suggestions for clarity, never as rigid rules or blocking gates. Do not force documentation prose into artificial STE-100 compliance.
 
 ### Step 6: Format & Lint
 Format tables and markdown structure:

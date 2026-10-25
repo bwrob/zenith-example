@@ -58,6 +58,9 @@ Use this checklist before you merge documentation changes or create pull request
 
 ## 3. Structural & Technical Verification
 
+> [!NOTE]
+> **ASD-STE100 Scope**: ASD-STE100 is strictly enforced on **agent skills** (`.agents/skills/`) and **Python docstrings**, not on user documentation in `docs/`. In documentation, STE-100 guidelines serve as suggestions for clarity, not rigid enforcement gates.
+
 - [ ] **Scannability**:
   - Are options presented in aligned Markdown tables rather than paragraphs?
   - Are workflows illustrated with Mermaid diagrams where relationships exist?
