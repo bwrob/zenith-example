@@ -2264,7 +2264,7 @@ dev = [
     { name = "pytest", specifier = ">=9.0.0" },
     { name = "pytest-cov", specifier = ">=7.0.0" },
     { name = "pytest-randomly", specifier = ">=3.16.0" },
-    { name = "pytest-sugar", specifier = ">=1.0.0" },
+    { name = "pytest-sugar", specifier = ">=1.1.1" },
     { name = "pytest-xdist", specifier = ">=3.8.0" },
     { name = "ruff", specifier = ">=0.17.0" },
     { name = "rumdl", specifier = ">=0.2.75" },
@@ -2304,7 +2304,7 @@ test = [
     { name = "pytest", specifier = ">=9.0.0" },
     { name = "pytest-cov", specifier = ">=7.0.0" },
     { name = "pytest-randomly", specifier = ">=3.16.0" },
-    { name = "pytest-sugar", specifier = ">=1.0.0" },
+    { name = "pytest-sugar", specifier = ">=1.1.1" },
     { name = "pytest-xdist", specifier = ">=3.8.0" },
     { name = "syrupy", specifier = ">=6.1.0" },
 ]

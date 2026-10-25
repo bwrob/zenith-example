@@ -4,7 +4,7 @@ description: >-
   Use when linting code, auto-fixing violations, formatting source files, or configuring rules.
   Triggers: ruff, lint, format, ruff.toml, code style.
 name: tool-ruff
-version: 1.1.0
+version: 1.2.0
 ---
 
 
@@ -54,83 +54,50 @@ uv run ruff rule E501                    # Display explanation for a rule
 ## 2. Configuration Location
 
 Zenith projects configure Ruff via a standalone **`ruff.toml`** at the
-repository root:
+repository root. The project pins Python to 3.13+ through `pyproject.toml`
+tool configuration:
 
 ```toml
-# Target Python version
-target-version = "py312"
-
-# Line length limit for code and docstrings
-line-length = 88
-indent-width = 4
-
-# Files and directories to exclude
-extend-exclude = [
-    ".venv",
-    "site",
-    "dist",
-    "build",
-    "__snapshots__",
-]
+exclude = [".venv", "site", "dist"]
+# The cookiecutter template directory contains literal Jinja syntax
+# that ruff cannot parse; it is validated via rendered projects instead.
+extend-exclude = ["*cookiecutter.project_slug*"]
+line-length    = 88
 
 [lint]
-# Enable all rules by default (Zenith strict preset)
-select = ["ALL"]
-future-annotations = true
+    # Enable all rules (Zenith strict preset) on preview.
+    preview = true
+    select  = ["ALL"]
+    ignore  = [
+        "blank-line-before-class",
+        "incorrect-blank-line-before-class",
+        "missing-copyright-notice",
+        "missing-trailing-comma",
+        "multi-line-summary-second-line",
+    ]
 
-# Globally ignored rules with explicit rationale
-ignore = [
-    "D203",   # One-blank-line-before-class (incompatible with D211)
-    "D213",   # Multi-line-summary-second-line (incompatible with D212)
-    "COM812", # Missing-trailing-comma (conflicts with ruff format)
-    "ISC001", # Single-line-implicit-string-concatenation
-]
+    [lint.flake8-bugbear]
+        extend-immutable-calls = ["typer.Argument", "typer.Option"]
 
-# Allow auto-fixing for all enabled rules
-fixable = ["ALL"]
-unfixable = []
+    [lint.flake8-tidy-imports]
+        ban-relative-imports = "all"
 
-# Enforce absolute package imports across all files
-[lint.flake8-tidy-imports]
-ban-relative-imports = "all"
+    [lint.flake8-type-checking]
+        exempt-modules = ["typing", "typing_extensions"]
 
-# Preserve runtime typing for dataclasses, attrs, and pydantic models
-[lint.flake8-type-checking]
-exempt-modules = ["typing", "typing_extensions"]
-runtime-evaluated-base-classes = ["pydantic.BaseModel"]
-runtime-evaluated-decorators = [
-    "attrs.define",
-    "attrs.frozen",
-    "attrs.mutable",
-    "dataclasses.dataclass",
-    "pydantic.dataclasses.dataclass",
-    "pydantic.validate_call",
-]
+    [lint.isort]
+        combine-as-imports = true
+        required-imports   = ["from __future__ import annotations"]
 
-# Consolidate aliased imports and require future annotations across all files
-[lint.isort]
-combine-as-imports = true
-required-imports = ["from __future__ import annotations"]
-
-# Per-file rule relaxations
-[lint.per-file-ignores]
-"**/*.pyi" = ["I002", "PYI044"]
-"tests/*" = [
-    "S101",    # Use of assert detected (standard in pytest)
-    "PLR2004", # Magic value used in comparison
-    "D",       # Docstring requirements relaxed in tests
-]
-
-[lint.pydocstyle]
-convention = "numpy"
+    # Per-file relaxations. Patterns are resolved relative to the directory
+    # containing ruff.toml — NOT the process working directory.
+    [lint.per-file-ignores]
+        "hooks/*"     = ["suspicious-subprocess-import"]
+        "scripts/*"   = ["suspicious-subprocess-import"]
+        "tests/*"     = ["assert", "suspicious-subprocess-import"]
 
 [format]
-quote-style = "double"
-indent-style = "space"
-skip-magic-trailing-comma = false
-line-ending = "auto"
-docstring-code-format = true
-docstring-code-line-length = 79
+    docstring-code-format = true
 ```
 
 ---
@@ -143,36 +110,45 @@ Use these patterns to adjust rule selections, relaxations, and exceptions.
 
 If a rule is noisy or conflicts with domain design:
 
-1. Add the rule code to `lint.ignore` in `ruff.toml`:
+1. Add the rule **name** (rule-name form, not letter-digit codes) to
+   `lint.ignore` in `ruff.toml` with a rationale comment:
 
    ```toml
    [lint]
    ignore = [
-       "ANN401",  # Dynamically typed expressions (typing.Any)
+       "any-explicit",  # typing.Any tolerated in test fixtures
    ]
-   ```
+    ```
+
+2. Add the identical list to BOTH the root `ruff.toml` and the template
+   `zenith-example/ruff.toml`.
+3. Harden the change with a `tests/test_template.py` assertion so the two
+   lists cannot drift apart silently.
 
 ### B. Relaxing Rules for Specific Subtrees (`per-file-ignores`)
 
-Tests, benchmarks, documentation scripts, or CLI files often require rule
-exceptions. Use negated globs (`"!src/**.py"`) to relax rules across all
-auxiliary files in one line. This approach keeps `src/` strictly enforced
-while relaxing checks for tests and scripts:
+Tests, hooks, and maintenance scripts often require rule exceptions. Keep
+`src/` strictly enforced and scope relaxations per subtree:
 
 ```toml
 [lint.per-file-ignores]
-# Relax docstring and assert rules everywhere outside production src/
-"!src/**.py" = ["D", "S101", "PLR2004"]
+# pytest idioms: assertion-driven tests.
+"tests/*" = ["assert", "suspicious-subprocess-import"]
 
-# Or scope to specific directories:
-"tests/**/*.py" = ["S101", "PLR2004", "D"]
-
-# Allow print statements and typer callbacks in CLI entrypoints
-"src/*/cli.py" = ["T201", "FBT001", "FBT002"]
-
-# Relax complexity checks for migration or benchmark scripts
-"scripts/*.py" = ["T201", "C901"]
+# Maintenance scripts: subprocess drives repo-owned tooling.
+"scripts/*" = ["suspicious-subprocess-import"]
 ```
+
+Two resolution facts cost hours in real debugging:
+
+- **Patterns are relative to the config file's directory**, not to the
+  process cwd. Auditing a rendered project by passing
+  `--config /repo/ruff.toml` while cwd is elsewhere makes `tests/*` never
+  match. To lint a generated project with its own config, run ruff *inside*
+  the rendered directory (see `scripts/audit_rendered.py`).
+- **CLI `--exclude` replaces the config's `exclude` list** (it does not
+  extend it). If you must override, restate the config values plus your
+  additions.
 
 ### C. Inline Rule Suppression (`# ruff: ignore`)
 
@@ -184,51 +160,77 @@ Ruff suppression directive — **never** a `# noqa` comment:
 result = evaluate_untrusted_input(payload)  # ruff: ignore[suspicious-eval-usage]
 
 # Suppress multiple rules in one directive
-secret_token = fetch_token()  # ruff: ignore[hardcoded-password-default, hardcoded-password-string]
+secret_token = fetch_token()
+# ruff: ignore[hardcoded-password-default, hardcoded-password-string]
 ```
 
-> [!WARNING]
-> Never use `# noqa` comments (bare or with rule codes). Ruff rules
-> `noqa-comments` (noqa instead of `ruff: ignore`) and `RUF106` (rule codes
-> instead of rule names) enforce the directive form above. Always specify the
-> exact rule by its full name: `# ruff: ignore[rule-name]`.
+Placement rules for file-level diagnostics:
 
-### D. Changing Docstring Style Convention
+- Some rules fire on the module as a whole (for example
+  `implicit-namespace-package`, `module-imports-not-top`).
+  For these rules, place the directive on the **first line of the file**,
+  before the module docstring:
 
-To switch between NumPy, Google, or Sphinx docstrings:
+  ```python
+  # ruff: ignore[implicit-namespace-package]
+  # Standalone maintenance script, not an importable package.
+  """Module docstring goes after the directive."""
+  ```
 
-```toml
-[lint.pydocstyle]
-convention = "google"  # Options: "google", "numpy", "pep257"
+  A standalone `# ruff: ignore[...]` comment placed further down the file
+  reports an unused-suppression error.
+- Trailing directives target per-line diagnostics: put `# ruff: ignore[name]`
+  on the line the diagnostic points at. When the diagnostic spans multiple
+  candidate lines (formatter re-joins can shift them), do one of these:
+  - place the directive on the last line of the expression
+  - hoist the value into a named variable so the directive line becomes
+    unambiguous
+
+Naming rules:
+
+- Always specify the rule by its full lowercase name:
+  `# ruff: ignore[rule-name]`.
+  Letter-digit codes such as `S603` fail the check.
+- Pair suppressed rules with a justification comment unless the reason is
+  obvious from the code itself.
+
+Shell-vs-subprocess trap:
+
+- `subprocess.run(cmd, shell=False)` does **not** silence
+  `suspicious-subprocess-without-shell-equals-true`.
+- Handle the family together:
+  - silence the `S404` sibling `suspicious-subprocess-import` through
+    `per-file-ignores` for repo-owned scripts
+  - add the explicit `check=` argument to each call
+
+Example: a maintenance script that must silence a module-level rule:
+
+```python
+# ruff: ignore[implicit-namespace-package]
+# Standalone verification script; not an importable package.
+"""Verify the rendered template's CLI shapes."""
+
+from __future__ import annotations
 ```
 
-### E. Enabling Unsafe Fixes for Specific Rules
+### D. Enabling Unsafe Fixes for Specific Rules
 
 By default, `ruff check --fix` applies only safe fixes. To enable automated
 fixes for rules that Ruff marks as unsafe:
 
 ```toml
 [lint]
-extend-safe-fixes = ["UP006", "UP035"]
+extend-safe-fixes = ["enforce-iterable-allocation"]
 ```
 
-### F. Future Annotations Enforcement
+### E. Future Annotations Enforcement
 
 Zenith requires `from __future__ import annotations` in all Python source
-files through `lint.isort.required-imports`. Ruff triggers rule `I002` if this
-import is missing:
+files through `lint.isort.required-imports`. Ruff triggers rule
+`required-imports (I002)` if this import is missing:
 
 ```bash
 uv run ruff check --fix .  # Automatically inserts the required import
-```
-
-Stub files (`.pyi`) must not include future annotations. Rule `PYI044`
-forbids this import in stub files. `ruff.toml` ignores rules `I002` and `PYI044`
-for stub files:
-
-```toml
-[lint.per-file-ignores]
-"**/*.pyi" = ["I002", "PYI044"]
 ```
 
 ---
@@ -240,8 +242,23 @@ Follow these guidelines:
 - **Always run check and format together**: A file is clean only when both
   `ruff check` and `ruff format` succeed.
 - **Never fight the formatter**: If `ruff format` breaks lines across multiple
-  rows, adjust structure or simplify expressions instead.
-- **Formatter vs. Linter Conflicts**: Always keep rules `COM812` and `ISC001`
-  in `lint.ignore` when you use `ruff format`.
+  rows, adjust structure or simplify expressions instead of patching the
+  formatted output back together.
+- **Formatter re-join hazard**: The formatter collapses implicit string
+  concatenations and reflows f-string continuations. A directive pinned to a
+  line the formatter rewrites will silently move.
+  Hoist such values into a named constant so the directive line becomes
+  stable.
+- **Rendered-output variability**: In this cookiecutter template, rendered
+  line lengths depend on the literal `project_slug` a user picks. In
+  generated `cli.py`, hoist template-dependent values (banner strings)
+  outside decorated functions to keep every render under the line limit.
+  Check both short and long slug renders with the `lint-rendered` task.
+- **Jinja templates are unparseable**: `zenith-example` raw
+  sources stay out of ruff's tree (root `extend-exclude`).
+  Enforce template prose and code comments on rendered output instead.
+- **Template suppression mirrors**: keep the root `ruff.toml` and
+  `zenith-example/ruff.toml` ignore lists in exact lockstep.
+  `tests/test_repo_conventions.py` fails on drift between the two rule lists.
 - **Scope fixes to edited code**: Avoid running `--unsafe-fixes` across an
   entire codebase. Inspect diffs with `--diff` first.

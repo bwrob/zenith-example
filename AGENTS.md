@@ -50,6 +50,13 @@ Before editing code or running tasks, ensure a clean, isolated environment:
   - `uv run poe fix` (to auto-fix formatting and spelling where applicable; always
     re-read files modified by `poe fix` or `prek` before making further edits)
   - `uv run poe clean` (to purge build artifacts and stale caches)
+- **CI Monitoring on Push**: Never leave work unmonitored after `git push`. Track the
+  triggered CI runs with `gh run watch` or `gh run list`. If a remote check fails,
+  inspect the failure immediately (`gh run view <run-id> --log-failed`), reproduce,
+  fix, and verify until all checks pass.
+- **Downstream CI Monitoring on PR Merge**: When merging a pull request to `main`,
+  monitor automated showcase and documentation workflows to ensure downstream canary
+  tests pass.
 - **Tool Guidance**: For tool usage and common configuration changes,
   consult the corresponding skill in `.agents/skills/tool-*/SKILL.md`.
 - **Reproduce-First Bug Scoping**: When fixing a bug, first reproduce the failure with a
@@ -60,6 +67,11 @@ Before editing code or running tasks, ensure a clean, isolated environment:
   from first principles rather than piling on patches.
 - **AI Contribution Policy**: All contributions must adhere to `AI_POLICY.md`
   for human review, local test verification, and tool disclosure.
+- **Inline Lint Suppression**: `# noqa` comments are forbidden. Where a rule
+  genuinely conflicts with required code, use the Ruff ignore directive
+  `# ruff: ignore[full-rule-name]` with a rationale comment (see the
+  `tool-ruff` skill, including the line-1 placement rule for module-level
+  diagnostics).
 
 ## Project Instructions Discovery & Compatibility
 

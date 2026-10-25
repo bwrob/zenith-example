@@ -5,7 +5,7 @@ description: >-
   Use when writing, reviewing, architecting, refactoring, or type-checking Python code in this repository.
   Triggers: python style, pep 695, protocols, dataclasses, typing, refactor.
 name: guide-python
-version: 1.0.0
+version: 1.1.0
 ---
 
 # Modern Python 3.12+ Engineering Conventions (`guide-python`)
@@ -268,3 +268,23 @@ def dispatch(action: Action) -> None:
   (`` `value` ``), never RST double backticks (```` ``value`` ````).
 - **Executable Doctests**: Include `>>>` doctest examples in pure functions when appropriate.
   Automated tests check these doctests via `pytest --doctest-modules`.
+
+---
+
+## 10. Terminal Output Conventions (Rich)
+
+- **ASCII-Safe Glyphs**: Use plain ASCII status characters (`OK`, `PASS`,
+  `[done]`) instead of decorative glyphs.
+  Ruff rule `RUF001` flags lookalike glyphs such as the information sign
+  (`U+2139`) in source code.
+  ASCII output also survives byte-comparison in CI logs.
+- **Byte-Stable Console Config**: Rich interim output must not depend on
+  terminal width or locale:
+  - `Console(highlight=False)` for deterministic plain text.
+  - For passthrough of command output (linters, test runners), use
+    `Console(markup=False, soft_wrap=True)`.
+    This config stops Rich from interpreting bracket tags in tool output.
+    It also stops Rich from rewrapping lines against a width guess.
+- **No Width-Sensitive Formatting**: Avoid `Console.width`-sensitive
+  formatting in CI assertions.
+  Byte-compare only outputs produced with a pinned console config.

@@ -150,3 +150,69 @@ gh pr create --title "feat(core): add parser" --body-file - <<'EOF'
 Updated `parse_token` to handle `$HOME` literals safely.
 EOF
 ```
+
+---
+
+## 6. Continuous Integration (CI) Monitoring After Every Push
+
+Never consider a task complete immediately after running `git push`.
+Remote CI environments run on multiple platforms and Python versions.
+They often catch environment-specific issues that local machines do not show.
+
+### Post-Push Monitoring Protocol
+
+Immediately after pushing commits to a branch or pull request:
+
+1. **Find the triggered workflow run**:
+
+   ```bash
+   gh run list --branch <branch-name> --limit 3
+   ```
+
+2. **Watch the workflow until completion**:
+
+   ```bash
+   gh run watch <run-id>
+   ```
+
+3. **Inspect failures immediately**:
+   If any job fails, inspect the failed step logs directly:
+
+   ```bash
+   gh run view <run-id> --log-failed
+   ```
+
+4. **Remediate and repeat**:
+   Reproduce the failure locally.
+   Apply the fix, run local verification gates, commit, and push again.
+   Monitor CI again until all jobs report green.
+
+---
+
+## 7. Downstream Showcase Monitoring After PR Merge
+
+In Zenith repositories, merging a PR to `main` triggers automated downstream synchronization.
+The `.github/workflows/sync-example.yaml` workflow synchronizes changes to `zenith-example`.
+
+### Post-Merge Downstream Protocol
+
+Immediately after merging a pull request into `main`:
+
+1. **Monitor the upstream sync workflow**:
+
+   ```bash
+   gh run list --workflow sync-example.yaml --limit 1
+   gh run watch <run-id>
+   ```
+
+2. **Monitor downstream showcase CI in `zenith-example`**:
+   Once the sync push lands, check the canary test workflows:
+
+   ```bash
+   gh run list --repo bwrob/zenith-example --limit 5
+   gh run watch <run-id> --repo bwrob/zenith-example
+   ```
+
+3. **Check canary green status**:
+   Ensure both `python_tests.yaml` and `test_redistribute.yaml` pass in `zenith-example`.
+   Consult `workflow-example-sync` for full troubleshooting steps if downstream CI fails.

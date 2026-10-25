@@ -38,7 +38,7 @@ TEST_PACKAGES = [
     "pytest>=9.0.0",
     "pytest-cov>=7.0.0",
     "pytest-randomly>=3.16.0",
-    "pytest-sugar>=1.0.0",
+    "pytest-sugar>=1.1.1",
     "pytest-xdist>=3.8.0",
     "syrupy>=6.1.0",
 ]
