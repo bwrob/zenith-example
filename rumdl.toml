@@ -57,6 +57,7 @@ respect-gitignore = true
             "ruff",
             "check",
             "--preview",
+            "--isolated",
             "--output-format=concise",
             "--ignore=D,T201,missing-required-import",
             "-",

@@ -11,12 +11,17 @@ Each directive takes an optional comma- or space-separated rule list. Without a
 list, it applies to every rule.
 """
 
+from __future__ import annotations
+
 import re
-from collections.abc import Iterable
 from dataclasses import dataclass
 from enum import StrEnum
+from typing import TYPE_CHECKING
 
 from ste.model import Suppressions
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
 
 
 class Action(StrEnum):
@@ -51,6 +56,12 @@ def parse_directive(comment_body: str, line: int) -> Directive | None:
     (<Action.DISABLE: 'disable'>, ['long-sentence', 'semicolon'])
     >>> parse_directive(" a normal comment ", 3) is None
     True
+
+    Returns
+    -------
+    Directive | None
+        Parsed directive, or `None` for a non-directive comment.
+
     """
     match = DIRECTIVE.match(comment_body)
     if match is None:
@@ -60,7 +71,14 @@ def parse_directive(comment_body: str, line: int) -> Directive | None:
 
 
 def build_suppressions(directives: Iterable[Directive], last_line: int) -> Suppressions:
-    """Fold directives in document order into suppressed line ranges."""
+    """Fold directives in document order into suppressed line ranges.
+
+    Returns
+    -------
+    Suppressions
+        Ranges with silencing start/end lines and the rule sets.
+
+    """
     ranges: list[tuple[int, int, frozenset[str]]] = []
     open_disables: dict[frozenset[str], int] = {}
     for directive in directives:
@@ -80,6 +98,13 @@ def build_suppressions(directives: Iterable[Directive], last_line: int) -> Suppr
 def _close(
     open_disables: dict[frozenset[str], int], directive: Directive
 ) -> list[tuple[int, int, frozenset[str]]]:
-    """Close the disables an enable matches. A bare enable closes all of them."""
+    """Close the disables an enable matches. A bare enable closes all.
+
+    Returns
+    -------
+    list[tuple[int, int, frozenset[str]]]
+        Closed ranges in document order.
+
+    """
     keys = [k for k in open_disables if not directive.rules or k == directive.rules]
     return [(open_disables.pop(key), directive.line, key) for key in keys]

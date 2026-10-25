@@ -4,7 +4,8 @@
 Ensures each skill adheres to the Zenith skill standard:
 - Directory contains SKILL.md.
 - Valid YAML frontmatter with `name` matching directory and non-empty `description`.
-- Internal links to templates/, references/, examples/, scripts/ resolve to actual files.
+- Internal links to templates/, references/, examples/, and scripts/
+  resolve to actual files.
 - Optional/auto-detected documentation coverage in docs/skills/*.md.
 """
 
@@ -15,6 +16,14 @@ import re
 import sys
 from pathlib import Path
 
+from rich.console import Console
+
+console = Console(highlight=False)
+error_console = Console(stderr=True, highlight=False)
+
+MIN_DESCRIPTION_LENGTH = 20
+MIN_FRONTMATTER_PARTS = 3
+
 
 def _handle_key_value(
     line: str,
@@ -22,13 +31,24 @@ def _handle_key_value(
     current_key: str | None,
     multiline_buf: list[str],
 ) -> tuple[str, list[str]]:
-    """Handle a key: value line in YAML frontmatter."""
+    """Handle a key: value line in YAML frontmatter.
+
+    Args:
+        line: Raw frontmatter line.
+        metadata: Accumulated key-value metadata.
+        current_key: Key whose value is being accumulated, if any.
+        multiline_buf: Buffered lines of the current multiline value.
+
+    Returns:
+        The parsed key and the (possibly cleared) multiline buffer.
+
+    """
     if current_key and multiline_buf:
         metadata[current_key] = " ".join(multiline_buf).strip()
     key, val = line.split(":", 1)
     new_key = key.strip()
     val_clean = val.strip().strip("'\"")
-    if val_clean in (">", ">-", "|", "|-"):
+    if val_clean in {">", ">-", "|", "|-"}:
         return new_key, []
     if val_clean:
         metadata[new_key] = val_clean
@@ -41,7 +61,18 @@ def _process_yaml_line(
     current_key: str | None,
     multiline_buf: list[str],
 ) -> tuple[str | None, list[str]]:
-    """Process a single line of YAML frontmatter."""
+    """Process a single line of YAML frontmatter.
+
+    Args:
+        line: Raw frontmatter line.
+        metadata: Accumulated key-value metadata.
+        current_key: Key whose value is being accumulated, if any.
+        multiline_buf: Buffered lines of the current multiline value.
+
+    Returns:
+        The current key (possibly None) and the multiline buffer.
+
+    """
     trimmed = line.strip()
     if not trimmed or trimmed.startswith("#"):
         return current_key, multiline_buf
@@ -56,13 +87,26 @@ def _process_yaml_line(
 
 
 def parse_frontmatter(content: str) -> dict[str, str]:
-    """Parse simple YAML frontmatter between leading `---` markers."""
+    """Parse simple YAML frontmatter between leading `---` markers.
+
+    Args:
+        content: Raw SKILL.md content.
+
+    Returns:
+        The parsed frontmatter key-value mapping.
+
+    Raises:
+        ValueError: When the frontmatter boundaries are malformed.
+
+    """
     if not content.startswith("---"):
-        raise ValueError("Missing leading '---' frontmatter boundary")
+        msg = "Missing leading '---' frontmatter boundary"
+        raise ValueError(msg)
 
     parts = content.split("---", 2)
-    if len(parts) < 3:
-        raise ValueError("Unclosed frontmatter; expected closing '---'")
+    if len(parts) < MIN_FRONTMATTER_PARTS:
+        msg = "Unclosed frontmatter; expected closing '---'"
+        raise ValueError(msg)
 
     raw_yaml = parts[1]
     metadata: dict[str, str] = {}
@@ -81,7 +125,15 @@ def parse_frontmatter(content: str) -> dict[str, str]:
 
 
 def validate_skill(skill_dir: Path) -> list[str]:
-    """Validate a single skill directory and return a list of error messages."""
+    """Validate a single skill directory and report structural violations.
+
+    Args:
+        skill_dir: Directory holding the skill definition.
+
+    Returns:
+        A list of error messages; empty when the skill is valid.
+
+    """
     errors: list[str] = []
     skill_file = skill_dir / "SKILL.md"
 
@@ -104,7 +156,8 @@ def validate_skill(skill_dir: Path) -> list[str]:
         errors.append(f"{skill_dir.name}/SKILL.md: missing 'name' in frontmatter")
     elif name != skill_dir.name:
         errors.append(
-            f"{skill_dir.name}/SKILL.md: frontmatter name '{name}' does not match directory '{skill_dir.name}'"
+            f"{skill_dir.name}/SKILL.md: frontmatter name '{name}' does not "
+            f"match directory '{skill_dir.name}'"
         )
 
     # Validate description
@@ -113,7 +166,7 @@ def validate_skill(skill_dir: Path) -> list[str]:
         errors.append(
             f"{skill_dir.name}/SKILL.md: missing 'description' in frontmatter"
         )
-    elif len(desc) < 20:
+    elif len(desc) < MIN_DESCRIPTION_LENGTH:
         errors.append(
             f"{skill_dir.name}/SKILL.md: description is too brief (min 20 chars)"
         )
@@ -127,14 +180,24 @@ def validate_skill(skill_dir: Path) -> list[str]:
         target_path = skill_dir / rel_target
         if not target_path.exists():
             errors.append(
-                f"{skill_dir.name}/SKILL.md: broken link to missing file: {match.group(2)}"
+                f"{skill_dir.name}/SKILL.md: broken link to missing file: "
+                f"{match.group(2)}"
             )
 
     return errors
 
 
 def validate_docs_coverage(skill_names: list[str], docs_dir: Path) -> list[str]:
-    """Validate that every skill is documented in the documentation directory."""
+    """Validate that every skill is documented in the documentation directory.
+
+    Args:
+        skill_names: Names of all discovered skills.
+        docs_dir: Documentation directory to scan.
+
+    Returns:
+        A list of error messages; empty when coverage is complete.
+
+    """
     if not docs_dir.is_dir():
         return [f"Docs directory not found: {docs_dir}"]
 
@@ -162,24 +225,42 @@ def validate_docs_coverage(skill_names: list[str], docs_dir: Path) -> list[str]:
 
 
 def _validate_all_skills(skill_subdirs: list[Path]) -> bool:
-    """Validate all individual skill directories. Return True if any errors occur."""
+    """Validate all individual skill directories.
+
+    Args:
+        skill_subdirs: Directories to validate.
+
+    Returns:
+        True when any validation error occurred.
+
+    """
     failed = False
     for s_dir in skill_subdirs:
         errs = validate_skill(s_dir)
         if errs:
             failed = True
-            print(f"  ✗ {s_dir.name}:")
+            console.print(f"  [red bold]✗[/] {s_dir.name}:")
             for err in errs:
-                print(f"      - {err}", file=sys.stderr)
+                error_console.print(f"      [red]✗ {err}[/]")
         else:
-            print(f"  ✓ {s_dir.name}")
+            console.print(f"  [green]✓[/] {s_dir.name}")
     return failed
 
 
 def _check_docs_coverage(
     args: argparse.Namespace, skills_dir: Path, skill_subdirs: list[Path]
 ) -> bool:
-    """Verify documentation coverage if docs directory is present. Return True on error."""
+    """Check documentation coverage when a docs directory is present.
+
+    Args:
+        args: Parsed CLI arguments.
+        skills_dir: Resolved skills directory.
+        skill_subdirs: Directories to check.
+
+    Returns:
+        True when coverage validation failed.
+
+    """
     if args.no_docs_check:
         return False
 
@@ -193,20 +274,35 @@ def _check_docs_coverage(
         return False
 
     skill_names = [d.name for d in skill_subdirs]
-    print(f"\n📚 Validating documentation coverage in {docs_dir}...")
+    console.print(
+        f"\n[bold cyan]📚 Validating documentation coverage in {docs_dir}...[/]"
+    )
     doc_errs = validate_docs_coverage(skill_names, docs_dir)
     if doc_errs:
         for err in doc_errs:
-            print(f"  ✗ {err}", file=sys.stderr)
+            error_console.print(f"  [red]✗ {err}[/]")
         return True
 
-    print(f"  ✓ All {len(skill_names)} skill(s) documented in {docs_dir.name}/")
+    console.print(
+        f"  [green]✓ All {len(skill_names)} skill(s) documented in {docs_dir.name}/[/]"
+    )
     return False
 
 
 def main(argv: list[str] | None = None) -> int:
+    """Run skill-structure validation over the given skills directory.
+
+    Args:
+        argv: Command-line arguments; defaults to ``sys.argv`` when None.
+
+    Returns:
+        Process exit code: 0 on success, 1 on validation failure.
+
+    """
     parser = argparse.ArgumentParser(
-        description="Validate agent skills structural invariants and documentation coverage."
+        description=(
+            "Validate agent skills structural invariants and documentation coverage."
+        )
     )
     parser.add_argument(
         "skills_dir",
@@ -219,7 +315,10 @@ def main(argv: list[str] | None = None) -> int:
         "--docs-dir",
         type=Path,
         default=None,
-        help="Path to documentation directory to verify all skills are documented (auto-detected if docs/skills exists)",
+        help=(
+            "Path to documentation directory to verify all skills are documented "
+            "(auto-detected if docs/skills exists)"
+        ),
     )
     parser.add_argument(
         "--no-docs-check",
@@ -230,7 +329,7 @@ def main(argv: list[str] | None = None) -> int:
 
     skills_dir = args.skills_dir.resolve()
     if not skills_dir.is_dir():
-        print(f"❌ Skills directory not found: {skills_dir}", file=sys.stderr)
+        error_console.print(f"[bold red]❌ Skills directory not found: {skills_dir}[/]")
         return 1
 
     skill_subdirs = sorted(
@@ -238,19 +337,24 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     if not skill_subdirs:
-        print(f"⚠️ No skill directories found in {skills_dir}")
+        console.print(f"[bold yellow]⚠️ No skill directories found in {skills_dir}[/]")
         return 0
 
     total_skills = len(skill_subdirs)
-    print(f"🔍 Validating {total_skills} agent skill(s) in {skills_dir}...")
+    console.print(
+        f"[bold cyan]🔍 Validating {total_skills} agent skill(s) in {skills_dir}...[/]"
+    )
     skills_failed = _validate_all_skills(skill_subdirs)
     docs_failed = _check_docs_coverage(args, skills_dir, skill_subdirs)
 
     if skills_failed or docs_failed:
-        print("\n❌ Skill validation failed with errors.", file=sys.stderr)
+        error_console.print("\n[bold red]❌ Skill validation failed with errors.[/]")
         return 1
 
-    print(f"\n✅ All {total_skills} skill(s) satisfied structural invariants!")
+    console.print(
+        f"\n[bold green]✅ All {total_skills} skill(s) satisfied "
+        f"structural invariants![/]"
+    )
     return 0
 
 

@@ -7,19 +7,19 @@ from typing import Annotated
 import typer
 from rich.console import Console
 
-from zenith_example import __version__
+from zenith_example import __doc__ as cli_help, __version__
 from zenith_example.core import get_greeting
 
 app: typer.Typer = typer.Typer(
     name="zenith-example",
-    help="Demonstration and showcase repository instantiated from the Zenith template.",
+    help=cli_help,
     no_args_is_help=True,
     rich_markup_mode="rich",
 )
 console: Console = Console()
 
 
-def version_callback(value: bool) -> None:
+def version_callback(*, value: bool) -> None:
     """Print the version and exit.
 
     Raises
@@ -29,14 +29,14 @@ def version_callback(value: bool) -> None:
 
     """
     if value:
-        console.print(
-            f"[bold cyan]zenith-example[/bold cyan] version [green]{__version__}[/green]"
-        )
+        styled_name = "[bold cyan]zenith-example[/bold cyan]"
+        console.print(f"{styled_name} version [green]{__version__}[/green]")
         raise typer.Exit
 
 
 @app.callback()
 def main_callback(
+    *,
     _version: Annotated[
         bool,
         typer.Option(

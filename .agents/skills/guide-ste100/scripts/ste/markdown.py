@@ -18,6 +18,8 @@ It understands the constructs that Zenith documentation and agent skills use:
 Indented code blocks are not recognized: Zenith requires fenced code (MD046).
 """
 
+from __future__ import annotations
+
 import re
 from dataclasses import dataclass, field
 
@@ -46,6 +48,8 @@ FRONTMATTER_END = re.compile(r"^(?:---|\.\.\.)[ \t]*$")
 DESCRIPTION_KEY = re.compile(r"^description:[ \t]*(?P<value>.*?)[ \t]*$")
 BLOCK_SCALAR = re.compile(r"^[>|][+-]?\d*$")
 ADMONITION_INDENT = 4
+MIN_TABLE_CELLS = 2
+MAX_OPENING_INDENT = 3
 
 
 @dataclass(frozen=True, slots=True)
@@ -65,11 +69,18 @@ class Line:
 
     @property
     def stripped(self) -> str:
-        """Return the text without surrounding whitespace."""
+        """The text without surrounding whitespace."""
         return self.text.strip()
 
     def fragment(self, start: int = 0) -> tuple[int, int, str]:
-        """Return `(line, column, text)` for `text[start:]` without outer spaces."""
+        """Extract the fragment starting at `start` without outer spaces.
+
+        Returns
+        -------
+        tuple[int, int, str]
+            Source line, 1-based column, and stripped fragment text.
+
+        """
         rest = self.text[start:]
         lead = len(rest) - len(rest.lstrip())
         return self.number, self.column + start + lead, rest.strip()
@@ -88,6 +99,12 @@ def _build_block(kind: BlockKind, fragments: list[tuple[int, int, str]]) -> Bloc
 
     Masking after the join lets inline constructs that wrap across lines (a
     link text, a code span) mask correctly.
+
+    Returns
+    -------
+    Block
+        Joined and inline-masked prose block with offset spans.
+
     """
     spans: list[Span] = []
     offset = 0
@@ -99,12 +116,18 @@ def _build_block(kind: BlockKind, fragments: list[tuple[int, int, str]]) -> Bloc
 
 
 def split_table_row(text: str) -> list[tuple[str, int]] | None:
-    """Split a table row into `(cell, start)` pairs. Escaped pipes stay in cells.
+    r"""Split a table row into `(cell, start)` pairs. Escaped pipes stay in cells.
 
-    >>> split_table_row("| a | b \\\\| c |")
-    [('a', 2), ('b \\\\| c', 6)]
+    >>> split_table_row("| a | b \\| c |")
+    [('a', 2), ('b \\| c', 6)]
     >>> split_table_row("no pipes") is None
     True
+
+    Returns
+    -------
+    list[tuple[str, int]] | None
+        Cell texts with start columns, or `None` when `text` is not a row.
+
     """
     left = len(text) - len(text.lstrip())
     content = text.strip()
@@ -115,7 +138,7 @@ def split_table_row(text: str) -> list[tuple[str, int]] | None:
     if content.endswith("|") and not content.endswith("\\|"):
         content = content[:-1]
     raw_cells = re.split(r"(?<!\\)\|", content)
-    if len(raw_cells) < 2:
+    if len(raw_cells) < MIN_TABLE_CELLS:
         return None
     cells: list[tuple[str, int]] = []
     column = left
@@ -135,7 +158,14 @@ def _is_separator(cells: list[tuple[str, int]] | None, width: int) -> bool:
 
 
 def _frontmatter(lines: list[str]) -> tuple[int, list[Block]]:
-    """Return the first body line index and the `description` block, if any."""
+    """Return the first body line index and the `description` block, if any.
+
+    Returns
+    -------
+    tuple[int, list[Block]]
+        Body start index and the parsed description block, possibly empty.
+
+    """
     if not lines or not FRONTMATTER_FENCE.match(lines[0]):
         return 0, []
     end = next(
@@ -197,7 +227,14 @@ class _Scanner:
     # -- line normalization -------------------------------------------------
 
     def _normalize(self, index: int) -> Line:
-        """Strip blockquote markers and admonition indentation from a line."""
+        """Strip blockquote markers and admonition indentation from a line.
+
+        Returns
+        -------
+        Line
+            Normalized line carrying quote depth and source column.
+
+        """
         text, column, depth = self.lines[index], 1, 0
         while match := QUOTE_PREFIX.match(text):
             text, column, depth = text[match.end() :], column + match.end(), depth + 1
@@ -211,6 +248,14 @@ class _Scanner:
     # -- dispatch -------------------------------------------------------------
 
     def _step(self, index: int) -> int:
+        """Consume one line and return the next index.
+
+        Returns
+        -------
+        int
+            Index of the next line to process.
+
+        """
         if self.comment is not None:
             self._continue_comment(self.lines[index], index + 1)
             return index + 1
@@ -231,7 +276,14 @@ class _Scanner:
         return next_index
 
     def _in_skipped_region(self, line: Line) -> bool:
-        """Consume lines inside fenced code and math blocks."""
+        """Consume the line when inside fenced code and math blocks.
+
+        Returns
+        -------
+        bool
+            True when the line belongs to a skipped region.
+
+        """
         if self.fence:
             close = FENCE_CLOSE.match(line.stripped)
             char, length = self.fence
@@ -248,7 +300,14 @@ class _Scanner:
         return False
 
     def _structural(self, line: Line, index: int) -> int | None:
-        """Handle non-paragraph constructs. Return the next index, or `None`."""
+        """Handle a non-paragraph line through its matching handler.
+
+        Returns
+        -------
+        int | None
+            Next index when a handler consumed the line, else `None`.
+
+        """
         for handler in (
             self._fence_open,
             self._math_open,
@@ -288,7 +347,8 @@ class _Scanner:
         return True
 
     def _continue_comment(self, text: str, number: int) -> None:
-        assert self.comment is not None
+        if self.comment is None:
+            return
         body, closed, _ = text.partition("-->")
         self.comment.append(body)
         if closed:
@@ -298,11 +358,21 @@ class _Scanner:
             self.comment = None
 
     def _skip_line(self, line: Line) -> bool:
-        """Skip lines that carry no prose: HTML blocks, rules, link defs, alert markers."""
+        """Report whether `line` carries no prose and should be skipped.
+
+        HTML blocks, thematic breaks, link definitions, and alert markers
+        carry no lintable prose.
+
+        Returns
+        -------
+        bool
+            True for a skipped line.
+
+        """
         text = line.stripped
         skip = bool(
-            (line.indent <= 3 and THEMATIC_BREAK.match(text))
-            or (line.indent <= 3 and LINK_DEFINITION.match(text))
+            (line.indent <= MAX_OPENING_INDENT and THEMATIC_BREAK.match(text))
+            or (line.indent <= MAX_OPENING_INDENT and LINK_DEFINITION.match(text))
             or HTML_BLOCK.match(text)
             or (line.quote_depth and ALERT.match(text))
         )
@@ -319,7 +389,9 @@ class _Scanner:
         return True
 
     def _heading(self, line: Line) -> bool:
-        match = HEADING.match(line.stripped) if line.indent <= 3 else None
+        match = (
+            HEADING.match(line.stripped) if line.indent <= MAX_OPENING_INDENT else None
+        )
         if match is None:
             return False
         self._flush()
@@ -342,10 +414,16 @@ class _Scanner:
         return True
 
     def _is_wrapped_number(self, line: Line, match: re.Match[str]) -> bool:
-        """Tell a reflowed line that starts with `2024.` from an ordered item.
+        """Report whether `match` opens a wrapped prose line, not a list item.
 
         Like CommonMark, only an ordered item numbered 1 interrupts a paragraph.
         Inside a list item, a numbered line at the content indent continues it.
+
+        Returns
+        -------
+        bool
+            True for a reflowed prose line starting with a number.
+
         """
         number = match.group("number")
         if number in {None, "1"} or self.open is None or self.previous_blank:
@@ -400,7 +478,21 @@ class _Scanner:
 
 
 def parse(text: str, filename: str = "<stdin>") -> Document:
-    """Extract the prose blocks and suppression directives of a Markdown text."""
+    """Extract the prose blocks and suppression directives of a Markdown text.
+
+    Parameters
+    ----------
+    text : str
+        Markdown source to scan.
+    filename : str
+        Name attached to the returned document.
+
+    Returns
+    -------
+    Document
+        Prose blocks with their spans, plus folded suppressions.
+
+    """
     lines = text.splitlines()
     scanner = _Scanner(lines)
     scanner.run()

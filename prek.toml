@@ -1,6 +1,8 @@
 #:schema https://www.schemastore.org/prek.json
 
-fail_fast = false
+default_install_hook_types = ["pre-commit", "pre-push"]
+default_stages             = ["pre-commit"]
+fail_fast                  = false
 
 # Hooks with matching priorities run concurrently. Keep file-mutating stages
 # separate when their inputs or outputs can overlap.
@@ -59,9 +61,7 @@ fail_fast = false
             "--fix",
             "--config",
             "./ruff.toml",
-        ], files = '(\.(py|pyi)$|(^|/)(pyproject\.toml|uv\.lock|ruff\.toml)$)', types_or = [
-            "file",
-        ], pass_filenames = false, priority = "source_fix" },
+        ], files = '\.(py|pyi)$', priority = "source_fix" },
         { id = "ruff-format", name = "🐍 ruff · Format Python code", args = [
             "--config",
             "./ruff.toml",
@@ -109,10 +109,18 @@ fail_fast = false
 
 [[repos]]
     hooks = [
-        { id = "pyrefly", name = "🐍 pyrefly · Type check Python code", entry = "uv run pyrefly check", language = "system", pass_filenames = false, files = '(\.(py|pyi)$|(^|/)(pyproject\.toml|uv\.lock|pyrefly\.toml)$)', priority = "checks" },
-        { id = "pyrefly-coverage", name = "🐍 pyrefly · Type coverage and completeness check", entry = "uv run pyrefly coverage check src --fail-under 100 --strict", language = "system", pass_filenames = false, files = '(\.(py|pyi)$|(^|/)(pyproject\.toml|uv\.lock|pyrefly\.toml)$)', priority = "checks" },
-        { id = "complexipy", name = "🧮 complexipy · Cognitive complexity check", entry = "uv run complexipy src tests", language = "system", pass_filenames = false, files = '(\.(py|pyi)$|(^|/)complexipy\.toml$)', priority = "checks" },
-        { id = "tach", name = "📐 tach · Architecture boundaries check", entry = "uv run tach check", language = "system", pass_filenames = false, files = '(\.(py|pyi)$|(^|/)(pyproject\.toml|uv\.lock|tach\.toml)$)', priority = "checks" },
+        { id = "pyrefly", name = "🐍 pyrefly · Type check Python code", entry = "uv run pyrefly check", language = "system", pass_filenames = false, files = '(\.(py|pyi)$|(^|/)(pyproject\.toml|uv\.lock|pyrefly\.toml)$)', priority = "checks", stages = [
+            "pre-push",
+        ] },
+        { id = "pyrefly-coverage", name = "🐍 pyrefly · Type coverage and completeness check", entry = "uv run pyrefly coverage check src --fail-under 100 --strict", language = "system", pass_filenames = false, files = '(\.(py|pyi)$|(^|/)(pyproject\.toml|uv\.lock|pyrefly\.toml)$)', priority = "checks", stages = [
+            "pre-push",
+        ] },
+        { id = "complexipy", name = "🧮 complexipy · Cognitive complexity check", entry = "uv run complexipy src tests", language = "system", pass_filenames = false, files = '(\.(py|pyi)$|(^|/)complexipy\.toml$)', priority = "checks", stages = [
+            "pre-push",
+        ] },
+        { id = "tach", name = "📐 tach · Architecture boundaries check", entry = "uv run tach check", language = "system", pass_filenames = false, files = '(\.(py|pyi)$|(^|/)(pyproject\.toml|uv\.lock|tach\.toml)$)', priority = "checks", stages = [
+            "pre-push",
+        ] },
     ]
     repo = "local"
 

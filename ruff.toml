@@ -1,23 +1,24 @@
-exclude     = [".venv", "site", "dist", "scripts", ".agents"]
+exclude     = [".venv", "site", "dist"]
 line-length = 88
 
 [lint]
-    exclude = [".venv", "site", "dist", "scripts", ".agents"]
     future-annotations = true
     ignore = [
         "blank-line-before-class",
-        "COM",
         "incorrect-blank-line-before-class",
         "missing-copyright-notice",
         "missing-trailing-comma",
         "multi-line-summary-second-line",
-        "too-many-branches",
     ]
     preview = true
     select = ["ALL"]
 
     [lint.flake8-bugbear]
         extend-immutable-calls = ["typer.Argument", "typer.Option"]
+
+    # CLI defaults are Annotated typer.Typer parameters, not raw boolean traps.
+    [lint.flake8-boolean-trap]
+        extend-allowed-calls = ["typer.Argument", "typer.Option"]
 
     [lint.flake8-tidy-imports]
         ban-relative-imports = "all"
@@ -39,21 +40,13 @@ line-length = 88
         required-imports   = ["from __future__ import annotations"]
 
     [lint.per-file-ignores]
-        "**/*.pyi" = ["missing-required-import", "future-annotations-in-stub"]
-        "src/*/__init__.py" = ["non-empty-init-module"]
-        "src/*/cli.py" = [
-            "boolean-default-value-positional-argument",
-            "boolean-positional-value-in-call",
-            "boolean-type-hint-positional-argument",
-            "line-too-long",
-        ]
-        "tests/**/*" = [
-            "import-private-name",
-            "private-member-access",
-            "assert",
-            "docstring-missing-returns",
-            "print",
-        ]
+        # pytest idioms: tests are assertion-driven and have no production
+        # assert surface to protect.
+        "tests/**/*" = ["assert"]
+
+        # Maintenance scripts: subprocess drives repo-owned tooling on
+        # repo-controlled paths.
+        "scripts/*" = ["suspicious-subprocess-import"]
 
     [lint.pyupgrade]
         keep-runtime-typing = true

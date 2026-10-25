@@ -31,24 +31,24 @@ def _resolve_or_raise(package: str, name: str) -> object:
         raise AttributeError(msg) from None
 
 
-def accessors(
+def lazy_getattr(
     module_globals: dict[str, object],
     members: Mapping[str, str],
-) -> tuple[Callable[[str], object], Callable[[], list[str]]]:
-    """Build a package's ``__getattr__`` and ``__dir__`` for lazy member loading.
+) -> Callable[[str], object]:
+    """Build a package's ``__getattr__`` for lazy member loading.
 
     Parameters
     ----------
     module_globals : dict[str, object]
-        The calling package's ``globals()``. Resolved members are written back
-        into it, so each submodule is imported at most once.
+        The calling package's ``globals()``. Resolved members are written
+        back into it, so each submodule is imported at most once.
     members : Mapping[str, str]
         Mapping of exported symbol name to its relative module path.
 
     Returns
     -------
-    tuple[Callable[[str], object], Callable[[], list[str]]]
-        Tuple of (module_getattr, module_dir) callables implementing PEP 562.
+    Callable[[str], object]
+        Callable implementing PEP 562 lazy attribute resolution.
 
     """
     package = str(module_globals["__name__"])
@@ -62,6 +62,24 @@ def accessors(
 
         return _resolve_or_raise(package, name)
 
+    return module_getattr
+
+
+def lazy_dir(module_globals: dict[str, object]) -> Callable[[], list[str]]:
+    """Build a package's ``__dir__`` for lazy member loading.
+
+    Parameters
+    ----------
+    module_globals : dict[str, object]
+        The calling package's ``globals()``.
+
+    Returns
+    -------
+    Callable[[], list[str]]
+        Callable that lists the package's imported members plus ``__all__``.
+
+    """
+
     def module_dir() -> list[str]:
         all_members = module_globals.get("__all__", ())
         if isinstance(all_members, (list, tuple)):
@@ -70,4 +88,4 @@ def accessors(
             names = set(module_globals)
         return sorted(names)
 
-    return module_getattr, module_dir
+    return module_dir

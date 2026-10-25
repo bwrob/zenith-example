@@ -6,6 +6,8 @@ one-letter placeholder word. Rules then see plain prose, and a match offset in
 the masked string is still a valid column in the source line.
 """
 
+from __future__ import annotations
+
 import re
 from collections.abc import Callable
 
@@ -65,9 +67,15 @@ def mask_inline(text: str) -> str:
     """Replace inline Markdown markup with offset-preserving prose.
 
     >>> mask_inline("Run `uv sync` and see [the docs](https://x.dev).")
-    'Run C       and see  the docs                  .'
+    'Run C         and see  the docs                .'
     >>> mask_inline("A **bold** claim.")
     'A   bold   claim.'
+
+    Returns
+    -------
+    str
+        Same-length masked text.
+
     """
     for pattern, replace in MASKS:
         text = pattern.sub(replace, text)

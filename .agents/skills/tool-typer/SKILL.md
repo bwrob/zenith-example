@@ -70,8 +70,7 @@ def deploy(
         list[str] | None,
         typer.Option("--tag", help="Deployment tags to associate."),
     ] = None,
-) -> None:
-    ...
+) -> None: ...
 ```
 
 ### Legacy Antipatterns to Avoid

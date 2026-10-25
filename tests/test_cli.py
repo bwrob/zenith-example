@@ -8,7 +8,6 @@ import pytest
 from typer.testing import CliRunner
 
 import zenith_example
-from zenith_example import _lazy
 from zenith_example.__main__ import main as module_main
 from zenith_example.cli import app, main
 
@@ -59,31 +58,44 @@ def test_cli_module_main(monkeypatch: pytest.MonkeyPatch) -> None:
     assert exc_info.value.code == 0
 
 
-def test_lazy_accessors_dunder() -> None:
+def test_lazy_dunder_lookup() -> None:
     """Test accessing dunders raises AttributeError directly."""
-    unknown_attribute = "__unknown__"
     with pytest.raises(AttributeError, match="has no attribute '__unknown__'"):
-        _ = getattr(zenith_example, unknown_attribute)
+        _ = zenith_example.__unknown__
 
 
-def test_lazy_accessors_unknown_attr() -> None:
+def test_lazy_unknown_attribute() -> None:
     """Test accessing unknown attributes raises AttributeError."""
-    unknown_attribute = "nonexistent_symbol"
     with pytest.raises(AttributeError, match="has no attribute 'nonexistent_symbol'"):
-        _ = getattr(zenith_example, unknown_attribute)
+        _ = zenith_example.nonexistent_symbol
 
 
-def test_lazy_accessors_submodule_import_error() -> None:
+def test_lazy_foreign_module_error() -> None:
     """Test re-raising ModuleNotFoundError when error is from internal dependency."""
     with (
         patch("importlib.import_module", side_effect=ModuleNotFoundError("unrelated")),
         pytest.raises(ModuleNotFoundError, match="unrelated"),
     ):
-        _lazy._resolve_or_raise("zenith_example", "some_mod")
+        _ = zenith_example.some_mod
 
 
-def test_lazy_dir_without_all_list() -> None:
+def test_lazy_member_caching() -> None:
+    """Test lazy member resolution caches the member in module globals."""
+    resolved = zenith_example.get_greeting
+    assert resolved("Template") == "Hello, Template!"
+    assert vars(zenith_example)["get_greeting"] is resolved
+
+
+def test_lazy_dir_exposes_all_members() -> None:
+    """Test module_dir lists __all__ exports before they are imported."""
+    names = dir(zenith_example)
+    assert "get_greeting" in names
+    assert "app" in names
+
+
+def test_lazy_dir_without_all_list(monkeypatch: pytest.MonkeyPatch) -> None:
     """Test module_dir when __all__ is not a list or tuple."""
-    mod_globals: dict[str, object] = {"__name__": "dummy", "__all__": None, "foo": 1}
-    _, mod_dir = _lazy.accessors(mod_globals, {})
-    assert mod_dir() == ["__all__", "__name__", "foo"]
+    monkeypatch.setattr(zenith_example, "__all__", None)
+    names = dir(zenith_example)
+    assert "__version__" in names
+    assert "lazy_getattr" in names

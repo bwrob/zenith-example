@@ -4,7 +4,7 @@ description: >-
   Use when linting code, auto-fixing violations, formatting source files, or configuring rules.
   Triggers: ruff, lint, format, ruff.toml, code style.
 name: tool-ruff
-version: 1.0.0
+version: 1.1.0
 ---
 
 
@@ -174,21 +174,24 @@ while relaxing checks for tests and scripts:
 "scripts/*.py" = ["T201", "C901"]
 ```
 
-### C. Inline Rule Suppression (`# noqa`)
+### C. Inline Rule Suppression (`# ruff: ignore`)
 
-When you need an exception on a single line rather than an entire file:
+When you need an exception on a single line rather than an entire file, use a
+Ruff suppression directive — **never** a `# noqa` comment:
 
 ```python
-# Suppress a single specific rule with explanation
-result = evaluate_untrusted_input(payload)  # noqa: S307
+# Suppress a single rule with the rule's full name
+result = evaluate_untrusted_input(payload)  # ruff: ignore[suspicious-eval-usage]
 
-# Suppress multiple rules
-secret_token = fetch_token()  # noqa: S105, S106
+# Suppress multiple rules in one directive
+secret_token = fetch_token()  # ruff: ignore[hardcoded-password-default, hardcoded-password-string]
 ```
 
 > [!WARNING]
-> Never use bare `# noqa`. Always specify the exact rule code
-> (`# noqa: XYZ`).
+> Never use `# noqa` comments (bare or with rule codes). Ruff rules
+> `noqa-comments` (noqa instead of `ruff: ignore`) and `RUF106` (rule codes
+> instead of rule names) enforce the directive form above. Always specify the
+> exact rule by its full name: `# ruff: ignore[rule-name]`.
 
 ### D. Changing Docstring Style Convention
 

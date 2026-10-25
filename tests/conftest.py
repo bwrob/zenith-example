@@ -7,5 +7,12 @@ import pytest
 
 @pytest.fixture
 def sample_name() -> str:
-    """Provide a sample name for testing."""
+    """Provide a sample name for testing.
+
+    Returns
+    -------
+    str
+        A sample user name used across tests.
+
+    """
     return "Antigravity"

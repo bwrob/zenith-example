@@ -8,15 +8,17 @@ Original creator: Dustin Yuchen Teng (https://github.com/danyuchn/asd-ste100-ski
 Licensed under the MIT License.
 """
 
+from __future__ import annotations
+
 import sys
 from pathlib import Path
 
-# Ensure 'scripts' is on sys.path so 'import ste' works when executed directly
-SCRIPTS_DIR = Path(__file__).resolve().parent
-if str(SCRIPTS_DIR) not in sys.path:
-    sys.path.insert(0, str(SCRIPTS_DIR))
-
-from ste.cli import main
-
 if __name__ == "__main__":
+    # Ensure 'scripts' is on sys.path so 'import ste' works when run directly
+    scripts_dir = Path(__file__).resolve().parent
+    if str(scripts_dir) not in sys.path:
+        sys.path.insert(0, str(scripts_dir))
+
+    from ste.cli import main
+
     sys.exit(main())

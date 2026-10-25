@@ -21,6 +21,7 @@ maintainer time, all contributors must adhere to the following principles:
   ```bash
   uv run poe test
   uv run poe code-quality
+  uv run prek run --all-files
   ```
 
 - **No Speculative Solutions**: Do not submit code for environments, platforms, or

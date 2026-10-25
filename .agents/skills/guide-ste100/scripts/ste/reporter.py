@@ -1,9 +1,14 @@
 """Formatters for lint results (standard console output and JSON)."""
 
-import json
-from collections.abc import Sequence
+from __future__ import annotations
 
-from ste.model import Finding
+import json
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+
+    from ste.model import Finding
 
 
 def compute_compliance_score(
@@ -13,11 +18,26 @@ def compute_compliance_score(
 
     A clean document scores 100.0. Hard violations incur higher deductions,
     scaled relative to text length.
+
+    Parameters
+    ----------
+    findings : Sequence[Finding]
+        All findings of the run.
+    words_total : int
+        Total prose words of the run.
+    hard_count : int
+        Number of hard violations among the findings.
+
+    Returns
+    -------
+    float
+        Quality score clamped to [0.0, 100.0].
+
     """
     if words_total == 0:
         return 100.0
     advisory_count = len(findings) - hard_count
-    # Density-based deduction: 1 hard violation per 100 words = -15 points; 1 advisory = -5 points
+    # Deduction density: 1 hard per 100 words = -15 points; 1 advisory = -5
     effective_density = (hard_count * 15.0 + advisory_count * 5.0) * (
         100.0 / max(words_total, 50)
     )
@@ -31,10 +51,28 @@ def format_text(
     baseline: int = 0,
     files_count: int = 1,
 ) -> str:
-    """Format findings in standard compiler/linter terminal format."""
-    lines: list[str] = []
-    for f in findings:
-        lines.append(f"{f.file}:{f.line}:{f.column} {f.rule}: {f.message} [{f.match}]")
+    """Format findings in standard compiler/linter terminal format.
+
+    Parameters
+    ----------
+    findings : Sequence[Finding]
+        All findings of the run.
+    words_total : int
+        Total prose words of the run.
+    hard_count : int
+        Number of hard violations among the findings.
+    baseline : int
+        Hard violations tolerated before a non-zero exit.
+    files_count : int
+        Number of files in the run, counting stdin as one.
+
+    Returns
+    -------
+    str
+        Multi-line text report ending with the summary line.
+
+    """
+    lines: list[str] = [format_finding(f) for f in findings]
 
     rate = round(len(findings) * 100 / words_total, 1) if words_total else 0.0
     score = compute_compliance_score(findings, words_total, hard_count)
@@ -48,6 +86,21 @@ def format_text(
     return "\n".join(lines)
 
 
+def format_finding(finding: Finding) -> str:
+    """Render one finding in compiler-style position format.
+
+    Returns
+    -------
+    str
+        ``file:line:column rule: message [match]``.
+
+    """
+    return (
+        f"{finding.file}:{finding.line}:{finding.column} "
+        f"{finding.rule}: {finding.message} [{finding.match}]"
+    )
+
+
 def format_json(
     findings: Sequence[Finding],
     words_total: int,
@@ -55,7 +108,27 @@ def format_json(
     baseline: int = 0,
     files_count: int = 1,
 ) -> str:
-    """Format findings as structured JSON."""
+    """Format findings as structured JSON.
+
+    Parameters
+    ----------
+    findings : Sequence[Finding]
+        All findings of the run.
+    words_total : int
+        Total prose words of the run.
+    hard_count : int
+        Number of hard violations among the findings.
+    baseline : int
+        Hard violations tolerated before a non-zero exit.
+    files_count : int
+        Number of files in the run, counting stdin as one.
+
+    Returns
+    -------
+    str
+        Indented JSON document.
+
+    """
     rate = round(len(findings) * 100 / words_total, 1) if words_total else 0.0
     score = compute_compliance_score(findings, words_total, hard_count)
     payload = {

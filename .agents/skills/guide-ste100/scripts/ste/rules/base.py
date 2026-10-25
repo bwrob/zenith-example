@@ -1,8 +1,11 @@
 """Rule protocol and common definitions."""
 
-from typing import Protocol
+from __future__ import annotations
 
-from ste.model import Document, Finding, Severity
+from typing import TYPE_CHECKING, Protocol
+
+if TYPE_CHECKING:
+    from ste.model import Document, Finding, Severity
 
 
 class Rule(Protocol):

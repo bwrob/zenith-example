@@ -46,6 +46,7 @@ Before editing code or running tasks, ensure a clean, isolated environment:
   your work using:
   - `uv run poe test` (or `uv run poe test-fast`)
   - `uv run poe code-quality`
+  - `uv run prek run --all-files`
   - `uv run poe fix` (to auto-fix formatting and spelling where applicable; always
     re-read files modified by `poe fix` or `prek` before making further edits)
   - `uv run poe clean` (to purge build artifacts and stale caches)

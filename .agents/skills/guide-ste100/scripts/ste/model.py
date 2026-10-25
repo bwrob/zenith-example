@@ -6,6 +6,8 @@ space, so sentence-level rules see whole sentences. `Span`s map every offset in
 that joined string back to a source line and column.
 """
 
+from __future__ import annotations
+
 from bisect import bisect_right
 from dataclasses import dataclass, field
 from enum import StrEnum
@@ -59,6 +61,12 @@ class Block:
         >>> block = Block(BlockKind.PARAGRAPH, "ab cd", (Span(0, 1, 1), Span(3, 2, 3)))
         >>> block.locate(4)
         (2, 4)
+
+        Returns
+        -------
+        tuple[int, int]
+            1-based source position for `offset`.
+
         """
         index = max(bisect_right([span.offset for span in self.spans], offset) - 1, 0)
         span = self.spans[index]
@@ -73,7 +81,14 @@ class Suppressions:
     """`(first_line, last_line, rules)`. An empty rule set silences every rule."""
 
     def silences(self, line: int, rule: str) -> bool:
-        """Return whether a directive silences `rule` on `line`."""
+        """Report whether a directive silences `rule` on `line`.
+
+        Returns
+        -------
+        bool
+            True when any range covers `line` and `rule`.
+
+        """
         return any(
             first <= line <= last and (not rules or rule in rules)
             for first, last, rules in self.ranges
@@ -103,11 +118,25 @@ class Finding:
 
     @property
     def sort_key(self) -> tuple[str, int, int, str]:
-        """Order findings by file, then position, then rule."""
+        """Order findings by file, then position, then rule.
+
+        Returns
+        -------
+        tuple[str, int, int, str]
+            Comparable sort key.
+
+        """
         return self.file, self.line, self.column, self.rule
 
     def to_dict(self) -> dict[str, str | int]:
-        """Return a JSON-serializable mapping."""
+        """Return a JSON-serializable mapping.
+
+        Returns
+        -------
+        dict[str, str | int]
+            Mapping of all Finding fields.
+
+        """
         return {
             "file": self.file,
             "line": self.line,

@@ -1,9 +1,11 @@
 """Deterministic automated fixer for ASD-STE100 mechanical violations."""
 
+from __future__ import annotations
+
 import re
 
-# (Pattern, Replacement)
-# Ordered so longer multi-word phrases match before individual words.
+# Each entry pairs a pattern with its replacement. The order matters: multi-word
+# phrases are listed first so they match before their individual words.
 SAFE_REPLACEMENTS: tuple[tuple[re.Pattern[str], str], ...] = (
     # Latin abbreviations
     (re.compile(r"\b\(e\.g\.,?\s*", re.IGNORECASE), "(for example, "),
@@ -110,28 +112,43 @@ SAFE_REPLACEMENTS: tuple[tuple[re.Pattern[str], str], ...] = (
 )
 
 
+def _substitute_all(text: str) -> tuple[str, int]:
+    """Apply every safe replacement to `text` and count the substitutions.
+
+    Returns
+    -------
+    tuple[str, int]
+        Rewritten text and the number of replacements made.
+
+    """
+    fixed = text
+    total_subs = 0
+    for pattern, replacement in SAFE_REPLACEMENTS:
+        fixed, count = pattern.subn(replacement, fixed)
+        total_subs += count
+    return fixed, total_subs
+
+
 def fix_line(line: str) -> tuple[str, int]:
     """Apply safe replacements to prose parts of a single line.
 
     Preserves text inside inline code backticks (`...`).
+
+    Returns
+    -------
+    tuple[str, int]
+        Fixed line and the number of replacements made outside code.
+
     """
     if "`" not in line:
-        fixed = line
-        total_subs = 0
-        for pattern, repl in SAFE_REPLACEMENTS:
-            fixed, count = pattern.subn(repl, fixed)
-            total_subs += count
-        return fixed, total_subs
+        return _substitute_all(line)
 
     parts = line.split("`")
     total_subs = 0
-    # Even indices are outside backticks; odd indices are inside code
+    # Even indices hold prose; odd indices hold code spans.
     for idx in range(0, len(parts), 2):
-        chunk = parts[idx]
-        for pattern, repl in SAFE_REPLACEMENTS:
-            chunk, count = pattern.subn(repl, chunk)
-            total_subs += count
-        parts[idx] = chunk
+        parts[idx], count = _substitute_all(parts[idx])
+        total_subs += count
 
     return "`".join(parts), total_subs
 
@@ -140,7 +157,12 @@ def fix_text(text: str) -> tuple[str, int]:
     """Apply deterministic 1:1 STE fixes to text.
 
     Skips fenced code blocks and inline suppression regions.
-    Returns (fixed_text, count_of_replacements).
+
+    Returns
+    -------
+    tuple[str, int]
+        Fixed text and the total count of replacements made.
+
     """
     lines = text.splitlines(keepends=True)
     in_fence = False
@@ -154,7 +176,7 @@ def fix_text(text: str) -> tuple[str, int]:
 
         # Handle code block fences
         if not in_fence:
-            if stripped.startswith("```") or stripped.startswith("~~~"):
+            if stripped.startswith(("```", "~~~")):
                 in_fence = True
                 fence_char = stripped[:3]
                 fixed_lines.append(line)

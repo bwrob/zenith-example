@@ -16,9 +16,7 @@
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Typing :: Typed",
     ]
-
-    dependencies = ["rich>=14.0.0", "typer>=0.16.0"]
-
+    dependencies = ["rich>=15.0.0", "typer>=0.16.0"]
     description = "Demonstration and showcase repository instantiated from the Zenith template."
 
     license       = "MIT"
@@ -56,7 +54,7 @@
     docs = [
         "griffe-warnings-deprecated>=1.1.0",
         "markdown-exec>=1.12.0",
-        "mkdocstrings[python]>=0.28.0",
+        "mkdocstrings[python]>=1.0.7",
         "typst>=0.13.0",
         "zensical>=0.0.70",
     ]
@@ -64,7 +62,6 @@
         "complexipy>=8.0.0",
         "deptry>=0.25.1",
         "griffe>=1.5.0",
-        "prek>=0.5.5",
         "pyrefly>=1.3.0",
         "ruff>=0.17.0",
         "rumdl>=0.2.75",
@@ -76,7 +73,6 @@
     mutation = ["cosmic-ray>=8.7.0", "mutmut>=3.8.0"]
     test = [
         "hypothesis>=6.125.0",
-        "poethepoet>=0.42.0",
         "pytest>=9.0.0",
         "pytest-cov>=7.0.0",
         "pytest-randomly>=3.16.0",

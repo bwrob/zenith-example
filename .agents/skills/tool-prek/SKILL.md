@@ -4,7 +4,7 @@ description: >-
   Use when installing, running, configuring, or debugging Git hooks with prek.
   Triggers: prek, pre-commit, git hooks, hooks, prek.toml.
 name: tool-prek
-version: 1.0.0
+version: 1.1.0
 ---
 
 # Prek Git Hook Runner (`tool-prek`)
@@ -13,8 +13,8 @@ version: 1.0.0
 alternative to Python `pre-commit`, executing hooks configured in
 `prek.toml` at native speeds.
 
-Zenith uses `prek` to run file hygiene checks, secret detection, TOML and YAML
-formatting, and local quality gates before every Git commit.
+Zenith uses `prek` to run fast file hygiene and formatting checks before every
+Git commit. Expensive repository-wide quality gates run at the `pre-push` stage.
 
 ---
 
@@ -23,12 +23,16 @@ formatting, and local quality gates before every Git commit.
 Execute hooks directly using `uv`:
 
 ```bash
-uv run prek run --all-files           # Execute all hooks across the repository
-uv run prek install                   # Install Git shims into .git/hooks/
-uv run prek run <hook_id> -a          # Execute a specific hook across all files
-uv run prek update                    # Update repository revisions in config
-uv run prek validate-config           # Check configuration syntax
+uv run prek run --all-files                    # Run the pre-commit stage across the repository
+uv run prek run --all-files --stage pre-push   # Run the pre-push gates across the repository
+uv run prek install                            # Install Git shims into .git/hooks/
+uv run prek run <hook_id> -a                   # Execute a specific hook across all files
+uv run prek update                             # Update repository revisions in config
+uv run prek validate-config                    # Check configuration syntax
 ```
+
+`prek run --all-files` uses the `pre-commit` stage. It skips hooks that declare
+`stages = ["pre-push"]`. To run the heavy gates locally, add `--stage pre-push`.
 
 Poe tasks integrate `prek` directly:
 
@@ -48,7 +52,9 @@ uv run poe fix                        # Run full auto-fix pipeline including pre
 - **Secret Detection**: `gitleaks` scans staged files for leaked tokens and credentials.
 - **Manifest Checks**: `validate-pyproject` checks `pyproject.toml` schema integrity.
 - **Formatters**: `ruff`, `taplo`, `rumdl`, and `prettier` format Python, TOML, Markdown, YAML, and CSS files.
-- **Quality Gates**: Local system hooks execute `pyrefly`, `complexipy`, and `tach`.
+- **Quality Gates**: Local system hooks execute `pyrefly`, `pyrefly-coverage`,
+  `complexipy`, and `tach`. These hooks declare `stages = ["pre-push"]` to keep
+  commits fast.
 
 ---
 
@@ -67,5 +73,7 @@ to Poe tasks:
 ## 4. Best Practices & Troubleshooting
 
 - **Install Hooks on Setup**: Run `uv run prek install` after cloning to enable automated pre-commit checks.
-- **Pre-PR Checks**: Run `uv run prek run --all-files` before opening a pull request to check that all files satisfy repository standards.
+- **Pre-PR Checks**: Run `uv run prek run --all-files` and
+  `uv run prek run --all-files --stage pre-push` before opening a pull request.
+  The second command runs the type, complexity, and architecture gates.
 - **Drop-in Compatibility**: `prek` accepts standard `pre-commit` arguments such as `--all-files` (`-a`), `--show-diff-on-failure`, and `--skip`.
