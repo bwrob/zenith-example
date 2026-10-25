@@ -1,3 +1,8 @@
+---
+diataxis: reference
+purpose: Catalog all Architectural Decision Records (ADRs) recorded in the project and track their status.
+---
+
 # Architecture Decision Records (ADRs)
 
 Architecture Decision Records capture significant technical, structural, and

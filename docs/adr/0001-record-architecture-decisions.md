@@ -1,3 +1,8 @@
+---
+diataxis: explanation
+purpose: Record the architectural decision to document design choices using Architecture Decision Records (ADRs).
+---
+
 # ADR-0001: Record Architecture Decisions
 
 - **Status**: Accepted

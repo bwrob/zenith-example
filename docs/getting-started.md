@@ -1,3 +1,8 @@
+---
+diataxis: tutorial
+purpose: Guide new users through installation, initial environment setup, and executing their first CLI command or Python call.
+---
+
 # Getting Started
 
 This guide explains how to install and develop with **Zenith Example**.

@@ -1,3 +1,8 @@
+---
+diataxis: explanation
+purpose: Introduce Zenith Example, summarize its core architecture, and link to getting-started and API reference documentation.
+---
+
 # Zenith Example
 
 <p align="center">

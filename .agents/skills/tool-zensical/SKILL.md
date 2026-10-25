@@ -277,3 +277,6 @@ Follow these guidelines to maintain documentation:
   also add them under `[project.plugins.llmstxt.sections]` and `docs/llms.txt`.
 - **Image Paths**: Keep asset images in `docs/assets/` and reference them
   using relative paths (`assets/my-image.png`).
+- **Documentation Authoring Standards**: For guidelines on information architecture,
+  human-centered prose, anti-AI-slop rules, and single-source-of-truth cross-linking,
+  consult [`workflow-docs-authoring`](../workflow-docs-authoring/SKILL.md).

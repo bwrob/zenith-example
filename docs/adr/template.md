@@ -1,3 +1,8 @@
+---
+diataxis: reference
+purpose: Provide the standardized MADR template for drafting new architectural decision records.
+---
+
 # ADR-XXXX: Short Imperative Title
 
 - **Status**:

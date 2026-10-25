@@ -1,3 +1,8 @@
+---
+diataxis: reference
+purpose: Document user-facing releases, breaking changes, and version history according to Keep a Changelog standards.
+---
+
 # Changelog
 
 All notable changes to the **Zenith Example** project will be

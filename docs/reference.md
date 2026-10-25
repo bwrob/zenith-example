@@ -1,3 +1,8 @@
+---
+diataxis: reference
+purpose: Provide the public Python API signature reference and CLI command options generated via mkdocstrings.
+---
+
 # API Reference
 
 This page documents the public API of **Zenith Example**, automatically
