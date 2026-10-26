@@ -13,7 +13,7 @@ version: 1.0.0
 into Abstract Syntax Trees (AST) without loading modules into the runtime. It
 extracts signatures, type hints, docstrings, and public APIs.
 
-Zenith uses `griffe` to generate API documentation and detect breaking changes in
+This project uses `griffe` to generate API documentation and detect breaking changes in
 public interfaces.
 
 ---
@@ -29,7 +29,7 @@ uv run griffe dump <package_name> --search src              # Dump API data as J
 uv run griffe dump <package_name> --search src -o api.json  # Save API data to file
 ```
 
-Zenith connects API verification to Poe:
+This project connects API verification to Poe:
 
 ```bash
 uv run poe check-api    # Runs: griffe check <package_name> --search src
@@ -51,19 +51,19 @@ reports breaking changes:
 
 Compare against the main branch:
 ```bash
-uv run griffe check zenith_example --search src --against origin/main
+uv run griffe check <package_name> --search src --against origin/main
 ```
 
 Output GitHub Actions workflow error notices:
 ```bash
-uv run griffe check zenith_example --search src -f github
+uv run griffe check <package_name> --search src -f github
 ```
 
 ---
 
 ## 3. Extension Configuration
 
-Zenith configures `griffe` extensions inside `zensical.toml` under the
+This project configures `griffe` extensions inside `zensical.toml` under the
 `[plugins.mkdocstrings]` section:
 
 ```toml

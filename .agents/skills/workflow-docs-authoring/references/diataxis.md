@@ -1,6 +1,6 @@
 # Diátaxis Documentation Architecture Reference
 
-This reference describes the Diátaxis framework used in Zenith documentation.
+This reference describes the Diátaxis framework used in Project documentation.
 Diátaxis separates technical documentation into four distinct quadrants based on
 user need.
 
@@ -25,7 +25,7 @@ Technical documentation serves two distinct needs:
 
 - **Primary Question**: "Can you teach me how to do this?"
 - **User Mindset**: Beginner. The user wants to learn through direct experience.
-- **Location in Zenith**: `docs/first-steps.md`, `docs/getting-started.md`.
+- **Typical Location**: `docs/getting-started.md`.
 - **Tone & Style**:
   - Linear and step-by-step.
   - Inspires confidence through immediate working results.
@@ -43,7 +43,7 @@ Technical documentation serves two distinct needs:
 
 - **Primary Question**: "How do I solve this specific problem?"
 - **User Mindset**: Competent user with a concrete real-world goal.
-- **Location in Zenith**: `docs/skills/`, `docs/adr/`.
+- **Typical Location**: `docs/guides/`, `docs/adr/`.
 - **Tone & Style**:
   - Practical and focused on an outcome.
   - Assumes basic tool knowledge.
@@ -61,7 +61,7 @@ Technical documentation serves two distinct needs:
 
 - **Primary Question**: "What is the exact machinery, parameter, or syntax?"
 - **User Mindset**: Working engineer who needs accurate facts fast.
-- **Location in Zenith**: `docs/tools/*.md`, `docs/reference.md`, `docs/ci-actions.md`.
+- **Typical Location**: `docs/reference.md`.
 - **Tone & Style**:
   - Austere, fact-dense, and objective.
   - Structured tables and code signatures.
@@ -79,7 +79,7 @@ Technical documentation serves two distinct needs:
 
 - **Primary Question**: "Why was it designed this way? What are the trade-offs?"
 - **User Mindset**: Architect or engineer seeking mental models and context.
-- **Location in Zenith**: `docs/philosophy.md`, `docs/skills/index.md`.
+- **Typical Location**: `docs/index.md`, `docs/adr/`.
 - **Tone & Style**:
   - Discursive, analytical, and context-rich.
   - Discusses design decisions, historical context, and architectural trade-offs.
@@ -102,8 +102,8 @@ Use this guide to detect drift:
 
 | Document Quadrant | Symptom of Drift | Action Required |
 | :--- | :--- | :--- |
-| **Tutorial** | Adding tables of all CLI flags or deep design debates. | Extract flags to a `docs/tools/<tool>.md` Reference page. |
-| **How-To Guide** | Re-explaining basic Python setup or tool installation. | Link to `docs/first-steps.md` or `docs/tools/<tool>.md`. |
+| **Tutorial** | Adding tables of all CLI flags or deep design debates. | Extract flags to `docs/reference.md`. |
+| **How-To Guide** | Re-explaining basic Python setup or tool installation. | Link to `docs/getting-started.md` or `docs/reference.md`. |
 | **Reference** | Adding long narrative tutorials or opinionated stories. | Move step-by-step instructions to a How-To Guide. |
 | **Explanation** | Pasting code blocks for concrete task implementation. | Move implementation steps to a How-To Guide. |
 

@@ -14,7 +14,7 @@ version: 1.0.0
 written in Rust. It combines the expressive power of LaTeX with the ergonomics
 and instant re-compilation of modern design systems.
 
-Zenith projects use `typst` as a vector graphics engine to compile
+This project uses `typst` as a vector graphics engine to compile
 SVG logotypes and branding assets directly from code.
 
 ---
@@ -31,7 +31,7 @@ uv run typst watch input.typ output.svg   # Live recompile on file change
 uv run typst fonts                        # List all available fonts
 ```
 
-Zenith automates the asset build task via Poe:
+This project automates the asset build task via Poe:
 
 ```bash
 uv run poe docs-logo                      # Compiles python-logo.typ -> .svg
@@ -117,7 +117,7 @@ To compose shapes, icons, and text together:
   gutter: 12pt,
   align: horizon,
   circle(radius: 14pt, fill: rgb("#387eb8")),
-  text(size: 20pt, weight: "medium")[Zenith App],
+  text(size: 20pt, weight: "medium")[Example App],
 )
 ```
 

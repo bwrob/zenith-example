@@ -1,6 +1,6 @@
 ---
 description: >
-  Sets up, bootstraps, or fixes a local Zenith Python development environment:
+  Sets up, bootstraps, or fixes the local Python development environment:
   a uv-managed virtual environment, dependency groups, pre-commit hooks, and
   initial verification runs. Runs only when explicitly requested.
   Use when asked to set up or fix a development checkout.
@@ -15,7 +15,7 @@ version: 1.0.0
 # Project Setup & Bootstrap (`workflow-setup`)
 
 This skill defines the process to set up, configure, and fix
-a local development environment for a Zenith Python project.
+a local development environment for this Python project.
 
 > [!IMPORTANT]
 > This skill operates with `disable-model-invocation: true`. Execute these

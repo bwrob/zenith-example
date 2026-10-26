@@ -3,13 +3,14 @@ name: sdd-implement
 description: >-
   Executes implementation plans using disciplined Test-Driven Development (TDD).
   Runs red-green-refactor loops, verifies quality gates per task, and stops on drift.
+  Mandatory whenever executing tasks from an SDD plan, even without prompt triggers.
   Triggers: sdd implement, execute plan, run tasks, tdd implementation, sdd coding.
 version: 1.1.0
 ---
 
 # Test-Driven Implementation (`sdd-implement`)
 
-This skill defines the process to execute technical implementation plans in Zenith projects.
+This skill defines the process to execute technical implementation plans in this project.
 It enforces sequential task execution, Test-Driven Development (TDD), and per-task verification gates.
 
 ---
@@ -78,7 +79,7 @@ uv run pytest tests/test_<module>.py
 
 ### Step 4: Refactor and Format
 
-Refactor code to satisfy Zenith standards:
+Refactor code to satisfy project standards:
 - Ensure cognitive complexity remains at 10 or less.
 - Ensure type annotations satisfy Pyrefly strict mode.
 - Apply auto-fixers and formatters:

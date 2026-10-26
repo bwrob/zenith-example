@@ -10,7 +10,7 @@ version: 1.0.0
 # Taplo TOML Toolkit & Formatter (`tool-taplo`)
 
 `taplo` is a fast TOML toolkit, linter, and formatter written in Rust.
-In Zenith repositories, `taplo` enforces consistent 4-space indentation and
+In this repository, `taplo` enforces consistent 4-space indentation and
 key-value alignment. It also enforces table indentation and alphabetical key
 ordering across all project TOML files (`pyproject.toml`, `poe_tasks.toml`,
 `ruff.toml`, `tach.toml`, `zensical.toml`).
@@ -28,7 +28,7 @@ uv run taplo format path/to/file.toml   # Format a specific TOML file
 uv run taplo lint                       # Lint TOML files against schemas
 ```
 
-Zenith wires task aliases directly into Poe:
+This project wires task aliases directly into Poe:
 
 ```bash
 uv run poe format-toml                  # Runs taplo format

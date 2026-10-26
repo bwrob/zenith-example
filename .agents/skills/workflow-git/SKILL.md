@@ -1,9 +1,10 @@
 ---
 description: >
-  Manages git branches, conventional commits, and pull requests in Zenith
-  projects. Enforces AI disclosure checklists, testing plans, and clean commit
-  hygiene. Use when creating branches, preparing commits, staging files, authoring
-  commit messages, or creating pull requests.
+  Manages git branches, conventional commits, and pull requests in this
+  project. Enforces AI disclosure checklists, testing plans, and clean commit
+  hygiene. Mandatory whenever creating branches, preparing commits, staging files,
+  authoring commit messages, or creating pull requests, even without prompt triggers.
+  Triggers: commit, branch, pull request, PR, push, conventional commit.
 name: workflow-git
 version: 1.0.0
 ---
@@ -11,7 +12,7 @@ version: 1.0.0
 # Git Workflow & Pull Request Standards (`workflow-git`)
 
 This skill defines branch management, conventional commit
-formatting, and pull request standards for Zenith repositories.
+formatting, and pull request standards for this repository.
 
 ---
 
@@ -186,33 +187,3 @@ Immediately after pushing commits to a branch or pull request:
    Reproduce the failure locally.
    Apply the fix, run local verification gates, commit, and push again.
    Monitor CI again until all jobs report green.
-
----
-
-## 7. Downstream Showcase Monitoring After PR Merge
-
-In Zenith repositories, merging a PR to `main` triggers automated downstream synchronization.
-The `.github/workflows/sync-example.yaml` workflow synchronizes changes to `zenith-example`.
-
-### Post-Merge Downstream Protocol
-
-Immediately after merging a pull request into `main`:
-
-1. **Monitor the upstream sync workflow**:
-
-   ```bash
-   gh run list --workflow sync-example.yaml --limit 1
-   gh run watch <run-id>
-   ```
-
-2. **Monitor downstream showcase CI in `zenith-example`**:
-   Once the sync push lands, check the canary test workflows:
-
-   ```bash
-   gh run list --repo bwrob/zenith-example --limit 5
-   gh run watch <run-id> --repo bwrob/zenith-example
-   ```
-
-3. **Check canary green status**:
-   Ensure both `python_tests.yaml` and `test_redistribute.yaml` pass in `zenith-example`.
-   Consult `workflow-example-sync` for full troubleshooting steps if downstream CI fails.

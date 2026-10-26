@@ -10,10 +10,9 @@ You know nothing about this project history or internal discussions.
 
 Read these primary documentation pages:
 - `docs/index.md`
-- `docs/first-steps.md`
-- `docs/philosophy.md`
-- `docs/tools/index.md`
-- `docs/skills/index.md`
+- `docs/getting-started.md`
+- `docs/reference.md`
+- `docs/adr/index.md`
 
 Your persona traits:
 [PASTE PERSONA TRAITS FROM references/<persona-file>.md]

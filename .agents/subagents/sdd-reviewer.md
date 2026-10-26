@@ -32,7 +32,7 @@ Your primary responsibility is to conduct an objective, read-only audit verifyin
    - Check public API changes against Section 3 of `plan.md`.
    - Flag any unplanned public API additions or breaking changes.
    - Confirm all public API changes with the developer before approving.
-5. **Zenith Quality Gates**:
+5. **Project Quality Gates**:
    - Verify 100% branch test coverage: `uv run poe test`.
    - Verify linting, formatting, types, and architecture: `uv run poe code-quality`.
 

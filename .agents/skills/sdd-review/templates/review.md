@@ -32,7 +32,7 @@
 
 ---
 
-## 4. Zenith Invariant Scorecard
+## 4. Quality Invariant Scorecard
 
 - [ ] **Tach Boundaries**: Passes `uv run tach check` with zero layer violations.
 - [ ] **Type Precision**: Passes `uv run pyrefly check` with zero errors.

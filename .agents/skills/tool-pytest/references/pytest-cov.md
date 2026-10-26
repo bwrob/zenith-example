@@ -15,7 +15,7 @@ uv run pytest --cov --cov-report=xml  # Generate coverage.xml for CI
 uv run pytest --cov-fail-under=80     # Fail if total coverage is below 80%
 ```
 
-In Zenith, run coverage tasks through Poe:
+Run coverage tasks through Poe:
 
 ```bash
 uv run poe test                       # Test with coverage and XML export
@@ -24,7 +24,7 @@ uv run poe coverage                   # Generate and inspect HTML report
 
 ## 2. Configuration via `.coveragerc`
 
-Zenith projects configure coverage centrally using **`.coveragerc`** at the
+This project configures coverage centrally using **`.coveragerc`** at the
 root:
 
 ```ini

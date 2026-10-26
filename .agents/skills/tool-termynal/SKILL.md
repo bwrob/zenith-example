@@ -12,7 +12,7 @@ version: 1.0.0
 # Termynal Animated Terminal (`tool-termynal`)
 
 This skill documents **Termynal**, an animated terminal widget designed by Ines
-Montani. Sebastián Ramírez and Zenith extended Termynal for Markdown
+Montani. Sebastián Ramírez extended Termynal for Markdown
 documentation.
 
 Termynal uses native browser `async`/`await` for typing animations without external
@@ -23,8 +23,7 @@ terminal output as clean static text.
 
 ## 1. Quick Reference & Core Syntax
 
-Zenith configures Termynal in Zensical documentation when `include_cli=yes`.
-Zenith loads styles and scripts through `docs/stylesheets/termynal.css` and
+Zensical loads Termynal styles and scripts through `docs/stylesheets/termynal.css` and
 `docs/javascripts/termynal.js`.
 
 ### Markdown Integration (`.termy`)
@@ -83,8 +82,8 @@ native HTML API:
     <span data-ty="input">uv add spacy</span>
     <span data-ty="progress"></span>
     <span data-ty>Successfully installed spacy</span>
-    <span data-ty="input" data-ty-prompt="guest@zenith:~$">whoami</span>
-    <span data-ty data-ty-delay="1000">zenith-developer</span>
+    <span data-ty="input" data-ty-prompt="guest@dev:~$">whoami</span>
+    <span data-ty data-ty-delay="1000">developer</span>
 </div>
 ```
 
@@ -139,7 +138,7 @@ const termynal = new Termynal('#termynal', {
 
 ### Controls
 
-Zenith's Termynal includes interactive control buttons in the top right:
+Termynal includes interactive control buttons in the top right:
 - **`fast →`**: Instantly sets delays to `0`, finishing the animation immediately.
 - **`restart ↻`**: Clears the container and replays the animation from the start.
 

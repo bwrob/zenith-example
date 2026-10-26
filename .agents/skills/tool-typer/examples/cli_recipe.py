@@ -1,6 +1,6 @@
 # ruff: ignore[implicit-namespace-package]
 # Canonical standalone example script; the examples directory is not a package.
-"""Canonical Typer CLI application recipe for Zenith projects."""
+"""Canonical Typer CLI application recipe for this project."""
 
 from __future__ import annotations
 

@@ -13,7 +13,7 @@ version: 1.2.0
 `ruff` is a fast Python linter and code formatter written in Rust by
 Astral. It replaces Flake8, Black, isort, pydocstyle, pyupgrade, and autoflake.
 
-Zenith projects configure `ruff` via `ruff.toml` with `select = ["ALL"]`
+This project configures `ruff` via `ruff.toml` with `select = ["ALL"]`
 and targeted exceptions.
 
 ---
@@ -53,19 +53,16 @@ uv run ruff rule E501                    # Display explanation for a rule
 
 ## 2. Configuration Location
 
-Zenith projects configure Ruff via a standalone **`ruff.toml`** at the
+This project configures Ruff via a standalone **`ruff.toml`** at the
 repository root. The project pins Python to 3.13+ through `pyproject.toml`
 tool configuration:
 
 ```toml
-exclude = [".venv", "site", "dist"]
-# The cookiecutter template directory contains literal Jinja syntax
-# that ruff cannot parse; it is validated via rendered projects instead.
-extend-exclude = ["*cookiecutter.project_slug*"]
-line-length    = 88
+exclude     = [".venv", "site", "dist"]
+line-length = 88
 
 [lint]
-    # Enable all rules (Zenith strict preset) on preview.
+    # Enable all rules on preview.
     preview = true
     select  = ["ALL"]
     ignore  = [
@@ -92,9 +89,8 @@ line-length    = 88
     # Per-file relaxations. Patterns are resolved relative to the directory
     # containing ruff.toml — NOT the process working directory.
     [lint.per-file-ignores]
-        "hooks/*"     = ["suspicious-subprocess-import"]
-        "scripts/*"   = ["suspicious-subprocess-import"]
-        "tests/*"     = ["assert", "suspicious-subprocess-import"]
+        "scripts/*" = ["suspicious-subprocess-import"]
+        "tests/*"   = ["assert", "suspicious-subprocess-import"]
 
 [format]
     docstring-code-format = true
@@ -118,16 +114,11 @@ If a rule is noisy or conflicts with domain design:
    ignore = [
        "any-explicit",  # typing.Any tolerated in test fixtures
    ]
-    ```
-
-2. Add the identical list to BOTH the root `ruff.toml` and the template
-   `zenith-example/ruff.toml`.
-3. Harden the change with a `tests/test_template.py` assertion so the two
-   lists cannot drift apart silently.
+   ```
 
 ### B. Relaxing Rules for Specific Subtrees (`per-file-ignores`)
 
-Tests, hooks, and maintenance scripts often require rule exceptions. Keep
+Tests and maintenance scripts often require rule exceptions. Keep
 `src/` strictly enforced and scope relaxations per subtree:
 
 ```toml
@@ -142,10 +133,9 @@ Tests, hooks, and maintenance scripts often require rule exceptions. Keep
 Two resolution facts cost hours in real debugging:
 
 - **Patterns are relative to the config file's directory**, not to the
-  process cwd. Auditing a rendered project by passing
-  `--config /repo/ruff.toml` while cwd is elsewhere makes `tests/*` never
-  match. To lint a generated project with its own config, run ruff *inside*
-  the rendered directory (see `scripts/audit_rendered.py`).
+  process cwd. Passing `--config /path/to/ruff.toml` from another directory
+  makes relative patterns like `tests/*` fail to match. Run `ruff` from the
+  directory that contains `ruff.toml`.
 - **CLI `--exclude` replaces the config's `exclude` list** (it does not
   extend it). If you must override, restate the config values plus your
   additions.
@@ -208,7 +198,7 @@ Example: a maintenance script that must silence a module-level rule:
 ```python
 # ruff: ignore[implicit-namespace-package]
 # Standalone verification script; not an importable package.
-"""Verify the rendered template's CLI shapes."""
+"""Verify the package CLI entry points."""
 
 from __future__ import annotations
 ```
@@ -225,7 +215,7 @@ extend-safe-fixes = ["enforce-iterable-allocation"]
 
 ### E. Future Annotations Enforcement
 
-Zenith requires `from __future__ import annotations` in all Python source
+This project requires `from __future__ import annotations` in all Python source
 files through `lint.isort.required-imports`. Ruff triggers rule
 `required-imports (I002)` if this import is missing:
 
@@ -249,16 +239,5 @@ Follow these guidelines:
   line the formatter rewrites will silently move.
   Hoist such values into a named constant so the directive line becomes
   stable.
-- **Rendered-output variability**: In this cookiecutter template, rendered
-  line lengths depend on the literal `project_slug` a user picks. In
-  generated `cli.py`, hoist template-dependent values (banner strings)
-  outside decorated functions to keep every render under the line limit.
-  Check both short and long slug renders with the `lint-rendered` task.
-- **Jinja templates are unparseable**: `zenith-example` raw
-  sources stay out of ruff's tree (root `extend-exclude`).
-  Enforce template prose and code comments on rendered output instead.
-- **Template suppression mirrors**: keep the root `ruff.toml` and
-  `zenith-example/ruff.toml` ignore lists in exact lockstep.
-  `tests/test_repo_conventions.py` fails on drift between the two rule lists.
 - **Scope fixes to edited code**: Avoid running `--unsafe-fixes` across an
   entire codebase. Inspect diffs with `--diff` first.

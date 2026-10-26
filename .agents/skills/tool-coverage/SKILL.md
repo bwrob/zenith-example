@@ -13,7 +13,7 @@ version: 1.0.0
 packages. It monitors program execution during test runs and evaluates
 conditional branching outcomes.
 
-Zenith uses `Coverage.py` to enforce a strict invariant: **100% statement and
+This project uses `Coverage.py` to enforce a strict invariant: **100% statement and
 branch test coverage**.
 
 ---

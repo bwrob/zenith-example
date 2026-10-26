@@ -16,7 +16,7 @@ replaces legacy `mkdocs.yml` configurations with clean, typed `zensical.toml`
 files, instant live reloading, and native support for Mermaid diagrams, MathJax
 math, and `mkdocstrings`.
 
-In Zenith projects, `zensical` manages all public documentation and API
+In this project, `zensical` manages all public documentation and API
 references.
 
 ---
@@ -33,7 +33,7 @@ uv run zensical build                  # Build static site into site/
 uv run zensical build --strict --clean # Production build with strict checks
 ```
 
-Zenith connects documentation tasks to Poe:
+This project connects documentation tasks to Poe:
 
 ```bash
 uv run poe docs-serve                  # Start live-reloading server (zensical serve)
@@ -250,11 +250,11 @@ referenced file does not exist.
 
 ### G. Custom Color Palette & Theming (`palette.css` & `custom.css`)
 
-Zenith styles Zensical documentation with a modular two-file CSS architecture
+This project styles Zensical documentation with a modular two-file CSS architecture
 located in `docs/stylesheets/`:
 
 - **`palette.css`**: Defines global color tokens on `:root` organized by hue and
-  lightness. It uses colors from the Zenith star emblem: radiant cyan (`#38bdf8`),
+  lightness. It uses colors from the project palette: radiant cyan (`#38bdf8`),
   guiding azure (`#0284c7`), and cosmic obsidian void (`#080c14`).
 - **`custom.css`**: Maps these design tokens to Zensical theme variables.
   It sets primary and accent colors for default and slate schemes,

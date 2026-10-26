@@ -9,7 +9,7 @@ version: 1.0.0
 
 # Prettier Code Formatter (`tool-prettier`)
 
-`prettier` is a code formatter. In Zenith repositories, Prettier
+`prettier` is a code formatter. In this repository, Prettier
 enforces 4-space indentation and 88-character line lengths.
 It applies uniform bracket spacing and quote styling to YAML manifests
 (`.github/workflows/*.yaml`) and CSS stylesheets
@@ -26,7 +26,7 @@ uv run prek run prettier --all-files      # Format all YAML manifests
 uv run prek run prettier-css --all-files  # Format all CSS stylesheets
 ```
 
-Zenith wires task aliases into Poe:
+This project wires task aliases into Poe:
 
 ```bash
 uv run poe format-yaml       # Runs prek run prettier --all-files
@@ -55,6 +55,5 @@ proseWrap: "preserve"
 
 ## 3. Best Practices & Troubleshooting
 
-- **Preserve Template Syntax**: When Jinja conditionals appear in YAML or CSS, use quotes or comments to protect syntax.
 - **Run Through Poe**: Use `uv run poe fix` or `uv run poe code-quality` to format YAML and CSS. These tasks do not require global Node.js or npm.
 - **Prek Integration**: Prettier runs during `git commit` through the `mirrors-prettier` hook in `prek.toml`.

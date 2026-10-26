@@ -1,10 +1,11 @@
 ---
 description: >
   Workflow to maintain, draft, and update Keep-a-Changelog
-  compliant changelogs and release notes in Zenith projects. Enforces source-checked
+  compliant changelogs and release notes in this project. Enforces source-checked
   Git commit ranges, Semantic Versioning, PR inspection via gh CLI, and contributor
-  attribution. Use when updating docs/changelog.md, preparing releases, drafting
-  release notes, or logging user-facing changes.
+  attribution. Mandatory whenever editing docs/changelog.md, preparing releases,
+  drafting release notes, or logging user-facing changes, even without prompt triggers.
+  Triggers: changelog, release notes, release, version bump, semver.
 name: workflow-changelog
 version: 1.0.0
 ---
@@ -14,7 +15,7 @@ version: 1.0.0
 This skill defines standards and procedures to maintain
 project changelogs and author source-checked release notes.
 
-Zenith projects track user-facing changes in `docs/changelog.md` following
+This project tracks user-facing changes in `docs/changelog.md` following
 [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/) and
 [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html).
 

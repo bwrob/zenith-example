@@ -13,7 +13,7 @@ version: 1.1.0
 alternative to Python `pre-commit`, executing hooks configured in
 `prek.toml` at native speeds.
 
-Zenith uses `prek` to run fast file hygiene and formatting checks before every
+This project uses `prek` to run fast file hygiene and formatting checks before every
 Git commit. Expensive repository-wide quality gates run at the `pre-push` stage.
 
 ---

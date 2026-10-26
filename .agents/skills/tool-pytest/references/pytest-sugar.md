@@ -28,7 +28,7 @@ uv run pytest -v                      # Detailed test listing with sugar bar
 
 ## 3. Interaction with Other Plugins
 
-`pytest-sugar` composes cleanly with Zenith's testing tools:
+`pytest-sugar` composes cleanly with the project testing tools:
 
 - **`pytest-xdist`**: Renders aggregate progress across all parallel worker
   processes.

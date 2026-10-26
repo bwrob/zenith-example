@@ -2,7 +2,7 @@
 
 Mutation testing introduces deliberate synthetic faults (mutations) into source code to verify whether the test suite detects and fails on them. If a mutated statement does not cause at least one test to fail, the mutant **survived**, indicating a gap in test assertions.
 
-Zenith supports both **`mutmut`** and **`cosmic-ray`**, each optimized for distinct operational needs.
+This project supports both **`mutmut`** and **`cosmic-ray`**, each optimized for distinct operational needs.
 
 ---
 
@@ -54,7 +54,7 @@ uv run mutmut html
 
 ```toml
 [cosmic-ray]
-module-path = "src/zenith_example"
+module-path = "src/<package_name>"
 timeout = 15.0
 excluded-modules = []
 test-command = "pytest"

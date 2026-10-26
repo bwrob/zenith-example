@@ -1,19 +1,20 @@
 ---
 description: >-
-  Workflow and standards for authoring clear, human-centered technical documentation in Zenith projects.
+  Workflow and standards for authoring clear, human-centered technical documentation in this project.
   Enforces information architecture, anti-AI-slop writing rules, single source of truth linking, and verification gates.
-  Use when writing, structuring, editing, or reviewing documentation in docs/.
-  Triggers: write docs, doc authoring, documentation guide, docs workflow, document feature, write guide, anti slop, single source of truth.
+  Mandatory whenever writing, structuring, editing, updating, or reviewing documentation in docs/, even without prompt triggers.
+  Triggers: write docs, doc authoring, documentation guide, docs workflow, document feature, write guide.
+  Additional triggers: anti slop, single source of truth, in the docs, update docs, edit docs, clarify docs, review docs.
 name: workflow-docs-authoring
-version: 1.1.0
+version: 1.2.0
 ---
 
 # Documentation Authoring Workflow (`workflow-docs-authoring`)
 
 This skill defines the standards, writing guidelines, information architecture,
-and verification procedures to author high-quality documentation in Zenith projects.
+and verification procedures to author high-quality documentation in this project.
 
-Zenith treats documentation as a primary product feature. Well-crafted documentation
+This project treats documentation as a primary product feature. Well-crafted documentation
 respects the developer's time: it is concise, scannable, fact-dense, and free from
 hollow filler.
 
@@ -38,9 +39,9 @@ Follow this primary rule: **Every fact, option, and workflow has exactly one can
      (`::: package.module`) or link directly to the source module in `src/`.
    - **Architecture Decisions**: Link to the specific record in `docs/adr/NNNN-*.md`.
      Do not summarize the rationale in multiple guides.
-   - **Tool Syntax & Commands**: Link to the dedicated tool guide in `docs/tools/<tool>.md`.
+   - **Tool Syntax & Commands**: Link to the dedicated reference page or `.agents/skills/tool-*/SKILL.md`.
      Do not document third-party CLI flags across general pages.
-   - **Workflows & Procedures**: Link to the relevant skill in `docs/skills/`.
+   - **Workflows & Procedures**: Link to the relevant guide or `.agents/skills/workflow-*/SKILL.md`.
    - **Release Notes**: Maintain changes strictly in `docs/changelog.md`.
 3. **Use Continuous-Tested Snippet Transclusion**:
    - When documentation requires code examples, do not copy code manually into
@@ -67,7 +68,7 @@ Follow this primary rule: **Every fact, option, and workflow has exactly one can
 
 ## 2. Documentation-Driven Design: Documentation as the Interface Test
 
-Zenith adopts Documentation-Driven Design as an architectural feedback loop.
+This project adopts Documentation-Driven Design as an architectural feedback loop.
 Treat documentation not as a closing chore, but as an active test for your API ergonomics.
 
 ### Documentation as the Interface Smell Test
@@ -104,7 +105,7 @@ Developer experience depends on editor feedback:
 ## 3. Human-First Writing: Anti-AI-Slop Standards
 
 AI coding assistants frequently produce "AI slop": wordy, passive, generic prose that
-says very little with many syllables. Zenith documentation must read as if authored by
+says very little with many syllables. Project documentation must read as if authored by
 an experienced human engineer who values clarity and precision.
 
 ### Banned AI Writing Patterns
@@ -150,18 +151,18 @@ an experienced human engineer who values clarity and precision.
 
 ## 4. Information Architecture (Diátaxis Model)
 
-Zenith organizes documentation into four distinct quadrants based on user intent:
+This project organizes documentation into four distinct quadrants based on user intent:
 
-| Quadrant | Purpose | Location in Zenith | Focus & Style |
+| Quadrant | Purpose | Typical Location | Focus & Style |
 | :--- | :--- | :--- | :--- |
-| **Tutorial** | Learning-oriented loop for newcomers | `docs/first-steps.md`<br/>`docs/getting-started.md` | Step-by-step guidance. Builds confidence with an immediate working result. |
-| **How-To Guide** | Task-oriented problem solving | `docs/skills/`<br/>`docs/adr/` | Problem-focused recipes. Assumes basic knowledge and shows exact execution steps. |
-| **Reference** | Information-oriented technical facts | `docs/tools/*.md`<br/>`docs/reference.md` | Concise, fact-dense tables, configuration keys, CLI syntax, and API symbols. |
-| **Explanation** | Understanding-oriented rationale | `docs/philosophy.md` | Context, architecture invariants, design rationale, and mental models. |
+| **Tutorial** | Learning-oriented loop for newcomers | `docs/getting-started.md` | Step-by-step guidance. Builds confidence with an immediate working result. |
+| **How-To Guide** | Task-oriented problem solving | `docs/guides/`<br/>`docs/adr/` | Problem-focused recipes. Assumes basic knowledge and shows exact execution steps. |
+| **Reference** | Information-oriented technical facts | `docs/reference.md` | Concise, fact-dense tables, configuration keys, CLI syntax, and API symbols. |
+| **Explanation** | Understanding-oriented rationale | `docs/index.md`<br/>`docs/adr/` | Context, architecture invariants, design rationale, and mental models. |
 
 ### Mandatory Non-Renderable Preamble & Splitting Rule
 
-Every documentation page in Zenith must start with a non-renderable YAML
+Every documentation page must start with a non-renderable YAML
 preamble that defines its Diátaxis classification and exact purpose:
 
 ```yaml
@@ -194,7 +195,7 @@ Follow this procedure when creating or editing documentation:
 
 ### Step 1: Scope & Placement
 1. Identify the document quadrant in the Diátaxis model.
-2. Choose the file path in `docs/` (for example, `docs/tools/my-tool.md` or `docs/guides/topic.md`).
+2. Choose the file path in `docs/` (for example, `docs/guides/topic.md` or `docs/reference.md`).
 3. Register the page in `project.nav` in `zensical.toml`.
 
 ### Step 2: Documentation-Driven Design & Interface Check

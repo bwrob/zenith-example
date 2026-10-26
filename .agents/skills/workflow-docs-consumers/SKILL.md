@@ -5,6 +5,8 @@ description: >-
   Dispatches independent reader agents to detect friction points, jargon barriers, unanswered questions, and architectural skepticism.
   Use when reviewing docs, testing onboarding clarity, validating developer experience, or auditing docs before release.
   Triggers: review docs personas, test docs personas, simulate readers, persona review, audience audit, docs consumer review, docs feedback.
+  Runs only when explicitly requested because it dispatches several subagents.
+disable-model-invocation: true
 version: 1.0.0
 ---
 
@@ -16,12 +18,16 @@ Technical writers and code authors suffer from the curse of knowledge.
 Authors understand architecture details and accidentally omit essential onboarding context.
 This workflow dispatches independent reader agents with simulated backgrounds to audit documentation before release.
 
+> [!IMPORTANT]
+> This skill operates with `disable-model-invocation: true`.
+> Run it only when the user explicitly asks for a persona review.
+
 ---
 
 ## 1. Multi-Persona Evaluation Model
 
 Reviewing documentation through a single perspective creates blind spots.
-Zenith evaluates documentation across complementary developer archetypes:
+This project evaluates documentation across complementary developer archetypes:
 
 ```mermaid
 flowchart TD

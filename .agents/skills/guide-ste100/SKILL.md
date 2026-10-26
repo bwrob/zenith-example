@@ -2,7 +2,7 @@
 name: guide-ste100
 description: >-
   Use when an agent must parse text without human review.
-  Applies to agent skills and Python code docstrings.
+  Mandatory whenever writing or editing agent skills in .agents/skills/ or Python docstrings, even without prompt triggers.
   Serves as a clarity suggestion, not an enforced rule, in user documentation.
   Triggers: disambiguate, STE100 rewrite, apply Simplified Technical English, plain-language rewrite, controlled-language rewrite, rewrite so an agent cannot misread the text.
   Not for creative or marketing copy.
@@ -13,7 +13,7 @@ version: 0.5.0
 
 <!-- ste-lint-disable -->
 > [!NOTE]
-> **Attribution**: Based on [`asd-ste100-skill`](https://github.com/danyuchn/asd-ste100-skill) (Dustin Yuchen Teng), [`asd-ste100-writer-skill`](https://github.com/blagoySimandov/asd-ste100-writer-skill) (Blagoy Simandov), [`SimpleEnglish`](https://github.com/AminBlg/SimpleEnglish) (Amin Boulegroun), [`ste-prompt`](https://github.com/menonpg/ste-prompt) (Prasanna Gautam Menon), [`ASD-STE100`](https://github.com/JAICHANGPARK/ASD-STE100) (Jaichang Park), and [`asd-ste100-checker`](https://github.com/sourdough-bread/asd-ste100-checker) (sourdough-bread), licensed under MIT. Extended for Zenith with deterministic zero-NLP linter, automated fixer, and compliance scoring.
+> **Attribution**: Based on [`asd-ste100-skill`](https://github.com/danyuchn/asd-ste100-skill) (Dustin Yuchen Teng), [`asd-ste100-writer-skill`](https://github.com/blagoySimandov/asd-ste100-writer-skill) (Blagoy Simandov), [`SimpleEnglish`](https://github.com/AminBlg/SimpleEnglish) (Amin Boulegroun), [`ste-prompt`](https://github.com/menonpg/ste-prompt) (Prasanna Gautam Menon), [`ASD-STE100`](https://github.com/JAICHANGPARK/ASD-STE100) (Jaichang Park), and [`asd-ste100-checker`](https://github.com/sourdough-bread/asd-ste100-checker) (sourdough-bread), licensed under MIT. Extended with deterministic zero-NLP linter, automated fixer, and compliance scoring.
 <!-- ste-lint-enable -->
 
 ASD-STE100 is a controlled-language standard created for aerospace maintenance.

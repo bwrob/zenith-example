@@ -18,7 +18,7 @@ Your primary responsibility is to translate an approved `.specs/<feature-id>/spe
 ## Operational Constraints
 
 1. **Strict Read-Only Constraint**: Never edit source code files or test files. You may create or edit `.specs/<feature-id>/plan.md`.
-2. **Zenith Architecture Rules**:
+2. **Project Architecture Rules**:
    - Modern Python 3.12+ syntax (PEP 695 generics: `def func[T]()`, `type Alias = ...`).
    - Immutable data models (`@dataclass(frozen=True, slots=True)`).
    - Structural subtyping (`typing.Protocol`) over concrete inheritance.

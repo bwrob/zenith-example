@@ -14,7 +14,7 @@ uv run pytest --snapshot-update       # Update snapshots with current output
 uv run pytest --snapshot-warn-unused  # Warn if snapshots exist with no test
 ```
 
-In Zenith, manage snapshots through Poe:
+Manage snapshots through Poe:
 
 ```bash
 uv run poe test-snapshot-update       # Re-record snapshots after changes

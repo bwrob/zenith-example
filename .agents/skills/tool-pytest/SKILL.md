@@ -9,7 +9,7 @@ version: 1.0.0
 
 # pytest Testing Stack (`tool-pytest`)
 
-Zenith equips `pytest` with these testing tools:
+This project equips `pytest` with these testing tools:
 
 - **Parallel Execution**: `pytest-xdist` (`-n auto`) for multi-core speed.
 - **Flakiness Detection**: `pytest-randomly` for randomized execution order.
@@ -34,7 +34,7 @@ uv run pytest --snapshot-update       # Update syrupy snapshot files (.ambr)
 uv run pytest --cov --cov-report=html # Generate HTML coverage in htmlcov/
 ```
 
-In Zenith, run tasks through Poe:
+Run tasks through Poe:
 
 ```bash
 uv run poe test                 # Run tests with coverage and doctests
@@ -125,9 +125,9 @@ exclude_also =
 
 ---
 
-## 3. Testing Paradigms in Zenith
+## 3. Testing Paradigms
 
-Zenith supports snapshot, property-based, and randomized tests.
+This project supports snapshot, property-based, and randomized tests.
 
 ### A. Snapshot Testing with `syrupy` (or `inline-snapshot` + `dirty-equals`)
 
@@ -183,7 +183,7 @@ To reproduce a specific randomized run:
 uv run pytest --randomly-seed=12345
 ```
 
-When running in parallel (`uv run poe test-fast`), Zenith uses
+When running in parallel (`uv run poe test-fast`), This project uses
 `--dist=worksteal --max-worker-restart=0`. Slow property-based tests do not
 bottleneck a single worker, and native worker crashes fail immediately instead of
 hanging.
@@ -230,7 +230,7 @@ exclude_also =
 ### D. Strict Encoding Hygiene (`PYTHONWARNDEFAULTENCODING=1`)
 
 Python 3.10+ introduced `EncodingWarning` (PEP 597) to identify calls to `open()`
-and text streams that omit an explicit encoding argument. In Zenith, all test
+and text streams that omit an explicit encoding argument. All test
 tasks execute with `PYTHONWARNDEFAULTENCODING=1`.
 Under `filterwarnings` in `pytest.ini`, `default::EncodingWarning` and
 `error::EncodingWarning:<package_name>.*` turn missing `encoding="utf-8"` in

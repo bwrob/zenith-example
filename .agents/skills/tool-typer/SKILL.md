@@ -14,7 +14,7 @@ version: 1.0.0
 command-line interfaces (CLIs) in modern Python. It uses Python type hints to
 provide automatic shell completion, parsing, validation, and rich terminal output.
 
-In Zenith projects, `typer` and `rich` constitute the CLI layer (`src/<package>/cli.py`)
+In this project, `typer` and `rich` constitute the CLI layer (`src/<package>/cli.py`)
 when you enable CLI generation.
 
 ---
@@ -32,7 +32,7 @@ when you enable CLI generation.
 
 ## 2. Modern Parameter Declaration with PEP 593 `Annotated`
 
-Zenith projects enforce PEP 593 `typing.Annotated` for all Typer CLI parameters.
+This project enforces PEP 593 `typing.Annotated` for all Typer CLI parameters.
 
 ### Canonical Argument Syntax
 
@@ -141,7 +141,7 @@ When testing Typer CLI applications with pytest:
 
 ### Documentation Terminal Visualizations with Termynal (`.termy`)
 
-When you enable CLI generation in Zenith (`include_cli=yes`), Zensical configures interactive animated terminal widgets via Termynal (`docs/javascripts/termynal.js` and `docs/stylesheets/termynal.css`).
+Zensical configures interactive animated terminal widgets via Termynal (`docs/javascripts/termynal.js` and `docs/stylesheets/termynal.css`).
 
 Wrap any console code block in `<div class="termy">` in your Markdown documentation:
 
@@ -206,9 +206,9 @@ def test_cli_main_invocation(monkeypatch: pytest.MonkeyPatch) -> None:
 
 ---
 
-## 6. Standard Zenith CLI Implementation Recipe
+## 6. Standard CLI Implementation Recipe
 
-In Zenith projects with `include_cli=yes`, [examples/cli_recipe.py](./examples/cli_recipe.py) defines the standard layout.
+[examples/cli_recipe.py](./examples/cli_recipe.py) defines the standard layout.
 
 Key implementation elements:
 - Explicit `app = typer.Typer(no_args_is_help=True, rich_markup_mode="rich")`.

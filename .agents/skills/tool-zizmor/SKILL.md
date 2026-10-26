@@ -15,7 +15,7 @@ workflows, written in Rust. It audits CI/CD pipelines for security
 vulnerabilities, including script injection, untrusted code execution, cache
 poisoning, credential exposure, and dangerous trigger configurations.
 
-Zenith projects use `zizmor` to check that workflow pipelines follow
+This project uses `zizmor` to check that workflow pipelines follow
 least-privilege principles and supply-chain security standards.
 
 ---

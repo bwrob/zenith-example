@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Deterministic structural linter for ASD-STE100 Simplified Technical English.
 
-Modularized and adapted for Zenith repository conventions, reflowed Markdown,
+Modularized and adapted for repository conventions, reflowed Markdown,
 GitHub alerts, Zensical admonitions, frontmatter descriptions, and inline suppressions.
 
 Original creator: Dustin Yuchen Teng (https://github.com/danyuchn/asd-ste100-skill)

@@ -13,7 +13,7 @@ version: 1.0.0
 `uv` is a fast, Rust-based Python package and project manager
 developed by Astral. It replaces `pip`, `poetry`, and `virtualenv`.
 
-In Zenith projects, `uv` is the exclusive manager for dependencies,
+In this project, `uv` is the exclusive manager for dependencies,
 virtual environments, lockfiles, and package builds.
 
 ---

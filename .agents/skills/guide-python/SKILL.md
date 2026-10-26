@@ -2,7 +2,8 @@
 description: >-
   Engineering style guide for modern Python 3.12+ projects.
   Enforces PEP 695 generic syntax, structural protocols, frozen slots dataclasses, pure functional transformations, strict typing with Pyrefly, and composition over inheritance.
-  Use when writing, reviewing, architecting, refactoring, or type-checking Python code in this repository.
+  Mandatory whenever writing, reviewing, architecting, refactoring, or type-checking Python code in this repository.
+  Applies to source, tests, scripts, and hooks, even without prompt triggers.
   Triggers: python style, pep 695, protocols, dataclasses, typing, refactor.
 name: guide-python
 version: 1.1.0

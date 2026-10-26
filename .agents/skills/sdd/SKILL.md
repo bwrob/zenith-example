@@ -9,7 +9,7 @@ version: 1.2.0
 
 # Spec-Driven Development Orchestrator (`sdd`)
 
-This skill orchestrates the end-to-end Spec-Driven Development (SDD) lifecycle for Zenith projects.
+This skill orchestrates the end-to-end Spec-Driven Development (SDD) lifecycle for this project.
 It coordinates specification, planning, implementation, and review across dedicated subagents or sequential phases.
 
 ---

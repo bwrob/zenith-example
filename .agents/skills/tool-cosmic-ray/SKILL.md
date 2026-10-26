@@ -13,7 +13,7 @@ version: 1.0.0
 code syntax trees to introduce small defects. It runs tests against each
 mutant and reports survivors that tests failed to catch.
 
-Zenith uses `cosmic-ray` to verify that test suites test behavior, not only code
+This project uses `cosmic-ray` to verify that test suites test behavior, not only code
 lines.
 
 ---
@@ -29,7 +29,7 @@ uv run cosmic-ray dump session.sqlite                   # Print detailed JSON re
 uv run cr-report session.sqlite                         # Generate summary survival report
 ```
 
-Zenith connects distributed mutation testing to Poe:
+This project connects distributed mutation testing to Poe:
 
 ```bash
 uv run poe test-mutation-cosmic     # Run full distributed mutation suite
@@ -43,7 +43,7 @@ Configure Cosmic Ray through **`cosmic-ray.toml`** at the project root:
 
 ```toml
 [cosmic-ray]
-module = "zenith_example"
+module = "<package_name>"
 python-version = "3.13"
 timeout = 10.0
 test-command = "pytest tests"

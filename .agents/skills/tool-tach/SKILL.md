@@ -15,7 +15,7 @@ Python, written in Rust. It enforces modular boundaries, defines public
 module interfaces, and guarantees that low-level domain layers never import
 from high-level presentation or CLI layers.
 
-Zenith projects configure `tach` to enforce clean acyclic layer separation and block
+This project configures `tach` to enforce clean acyclic layer separation and block
 circular imports.
 
 ---
@@ -127,7 +127,7 @@ trigger a Tach interface violation error.
 
 ### D. Exporting Mermaid Architecture Diagrams to Documentation
 
-Zenith defines a built-in task in `poe_tasks.toml` to export the current
+This project defines a built-in task in `poe_tasks.toml` to export the current
 dependency graph directly as a Mermaid diagram:
 
 ```bash

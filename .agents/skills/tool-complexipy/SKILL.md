@@ -14,7 +14,7 @@ Legacy cyclomatic complexity only counts branches.
 In contrast, **cognitive complexity** measures the mental effort
 a reader needs to understand and maintain a function.
 
-In Zenith projects, `complexipy` enforces a ceiling of **$\le 10$**
+In this project, `complexipy` enforces a ceiling of **$\le 10$**
 cognitive complexity per function across all source code.
 
 ---
@@ -30,7 +30,7 @@ uv run complexipy src -c 10              # Run with custom limit
 uv run complexipy src --output-csv       # Export analysis to CSV
 ```
 
-In Zenith, run the check through Poe:
+Run the check through Poe:
 
 ```bash
 uv run poe complexity                    # Runs complexipy src tests
@@ -43,7 +43,7 @@ uv run poe complexity                    # Runs complexipy src tests
 Configure `complexipy` in `complexipy.toml` at the project root:
 
 ```toml
-# Maximum cognitive complexity allowed per function (Zenith strict threshold)
+# Maximum cognitive complexity allowed per function (strict project threshold)
 max_complexity = 10
 
 # Paths and patterns to exclude from complexity analysis
@@ -142,7 +142,7 @@ Adjust thresholds and exclusions in `complexipy.toml`:
 
 ### A. Adjusting Complexity Threshold
 
-Zenith recommends a threshold of $\le 10$ for maintainability:
+This project recommends a threshold of $\le 10$ for maintainability:
 
 ```toml
 max_complexity = 12

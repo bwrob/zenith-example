@@ -14,7 +14,7 @@ source code syntax trees directly in memory and local source files to introduce
 small code defects. It executes tests against each mutant and identifies
 surviving mutants that tests failed to catch.
 
-Zenith uses `mutmut` for fast developer test loops on macOS and Linux.
+This project uses `mutmut` for fast developer test loops on macOS and Linux.
 
 ---
 

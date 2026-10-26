@@ -108,9 +108,11 @@
     cmd  = "rumdl check"
     help = "Lint markdown documentation with rumdl."
 
+
 [tasks.lint-ste]
     cmd  = "python .agents/skills/guide-ste100/scripts/ste-lint.py .agents/skills"
     help = "Lint agent skills against ASD-STE100 structural rules."
+
 
 [tasks.format-md]
     cmd  = "rumdl fmt"
@@ -168,9 +170,11 @@
         "typos -w",
     ]
 
+
 [tasks.check-skills]
     cmd  = "python scripts/check_skills.py .agents/skills"
     help = "Validate structural invariants and frontmatter of agent skills in .agents/skills/."
+
 
 [tasks.code-quality]
     help = "Execute the full code quality verification pipeline."
@@ -190,7 +194,9 @@
         "zizmor",
 
         "dependencies",
+
         "check-skills",
+
     ]
 
     # ------------------------------------------------------------------------------
@@ -318,6 +324,7 @@
     # ------------------------------------------------------------------------------
     # AI Coding Assistants & Agent Skills
     # ------------------------------------------------------------------------------
+
 
 [tasks.sync-skills]
     cmd  = "uvx library-skills --all -y"

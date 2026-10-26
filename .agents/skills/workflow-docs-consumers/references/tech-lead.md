@@ -19,5 +19,5 @@ Use this persona to evaluate team velocity, maintenance cost, and business ROI.
 
 - Will these quality gates accelerate or slow down our sprint commitments?
 - How long does a new hire need to submit their first change?
-- How do we maintain template updates over two years?
+- How do we maintain dependency and toolchain updates over two years?
 - What is the quantified return on investment for strict linting?

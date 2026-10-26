@@ -54,9 +54,6 @@ Before editing code or running tasks, ensure a clean, isolated environment:
   triggered CI runs with `gh run watch` or `gh run list`. If a remote check fails,
   inspect the failure immediately (`gh run view <run-id> --log-failed`), reproduce,
   fix, and verify until all checks pass.
-- **Downstream CI Monitoring on PR Merge**: When merging a pull request to `main`,
-  monitor automated showcase and documentation workflows to ensure downstream canary
-  tests pass.
 - **Tool Guidance**: For tool usage and common configuration changes,
   consult the corresponding skill in `.agents/skills/tool-*/SKILL.md`.
 - **Reproduce-First Bug Scoping**: When fixing a bug, first reproduce the failure with a
@@ -67,6 +64,25 @@ Before editing code or running tasks, ensure a clean, isolated environment:
   from first principles rather than piling on patches.
 - **AI Contribution Policy**: All contributions must adhere to `AI_POLICY.md`
   for human review, local test verification, and tool disclosure.
+- **Automatic Skill Activation by Domain**: When working in specific project domains,
+  agents must activate and follow the corresponding workflow skill unconditionally, even
+  without explicit prompt triggers:
+  - **Documentation (`docs/`)**: Always activate and adhere to
+    `workflow-docs-authoring`.
+  - **Pre-PR & Code Audits**: Always activate and adhere to `workflow-code-review`.
+  - **Architecture Decisions (`docs/adr/`)**: Always activate and adhere to
+    `workflow-adr`.
+  - **Changelog & Releases (`docs/changelog.md`)**: Always activate and adhere to
+    `workflow-changelog`.
+  - **Python Implementation & Refactoring**: Always adhere to `guide-python`.
+  - **Skill Authoring (`.agents/skills/`)**: Always activate and adhere to
+    `workflow-skill-creator` and `guide-ste100`.
+  - **Git Operations (branches, commits, PRs)**: Always activate and adhere to
+    `workflow-git`.
+  - **Spec-Driven Features (`specs/`)**: Activate the matching `sdd-*` phase skill.
+  - **Manual Only**: Never self-activate skills marked
+    `disable-model-invocation: true` (`workflow-setup`, `workflow-docs-consumers`).
+    Run them only on explicit user request.
 - **Inline Lint Suppression**: `# noqa` comments are forbidden. Where a rule
   genuinely conflicts with required code, use the Ruff ignore directive
   `# ruff: ignore[full-rule-name]` with a rationale comment (see the
@@ -89,6 +105,15 @@ Before editing code or running tasks, ensure a clean, isolated environment:
     (`ln -s AGENTS.md .cursorrules`) and `.cursor/rules/zenith.mdc`.
   - **Aider**: `.aider.conf.yml` (auto-loading `AGENTS.md`, wiring `lint-cmd` and
     `test-cmd` to Poe tasks).
+  - **OpenCode**: `opencode.json` (pre-approving hermetic `uv run poe *` commands)
+    and `.opencode/agents/*.md` (project subagents).
+  - **Devin**: `.devin/config.json` (pre-authorizing hermetic `uv run poe:*` commands)
+    and native `AGENTS.md` ingestion.
+  - **Zed**: `.zed/settings.json` (configuring Ruff formatting on save) and
+    `.zed/tasks.json` (wiring one-key task execution for Poe tasks).
+  - **Pi & Oh My Pi**: `.pi/settings.json`, `.pi/APPEND_SYSTEM.md`, and
+    `.omp/SYSTEM.md` symlinks injecting project instructions.
+  - **Hermes Agent**: `HERMES.md` symlink (`ln -s AGENTS.md HERMES.md`).
 - **Scope Hierarchy**: When exploring subdirectories, check for nested `AGENTS.md` or
   `CLAUDE.md` files; localized instructions take precedence within their scope.
 - **Workflow & Tool Guidance**: Consult `.agents/skills/` for lifecycle workflow skills

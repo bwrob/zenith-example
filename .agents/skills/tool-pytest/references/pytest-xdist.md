@@ -15,7 +15,7 @@ uv run pytest -n auto --dist loadfile  # Group tests by test file
 uv run pytest -f                      # Loop-on-fail: re-run on code change
 ```
 
-In Zenith, run parallel tests through the Poe task:
+Run parallel tests through the Poe task:
 
 ```bash
 uv run poe test-fast                  # Executes pytest with -n auto

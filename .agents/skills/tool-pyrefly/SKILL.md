@@ -13,7 +13,7 @@ version: 1.0.0
 for Python, written in Rust. It enforces strict type safety, generic checking,
 and zero implicit `Any` types.
 
-Zenith projects configure `pyrefly` with the `strict` preset mode to
+This project configures `pyrefly` with the `strict` preset mode to
 guarantee type coverage across the codebase.
 
 ---
@@ -41,7 +41,7 @@ uv run pyrefly init                                          # Generate pyrefly.
 codebase. It provides two subcommands:
 
 - **`pyrefly coverage check`**: Fails when coverage falls below a specified
-  threshold. Zenith uses this as an automated CI and code-quality gate.
+  threshold. This project uses this as an automated CI and code-quality gate.
 - **`pyrefly coverage report`**: Emits a structured JSON report with per-module
   and per-symbol coverage metrics.
 
@@ -58,7 +58,7 @@ Each typable has one of three states:
 2. **Any**: Annotated, but the resolved type contains `Any`.
 3. **Untyped**: No type annotation is present.
 
-Zenith uses the `--strict` flag. Under `--strict`, any annotation that resolves
+This project uses the `--strict` flag. Under `--strict`, any annotation that resolves
 to `Any` counts as untyped. Only sound, concrete types count as covered.
 
 Only public symbols count toward coverage: names without a leading underscore,
@@ -70,7 +70,7 @@ modules through re-export chains (PEP 561 public API type completeness).
 
 ### Poe Tasks for Type Coverage
 
-Zenith provides two pre-configured Poe tasks:
+This project provides two pre-configured Poe tasks:
 
 ```bash
 uv run poe type-coverage         # Enforce 100% strict coverage on src/
@@ -180,7 +180,7 @@ project-includes = ["src", "tests", "scripts"]
 
 ### E. Toggling Presets
 
-While Zenith defaults to `strict`, projects during active prototyping can
+While the project defaults to `strict`, projects during active prototyping can
 adjust the preset level:
 
 - **`strict`**: Requires full type coverage, disallows implicit `Any`,

@@ -1,7 +1,7 @@
 """Extract prose blocks from Markdown.
 
 The scanner is line-based and stdlib-only. It is not a full CommonMark parser.
-It understands the constructs that Zenith documentation and agent skills use:
+It understands the constructs that Project documentation and agent skills use:
 
 - YAML frontmatter. Only the `description` value is prose. Skill descriptions
   are agent-facing text, so they get linted.
@@ -15,7 +15,7 @@ It understands the constructs that Zenith documentation and agent skills use:
 - Hard-wrapped paragraphs and list items. Wrapped lines are joined into one
   block, so a sentence that rumdl reflowed across three lines is one sentence.
 
-Indented code blocks are not recognized: Zenith requires fenced code (MD046).
+Indented code blocks are not recognized: This project requires fenced code (MD046).
 """
 
 from __future__ import annotations

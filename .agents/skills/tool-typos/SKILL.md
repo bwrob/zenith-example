@@ -14,7 +14,7 @@ version: 1.0.0
 Rust by `crate-ci`. The tool targets software codebases to find typos in
 identifiers, comments, strings, and markdown with a low false-positive rate.
 
-In Zenith projects, `typos` runs in CI, pre-commit, and local verification tasks.
+In this project, `typos` runs in CI, pre-commit, and local verification tasks.
 
 ---
 
@@ -29,7 +29,7 @@ uv run typos -w                        # Fix all detected typos in place
 uv run typos --format brief            # Output path:line:col findings
 ```
 
-Zenith manages task aliases via Poe:
+This project manages task aliases via Poe:
 
 ```bash
 uv run poe typos                       # Runs typos check
