@@ -131,6 +131,11 @@
     border: 1px solid var(--color-obsidian-700);
 }
 
+/* Hide auto-injected page title on landing pages that lead with a hero banner */
+.md-typeset > h1:not([id]):has(+ p[align="center"]) {
+    display: none;
+}
+
 /* Scrollable showcase for tool configurations */
 .config-block pre,
 .config-scroll pre,

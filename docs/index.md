@@ -12,13 +12,6 @@ Welcome to the documentation for **Zenith Example**.
 
 Demonstration and showcase repository instantiated from the Zenith template.
 
-```mermaid
-flowchart LR
-    A["Developer"] -->|uv run| B["zenith-example"]
-    B --> C["Core Engine"]
-    B --> D["Zensical Docs"]
-```
-
 ## Quick Start CLI
 
 <!-- termynal -->
@@ -129,26 +122,6 @@ print("```")
 > [!NOTE]
 > The directory tree above is rendered dynamically at documentation build time using
 > the `markdown-exec` plugin with the ` ```tree ` fence.
-
-## Mathematical Notation
-
-LaTeX equations are fully supported via MathJax:
-
-$$
-f(x) = \int_{-\infty}^\infty \hat{f}(\xi)\,e^{2 \pi i \xi x}\,d\xi
-$$
-
-Inline equations such as $E = mc^2$ and $\mathcal{O}(n \log n)$ render smoothly.
-
-## Dynamic Code Execution
-
-Execute embedded Python and shell snippets at documentation build time:
-
-```python exec="on"
-import sys
-
-print(f"Docs built with Python {sys.version.split()[0]} via markdown-exec!")
-```
 
 ## Next Steps
 
