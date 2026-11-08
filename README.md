@@ -1,7 +1,9 @@
-# Zenith Example
-
 <p align="center">
-  <img src="docs/assets/python-logo.svg" alt="Python Logotype" width="140">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/bwrob/zenith-example/main/docs/assets/python-banner-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/bwrob/zenith-example/main/docs/assets/python-banner-light.svg">
+    <img src="https://raw.githubusercontent.com/bwrob/zenith-example/main/docs/assets/python-banner-dark.svg" alt="Zenith Example" width="430">
+  </picture>
 </p>
 
 [![CI](https://github.com/bwrob/zenith-example/actions/workflows/python_tests.yaml/badge.svg)](https://github.com/bwrob/zenith-example/actions/workflows/python_tests.yaml)
@@ -183,7 +185,7 @@ Inline equations like $E = mc^2$ and $\Omega(n)$ are supported out of the box.
 | **Interactive REPL**     | `uv run poe repl`                 | Launches interactive Python REPL with package pre-loaded                        |
 | **Docs**                 | `uv run poe docs-serve`           | Starts local Zensical documentation server                                      |
 | **Build Docs**           | `uv run poe docs-build`           | Compiles documentation into `site/`                                             |
-| **Logotype**             | `uv run poe docs-logo`            | Compiles documentation logotype SVG with Typst                                  |
+| **Banner**               | `uv run poe docs-logo`            | Compiles documentation banner SVG with Typst                                    |
 | **Verify Wheel**         | `uv run poe verify-wheel`         | Verifies clean package and entry-point imports in an isolated wheel environment |
 
 ## Configuration Blueprint

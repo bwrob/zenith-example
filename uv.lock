@@ -422,6 +422,26 @@ wheels = [
 ]
 
 [[package]]
+name = "fontpkg"
+version = "0.2.2"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/6a/6f/5842ce5789ac3486d3cd1b52ab32bcd34f2da478bbae6fe3bc18dbd39856/fontpkg-0.2.2.tar.gz", hash = "sha256:feca3d345f1f3c700a0c86de52b5d1de6f41cc703ae92fa5428ebc88c3246bba", size = 8965, upload-time = "2026-08-19T16:52:50.793Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/53/9d/ee4223909fe6ed696b0cd528d63c7c4c1ae410fa91c59fb6c2c8ffc8f811/fontpkg-0.2.2-py3-none-any.whl", hash = "sha256:18891ee877139922f5be6ea421df630376fab2440b7dba2754652f7daf809dea", size = 8793, upload-time = "2026-08-19T16:52:50.032Z" },
+]
+
+[[package]]
+name = "fontpkg-cinzel"
+version = "2.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "fontpkg" },
+]
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c0/0f/370070cbf2cd9195bebd84e5eabff89d5f92d966cf21f34b26547f01c099/fontpkg_cinzel-2.0-py3-none-any.whl", hash = "sha256:8cccc36b6e101a96fbe2fea3f3a51cb9207e7a98e09ac41b20d159a410ec7c45", size = 66225, upload-time = "2026-09-22T01:37:05.032Z" },
+]
+
+[[package]]
 name = "frozenlist"
 version = "1.8.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1334,15 +1354,15 @@ wheels = [
 
 [[package]]
 name = "pymdown-extensions"
-version = "12.3"
+version = "13.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "markdown" },
     { name = "pyyaml" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/f3/fe/ac50ee24a80a1b344e643f6fb626063cc7041b978cd1dd9a7f9963ae1cd1/pymdown_extensions-12.3.tar.gz", hash = "sha256:a7f2a4e0bc60c6e6babfa7922cfb3b01cd640eb00fb208f3c582e12bae00ea67", size = 870532, upload-time = "2026-10-14T22:40:43.252Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/c6/ef/6496e7e9fb63427ace8636a481b3f8151e0dfaa6a76512e6b01f7c815a4b/pymdown_extensions-13.0.tar.gz", hash = "sha256:092524bea4fb3e62891204495de9e56b98603912df167ddd90d4f91bf2cd0414", size = 881230, upload-time = "2026-11-08T14:20:29.437Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/8a/d0/758afe732c2da502c051b4d03ff88daa3c0fc1a1e671e6c5a6318177bab4/pymdown_extensions-12.3-py3-none-any.whl", hash = "sha256:345493a8e3497e24382902903a1c43a28e34a52f2b7571a1c9641429b820ca74", size = 277597, upload-time = "2026-10-14T22:40:41.543Z" },
+    { url = "https://files.pythonhosted.org/packages/f6/47/e96d2b3439b9fab6dc085747f25aee0cbae2bae16743e86ca60907bd0d59/pymdown_extensions-13.0-py3-none-any.whl", hash = "sha256:c68f6e69b14604fb55227735bd0c4c4d3d1d9299a2d1314352190c48aa0d1040", size = 280470, upload-time = "2026-11-08T14:20:27.756Z" },
 ]
 
 [[package]]
@@ -2213,6 +2233,7 @@ dev = [
     { name = "complexipy" },
     { name = "cosmic-ray" },
     { name = "deptry" },
+    { name = "fontpkg-cinzel" },
     { name = "griffe" },
     { name = "griffe-warnings-deprecated" },
     { name = "hypothesis" },
@@ -2240,6 +2261,7 @@ dev = [
     { name = "zizmor" },
 ]
 docs = [
+    { name = "fontpkg-cinzel" },
     { name = "griffe-warnings-deprecated" },
     { name = "markdown-exec" },
     { name = "mkdocstrings", extra = ["python"] },
@@ -2285,6 +2307,7 @@ dev = [
     { name = "complexipy", specifier = ">=8.0.0" },
     { name = "cosmic-ray", specifier = ">=8.7.0" },
     { name = "deptry", specifier = ">=0.25.1" },
+    { name = "fontpkg-cinzel", specifier = ">=2.0" },
     { name = "griffe", specifier = ">=1.5.0" },
     { name = "griffe-warnings-deprecated", specifier = ">=1.1.0" },
     { name = "hypothesis", specifier = ">=6.125.0" },
@@ -2312,6 +2335,7 @@ dev = [
     { name = "zizmor", specifier = ">=1.23.0" },
 ]
 docs = [
+    { name = "fontpkg-cinzel", specifier = ">=2.0" },
     { name = "griffe-warnings-deprecated", specifier = ">=1.1.0" },
     { name = "markdown-exec", specifier = ">=1.12.0" },
     { name = "mkdocstrings", extras = ["python"], specifier = ">=1.0.7" },

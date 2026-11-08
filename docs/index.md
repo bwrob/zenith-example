@@ -3,10 +3,9 @@ diataxis: explanation
 purpose: Introduce Zenith Example, summarize its core architecture, and link to getting-started and API reference documentation.
 ---
 
-# Zenith Example
-
 <p align="center">
-  <img src="assets/python-logo.svg" alt="Python Logotype" width="120">
+  <img src="assets/python-banner-dark.svg#gh-dark-mode-only" alt="Zenith Example" width="430">
+  <img src="assets/python-banner-light.svg#gh-light-mode-only" alt="Zenith Example" width="430">
 </p>
 
 Welcome to the documentation for **Zenith Example**.

@@ -289,8 +289,8 @@
     help = "Build production static documentation into site/."
 
 [tasks.docs-logo]
-    cmd  = "typst compile docs/assets/python-logo.typ docs/assets/python-logo.svg"
-    help = "Compile documentation logotype SVG with Typst."
+    cmd  = "python -c \"import fontpkg, shutil, typst; fp = [str(fontpkg.path('Cinzel').parent)]; typst.compile('docs/assets/python-banner-dark.typ', output='docs/assets/python-banner-dark.svg', font_paths=fp); typst.compile('docs/assets/python-banner-light.typ', output='docs/assets/python-banner-light.svg', font_paths=fp); shutil.copyfile('docs/assets/python-banner-dark.svg', 'docs/assets/python-banner.svg')\""
+    help = "Compile documentation banner SVGs with Typst."
 
 [tasks.publish-docs]
     help = "Build and deploy Zensical docs to gh-pages via clean orphan branch."

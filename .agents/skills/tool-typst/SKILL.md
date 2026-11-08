@@ -34,7 +34,7 @@ uv run typst fonts                        # List all available fonts
 This project automates the asset build task via Poe:
 
 ```bash
-uv run poe docs-logo                      # Compiles python-logo.typ -> .svg
+uv run poe docs-logo                      # Compiles python-banner-(dark|light).typ -> .svg
 ```
 
 ---
