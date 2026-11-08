@@ -17,9 +17,9 @@ line-length = 88
 respect-gitignore = true
 
 [per-file-ignores]
-    # Banner at top replaces H1 title.
+    # Banner at top replaces H1 title; GFM treats Zensical tabs as indented code blocks.
     "**/README.md"     = ["MD041"]
-    "**/docs/index.md" = ["MD041"]
+    "**/docs/index.md" = ["MD041", "MD046"]
 
     # GFM treats this Zensical admonition as an indented code block.
     "**/docs/getting-started.md" = ["MD046"]
