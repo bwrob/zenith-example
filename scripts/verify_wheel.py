@@ -511,6 +511,8 @@ def run_distribution_tests(
     console.print("🚀 Executing pytest against installed wheel distribution...")
     env = os.environ.copy()
     env["PYTHONWARNDEFAULTENCODING"] = "1"
+    bin_dir = str(python_exe.parent)
+    env["PATH"] = f"{bin_dir}{os.pathsep}{env.get('PATH', '')}"
     # Hermetic interpreter driven with fixed repo-owned pytest arguments.
     result = subprocess.run(  # ruff: ignore[subprocess-without-shell-equals-true]
         _pytest_command(python_exe, project_root),

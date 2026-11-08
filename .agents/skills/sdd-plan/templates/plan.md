@@ -2,7 +2,8 @@
 
 - **Feature Identifier**: `[feature-id]`
 - **Spec Reference**: `.specs/[feature-id]/spec.md`
-- **Status**: Draft | Approved | In Progress | Completed
+- **Status**: Draft
+- **Approval**: Pending <!-- Developer only. Replace with: YYYY-MM-DD, "<quote of approval message>" -->
 - **Created**: YYYY-MM-DD
 
 ---

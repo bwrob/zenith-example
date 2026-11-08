@@ -1,7 +1,8 @@
 # Feature Specification: [Feature Name]
 
 - **Feature Identifier**: `[feature-id]`
-- **Status**: Draft | Under Review | Approved
+- **Status**: Draft
+- **Approval**: Pending <!-- Developer only. Replace with: YYYY-MM-DD, "<quote of approval message>" -->
 - **Author**: [Author / Agent]
 - **Created**: YYYY-MM-DD
 - **Target Release**: [Version or Milestone]

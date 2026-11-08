@@ -36,14 +36,13 @@ Replace `your_package` with the generated package name.
 
 Run commands directly via `uv`:
 
-<div class="termy">
-
+<!-- termynal -->
 ```console
 $ uv run zenith-example greet "World"
 
 ✨ Hello, World!
 
-// Inspect CLI options and help
+# Inspect CLI options and help
 $ uv run zenith-example --help
 
 <b>Usage: </b><b>zenith-example [OPTIONS] COMMAND [ARGS]...</b>
@@ -57,8 +56,6 @@ $ uv run zenith-example --help
 │                      greeting.                    │
 ╰───────────────────────────────────────────────────╯
 ```
-
-</div>
 
 ## Development Workflow
 

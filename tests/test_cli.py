@@ -2,40 +2,41 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
 from unittest.mock import patch
 
 import pytest
-from typer.testing import CliRunner
 
 import zenith_example
 from zenith_example.__main__ import main as module_main
 from zenith_example.cli import app, main
 
-runner = CliRunner()
+if TYPE_CHECKING:
+    from typer.testing import CliRunner
 
 
-def test_cli_help() -> None:
+def test_cli_help(runner: CliRunner) -> None:
     """Test CLI help flag outputs command information."""
     result = runner.invoke(app, ["--help"])
     assert result.exit_code == 0
     assert "Usage:" in result.stdout or "Options:" in result.stdout
 
 
-def test_cli_version() -> None:
+def test_cli_version(runner: CliRunner) -> None:
     """Test CLI version option outputs version."""
     result = runner.invoke(app, ["--version"])
     assert result.exit_code == 0
     assert "zenith-example" in result.stdout
 
 
-def test_cli_greet() -> None:
+def test_cli_greet(runner: CliRunner) -> None:
     """Test CLI greet subcommand."""
     result = runner.invoke(app, ["greet", "Developer"])
     assert result.exit_code == 0
     assert "Hello, Developer!" in result.stdout
 
 
-def test_cli_greet_default() -> None:
+def test_cli_greet_default(runner: CliRunner) -> None:
     """Test CLI greet subcommand with default argument."""
     result = runner.invoke(app, ["greet"])
     assert result.exit_code == 0

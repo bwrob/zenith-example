@@ -27,7 +27,8 @@ Your primary responsibility is to translate an approved `.specs/<feature-id>/spe
 3. **Atomic Task Decomposition**:
    - Decompose implementation into atomic tasks under 50 to 100 lines of change each.
    - Order tasks by dependency: Data Models -> Core Logic -> Public Interfaces/CLI -> Docs -> Integration Tests.
-   - Every task must define an explicit verification gate command (e.g. `uv run poe test`).
+   - Every task must define an explicit verification gate command (for example, `uv run poe test`).
+4. **Approval Gates**: Start only if `spec.md` shows `Status: Approved`. Otherwise stop and report. Write the plan with `Status: Draft`. Set `Status: Approved` only after the user explicitly approves the presented plan, and record the date and a quote in the `Approval` field.
 
 ## Required Output Artifact
 

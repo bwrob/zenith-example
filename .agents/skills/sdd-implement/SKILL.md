@@ -1,17 +1,37 @@
 ---
 name: sdd-implement
 description: >-
-  Executes implementation plans using disciplined Test-Driven Development (TDD).
+  Executes approved implementation plans using disciplined Test-Driven Development (TDD).
   Runs red-green-refactor loops, verifies quality gates per task, and stops on drift.
+  Requires a developer-approved spec.md and plan.md before any code edit.
   Mandatory whenever executing tasks from an SDD plan, even without prompt triggers.
   Triggers: sdd implement, execute plan, run tasks, tdd implementation, sdd coding.
-version: 1.1.0
+version: 1.2.0
 ---
 
 # Test-Driven Implementation (`sdd-implement`)
 
 This skill defines the process to execute technical implementation plans in this project.
 It enforces sequential task execution, Test-Driven Development (TDD), and per-task verification gates.
+
+---
+
+## 0. Entry Gate
+
+Verify these conditions before any file edit, branch creation, or dependency change:
+
+1. Open `.specs/<feature-id>/spec.md` and `.specs/<feature-id>/plan.md`.
+2. Verify that both files exist.
+3. Verify that both files show `Status: Approved` and a filled `Approval` field.
+
+If a condition fails, stop and end the turn.
+Tell the developer which artifact is missing or not approved.
+Recommend `/sdd` for the full lifecycle, or `/sdd-spec` and `/sdd-plan` for the missing phase.
+
+> [!IMPORTANT]
+> Do not write, complete, or approve `spec.md` or `plan.md` in this skill.
+> A direct invocation of `sdd-implement` does not activate Autonomous Mode.
+> Apply the Approval Protocol in the [sdd](../sdd/SKILL.md) skill.
 
 ---
 
@@ -33,7 +53,8 @@ It enforces sequential task execution, Test-Driven Development (TDD), and per-ta
    Re-evaluate the approach from first principles.
 5. **Drift Protocol**:
    If an unhandled requirement emerges, pause code edits.
-   Update `.specs/<feature-id>/spec.md` and `.specs/<feature-id>/plan.md` before writing further code.
+   Propose the change to `spec.md` and `plan.md`, and set both to `Status: Draft`.
+   Stop and obtain developer approval before you write further code.
 
 ---
 
@@ -113,16 +134,13 @@ After tests pass, commit the code changes and record the commit hash:
    - Change the task checkbox from `[ ]` to `[x]`.
    - Append the short commit hash in parentheses:
      `- [x] **Task N: [Title]** (<sha>)`
-4. Commit the plan update:
-   ```bash
-   git add .specs/<feature-id>/plan.md
-   git commit -m "docs(plan): complete task N (<sha>)"
-   ```
+4. Do not commit `plan.md`.
+   Git ignores the `.specs/` directory, so the plan stays a local working file.
 5. Proceed to the next task in the phase.
 
 ### Step 7: Execute Phase Checkpoint Protocol
 
-When you complete the final task in a Phase:
+When you complete the final task in a Phase, do all of these steps before the next task:
 
 1. **Verify Module Test Coverage**:
    Inspect modified files under `src/` since the previous checkpoint:
@@ -130,25 +148,27 @@ When you complete the final task in a Phase:
    git diff --name-only <prev-checkpoint-sha|main> HEAD -- 'src/*'
    ```
    Verify that each modified module has a corresponding unit test file in `tests/`.
+
 2. **Execute Quality Gates**:
    Run the test suite and quality verification:
    ```bash
    uv run poe test
    uv run poe code-quality
    ```
-3. **Generate Manual Verification Recipe**:
-   Create a step-by-step manual test recipe for developer inspection (for example, a CLI invocation or REPL call with expected output).
-4. **Stop for Developer Approval**:
-   Present the manual verification recipe. Pause for developer confirmation before you start the next phase, unless `--autonomous` or `/goal` is active.
-5. **Record Phase Checkpoint**:
+   Fix every gate failure before you continue.
+
+3. **Record Phase Checkpoint**:
    Obtain the latest commit hash (`git rev-parse --short HEAD`).
    Update the phase heading in `.specs/<feature-id>/plan.md` to record the checkpoint:
    `### Phase <N>: [Name] [checkpoint: <sha>]`.
-   Commit the plan update:
-   ```bash
-   git add .specs/<feature-id>/plan.md
-   git commit -m "docs(plan): record checkpoint for phase <N> (<sha>)"
-   ```
+
+4. **Generate Manual Verification Recipe**:
+   Create a step-by-step manual test recipe for developer inspection (for example, a CLI invocation or REPL call with expected output).
+
+5. **Stop for Developer Approval**:
+   Present the gate results and the manual verification recipe, then end the turn.
+   Start the next phase only after the developer approves.
+   Skip this stop only if the developer explicitly requested Autonomous Mode (for example, `--autonomous` or `/goal`).
 
 ---
 
@@ -156,6 +176,8 @@ When you complete the final task in a Phase:
 
 Verify that the implementation satisfies these criteria:
 
-1. All task checkboxes in `.specs/<feature-id>/plan.md` show complete status.
-2. The entire test suite passes with 100% branch coverage.
-3. Auto-formatters and linters report zero errors.
+1. The Entry Gate passed before the first code edit.
+2. All task checkboxes in `.specs/<feature-id>/plan.md` show complete status.
+3. Every phase heading records a checkpoint, and the developer approved each phase.
+4. The entire test suite passes with 100% branch coverage.
+5. Auto-formatters and linters report zero errors.

@@ -4,7 +4,7 @@ description: >-
   Coordinates the Spec-Driven Development (SDD) lifecycle from feature conception to verification.
   Orchestrates specification authoring, planning, implementation, and review using artifact boundaries and subagents.
   Triggers: sdd, spec driven dev, spec-driven development, feature spec, execute sdd, sdd runbook.
-version: 1.2.0
+version: 1.3.0
 ---
 
 # Spec-Driven Development Orchestrator (`sdd`)
@@ -41,6 +41,51 @@ The SDD orchestrator supports two operational modes:
 | **Autonomous Mode** | Explicit user request (for example: "run autonomously" or `/goal`). | The agent executes all steps continuously without intermediate approval stops if tests pass. |
 
 If an automated test fails in autonomous mode, stop immediately and report the error to the user.
+
+Supervised Mode applies unless the developer explicitly requests Autonomous Mode.
+These signals do not activate Autonomous Mode:
+- The developer invokes a phase skill directly (for example, `/sdd-implement`).
+- The developer answers clarification questions.
+- The task looks small or the next step looks obvious.
+
+---
+
+## 2a. Approval Protocol
+
+Approval stops protect the developer from code built on unreviewed decisions.
+Apply these rules in every phase skill.
+
+1. **Only the developer approves**:
+   The agent never sets `Status: Approved` on its own judgment.
+   Write every new `spec.md` and `plan.md` with `Status: Draft`.
+2. **Approval is an explicit message**:
+   An approval is a developer message that approves the presented document.
+   Answers to clarification questions are input, not approval.
+   Silence, or an instruction to start a different phase, is not approval.
+3. **Record the approval**:
+   After the developer approves, set `Status: Approved`.
+   Fill the `Approval` field with the date and a short quote of the approval message.
+4. **End the turn at each stop**:
+   At an approval stop, present the document and end the turn.
+   Do not make more file edits, commits, or tool calls in that turn.
+5. **Re-approve after changes**:
+   If the agent changes an approved document, set `Status: Draft` again.
+   Request approval for the changed document.
+
+### Phase Entry Gates
+
+Before a phase starts, verify its entry gate.
+If the gate fails, stop and report the missing artifact to the developer.
+Do not create the missing artifact inside the current phase.
+
+| Phase | Entry Gate |
+| :--- | :--- |
+| `sdd-spec` | None. |
+| `sdd-plan` | `spec.md` exists and shows `Status: Approved`. |
+| `sdd-implement` | `spec.md` and `plan.md` exist and both show `Status: Approved`. |
+| `sdd-review` | All task checkboxes in `plan.md` show complete status. |
+
+If the developer invokes a later phase and an earlier artifact is missing, recommend `/sdd` or the missing phase skill.
 
 ---
 

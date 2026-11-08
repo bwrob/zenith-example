@@ -5,7 +5,7 @@ description: >-
   Defines component architectures, layer boundaries, interface contracts, and atomic task breakdowns.
   Mandatory whenever converting an approved spec into a plan or task list.
   Triggers: plan implementation, sdd plan, technical plan, task breakdown, architecture plan.
-version: 1.1.0
+version: 1.2.0
 ---
 
 # Technical Implementation Planning (`sdd-plan`)
@@ -56,6 +56,12 @@ Follow these steps to produce an implementation plan:
 
 ### Step 1: Ingest the Specification
 
+Verify the entry gate first.
+Open `.specs/<feature-id>/spec.md` and verify that it shows `Status: Approved`.
+If the file is missing or not approved, stop and end the turn.
+Tell the user to finish `sdd-spec` first.
+Do not write or approve the specification in this skill.
+
 Read `.specs/<feature-id>/spec.md`.
 Identify all functional requirements and acceptance scenarios.
 Inspect existing codebase modules to identify integration points.
@@ -85,8 +91,14 @@ For each task:
 
 ### Step 6: Verify User Alignment
 
-Present `.specs/<feature-id>/plan.md` to the user.
-Secure explicit approval before starting `sdd-implement`.
+1. Set `Status: Draft` and `Approval: Pending` in `.specs/<feature-id>/plan.md`.
+2. Present the plan to the user, then end the turn.
+3. When the user sends an explicit approval, set `Status: Approved`.
+   Record the date and a short quote of the approval message in the `Approval` field.
+4. Start `sdd-implement` only after this record exists.
+
+Never set `Status: Approved` on your own judgment.
+Apply the Approval Protocol in the [sdd](../sdd/SKILL.md) skill.
 
 ---
 
@@ -98,3 +110,4 @@ Verify that the plan satisfies these criteria:
 2. Every task contains an explicit verification command.
 3. No task requires more than 100 lines of estimated code change.
 4. Layer dependencies flow unidirectionally without circular imports.
+5. The `Status` field shows `Draft` until the user explicitly approves the plan.

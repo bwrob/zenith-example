@@ -5,7 +5,7 @@ description: >-
   Verifies acceptance criteria, tests for regressions, and audits for scope creep.
   Mandatory after all tasks of an SDD plan are complete, before the agent reports the feature as done.
   Triggers: sdd review, verify spec, audit implementation, spec conformance, sdd convergence.
-version: 1.1.0
+version: 1.2.0
 ---
 
 # Specification Conformance Review (`sdd-review`)
@@ -48,6 +48,10 @@ When operating in multi-agent environments, invoke a dedicated `sdd-reviewer` su
 Follow these steps to audit specification conformance:
 
 ### Step 1: Ingest Specification and Code Diff
+
+Verify the entry gate first.
+Open `.specs/<feature-id>/plan.md` and verify that all task checkboxes show complete status.
+If a task is incomplete, stop and report the incomplete tasks to the developer.
 
 Read `.specs/<feature-id>/spec.md` to review acceptance criteria.
 Inspect the git diff against the base branch:

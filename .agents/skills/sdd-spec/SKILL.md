@@ -5,13 +5,13 @@ description: >-
   Captures user stories, scope boundaries, and acceptance criteria in EARS format without implementation details.
   Mandatory whenever authoring or changing a spec file in an SDD feature directory.
   Triggers: write spec, author spec, sdd spec, feature specification, clarify requirements.
-version: 1.1.0
+version: 1.2.0
 ---
 
 # Feature Specification Authoring (`sdd-spec`)
 
 This skill defines the process to author and clarify functional specifications in this project.
-It captures observable behavior, boundary limits, and testable acceptance criteria before code design begins.
+It captures observable behavior, boundary limits, and testable acceptance criteria before code design starts.
 
 ---
 
@@ -85,8 +85,15 @@ Add concrete Given/When/Then scenarios for every functional requirement:
 
 ### Step 6: Verify User Approval
 
-Present the completed `.specs/<feature-id>/spec.md` to the user.
-Secure explicit user approval before proceeding to `sdd-plan`.
+1. Set `Status: Draft` and `Approval: Pending` in `.specs/<feature-id>/spec.md`.
+2. Present the completed specification to the user, then end the turn.
+3. When the user sends an explicit approval, set `Status: Approved`.
+   Record the date and a short quote of the approval message in the `Approval` field.
+4. Do not start `sdd-plan` until this record exists.
+
+Answers to the Step 2 clarification questions are input, not approval.
+Never set `Status: Approved` on your own judgment.
+Apply the Approval Protocol in the [sdd](../sdd/SKILL.md) skill.
 
 ---
 
@@ -103,3 +110,4 @@ Verify that the specification satisfies these criteria:
 1. The document contains both In-Scope and Out-of-Scope sections.
 2. Every acceptance scenario defines the initial context, trigger event, and observable outcome.
 3. The specification contains zero private implementation details.
+4. The `Status` field shows `Draft` until the user explicitly approves the specification.
