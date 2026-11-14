@@ -22,7 +22,10 @@ console = Console(highlight=False)
 error_console = Console(stderr=True, highlight=False)
 
 MIN_DESCRIPTION_LENGTH = 20
-MIN_FRONTMATTER_PARTS = 3
+FRONTMATTER_PATTERN = re.compile(
+    r"\A---[ \t]*\r?\n(?P<yaml>(?:.*?\r?\n)??)---[ \t]*(?:\r?\n|\Z)",
+    re.DOTALL,
+)
 
 
 def _handle_key_value(
@@ -100,16 +103,16 @@ def parse_frontmatter(content: str) -> dict[str, str]:
         ValueError: When the frontmatter boundaries are malformed.
 
     """
-    if not content.startswith("---"):
+    if re.match(r"\A---[ \t]*(?:\r?\n|\Z)", content) is None:
         msg = "Missing leading '---' frontmatter boundary"
         raise ValueError(msg)
 
-    parts = content.split("---", 2)
-    if len(parts) < MIN_FRONTMATTER_PARTS:
+    match = FRONTMATTER_PATTERN.match(content)
+    if match is None:
         msg = "Unclosed frontmatter; expected closing '---'"
         raise ValueError(msg)
 
-    raw_yaml = parts[1]
+    raw_yaml = match.group("yaml")
     metadata: dict[str, str] = {}
     current_key: str | None = None
     multiline_buf: list[str] = []
