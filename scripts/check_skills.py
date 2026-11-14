@@ -52,6 +52,7 @@ def _handle_key_value(
         return new_key, []
     if val_clean:
         metadata[new_key] = val_clean
+        return new_key, [val_clean]
     return new_key, []
 
 
