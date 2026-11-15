@@ -23,7 +23,7 @@ It coordinates risk-tiered scouting, worktree reproduction, sharded arbiter revi
 4. **Rolling Worktree Pool**: Run experimentation, reproduction, and patching in Git worktrees under `.temp/worktrees/`. Cap active worktrees at 4 and remove completed worktrees immediately.
 5. **Shared Environment**: Pin `PYTHONPATH="$PWD:$PWD/src"`, `UV_PROJECT_ENVIRONMENT="<root>/${UV_PROJECT_ENVIRONMENT:-.venv}"`, and `-c pytest.ini --rootdir="$PWD"` with `--no-sync`. This avoids `.venv` rebuilds and shadowed imports.
 6. **Persistent State Ledger**: Track slice status in `.temp/bug-hunt/scope.md`, findings in `.temp/bug-hunt/findings/`, and reproducers in `.temp/bug-hunt/repro/`. Never run `uv run poe clean` during an active hunt.
-7. **Human Review Gate**: Present triaged findings and branch diffs for human approval before merging fixes.
+7. **Human Review Gate**: Open a pull request per fix (`gh pr create`) and require human approval before merging any pull request.
 
 ---
 
@@ -93,7 +93,7 @@ PYTHONPATH="$PWD:$PWD/src" UV_PROJECT_ENVIRONMENT="<root>/${UV_PROJECT_ENVIRONME
 Run this stage only when the user requests fixes, or after user approval of `.temp/bug-hunt/summary.md`.
 
 1. Start up to 4 concurrent Patcher agents per batch. Assign one agent to one accepted finding (`BH-<id>`).
-2. Assign disjoint line anchors (at least 10 lines apart) when multiple findings edit one file. Separate helpers, call sites, and test line budgets.
+2. Run concurrent Patchers only on disjoint files or non-overlapping functions. Sequence or group findings that edit the same function.
 3. Create an isolated branch worktree per agent (`git worktree add -b fix/bh-<id> .temp/worktrees/patch-<id>` or `workspace: "share"`).
 4. Apply the minimal root-cause fix and in-slice sibling fixes inside the patch worktree without broad exception swallowing.
 5. Add a typed regression test (`from __future__ import annotations`, `-> None`, `Bug / Root cause / Fix` docstring) in `tests/test_<module>.py`.
@@ -120,4 +120,4 @@ After the concurrent Patcher agents open their pull requests, verify cross-patch
 2. Run `PYTHONPATH="$PWD:$PWD/src" UV_PROJECT_ENVIRONMENT="<root>/${UV_PROJECT_ENVIRONMENT:-.venv}" uv run --no-sync poe test` and `poe code-quality` inside `.temp/worktrees/integration`.
 3. If a cross-fix conflict or test failure occurs, update the affected `fix/bh-<id>` branch and pull request.
 4. Remove `.temp/worktrees/integration` and prune worktrees (`git worktree prune && rm -rf .temp/worktrees`). Run `uv sync` at the repository root so editable package links point back to the root checkout.
-5. Monitor remote CI runs across all pull requests (including Windows and macOS), then rebase and squash-merge approved pull requests sequentially before deleting `.temp/bug-hunt`.
+5. Monitor configured CI runs across open pull requests and wait for human approval. Merge approved pull requests sequentially before deleting `.temp/bug-hunt`.

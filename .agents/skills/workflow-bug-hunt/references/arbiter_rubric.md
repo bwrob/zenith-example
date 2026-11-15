@@ -32,7 +32,7 @@ Keep the highest-severity trigger path as the primary reproducer and list siblin
 Run a 3-step semantic variant sweep across source roots for each accepted root cause:
 
 1. **Extract Exact Pattern**: Identify the defective operation and missing guard in the original finding.
-2. **Abstract Structural Pattern**: Generalize variable and helper names into a structural regex (`rg -n` or `rg -U`) across `src/`.
+2. **Abstract Structural Pattern**: Generalize variable and helper names into a structural regex (`rg -n` or `rg -U`) across source roots.
 3. **Triage Sibling Call Sites**: Audit each match for upstream guards and record unguarded `file:line` locations under `Sibling Variants`.
 
 ---

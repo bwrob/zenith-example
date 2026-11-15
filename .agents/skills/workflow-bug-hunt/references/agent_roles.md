@@ -15,7 +15,7 @@ This reference defines the five roles in `workflow-bug-hunt`, their isolation mo
   3. Partition slices (`S01`, `S02`) of at most 15 files or 4,000 lines in `.temp/bug-hunt/scope.md`.
   4. Budget at most 3 scout waves (15 slices) per run starting with `Tier 1` slices. Track slice status (`PENDING | SCOUTED | TRIAGED | ARBITRATED | PATCHED`).
   5. Deduplicate candidates via `rg` indexing and triage every `RAW` finding before Stage 5. Shard `CONFIRMED` findings into batches of 8 per arbiter.
-  6. Assign disjoint anchors (10+ lines apart for helpers and call sites) plus test budgets to Patcher batches. Verify compatibility in `.temp/worktrees/integration`, run `uv sync` at root, and merge sequentially.
+  6. Dispatch concurrent Patchers on non-overlapping targets, verify compatibility in `.temp/worktrees/integration`, run `uv sync` at root, and merge approved pull requests sequentially.
 
 ---
 
@@ -63,7 +63,7 @@ This reference defines the five roles in `workflow-bug-hunt`, their isolation mo
 - **Count**: Up to 4 concurrent agents per wave (1 agent = 1 finding = 1 branch = 1 pull request).
 - **Mode**: Isolated branch worktree (`git worktree add -b fix/bh-<id> .temp/worktrees/patch-<id>` or `workspace: "share"`).
 - **Write Scope**: Only the target module, its in-slice sibling variants, `tests/test_<module>.py` inside `.temp/worktrees/patch-<id>`, and `.temp/bug-hunt/findings/BH-<id>.md`.
-- **Patch Soundness Rule**: Fix the root cause directly inside Coordinator-assigned line anchors and line budgets. Never mask failures with broad exception handlers or silent fallback returns.
+- **Patch Soundness Rule**: Fix the root cause directly within the target function without touching unrelated code. Never mask failures with broad exception handlers or silent fallback returns.
 - **Responsibilities**:
   1. Implement minimal fixes inside `.temp/worktrees/patch-<id>` while preserving public API contracts.
   2. Add a typed regression test (`from __future__ import annotations`, `-> None`, `Bug / Root cause / Fix` docstring) in `tests/test_<module>.py`.
