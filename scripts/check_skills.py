@@ -175,12 +175,12 @@ def validate_skill(skill_dir: Path) -> list[str]:
             f"{skill_dir.name}/SKILL.md: description is too brief (min 20 chars)"
         )
 
-    # Validate internal file links (e.g. [templates/...](./templates/...))
+    # Validate internal file links (e.g. [templates/...](templates/...))
     link_pattern = re.compile(
-        r"\[([^\]]+)\]\((\./(templates|references|examples|scripts)/[^\)]+)\)"
+        r"\[([^\]]+)\]\(((?:\./)?(templates|references|examples|scripts)/[^\)]+)\)"
     )
     for match in link_pattern.finditer(content):
-        rel_target = match.group(2).lstrip("./")
+        rel_target = match.group(2).removeprefix("./").split("#", 1)[0]
         target_path = skill_dir / rel_target
         if not target_path.exists():
             errors.append(
