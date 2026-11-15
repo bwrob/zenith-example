@@ -81,7 +81,8 @@ Before editing code or running tasks, ensure a clean, isolated environment:
     `workflow-git`.
   - **Spec-Driven Features (`specs/`)**: Activate the matching `sdd-*` phase skill.
   - **Manual Only**: Never self-activate skills marked
-    `disable-model-invocation: true` (`workflow-setup`, `workflow-docs-consumers`).
+    `disable-model-invocation: true` (`workflow-setup`, `workflow-docs-consumers`,
+    `workflow-bug-hunt`).
     Run them only on explicit user request.
 - **Inline Lint Suppression**: `# noqa` comments are forbidden. Where a rule
   genuinely conflicts with required code, use the Ruff ignore directive
@@ -119,9 +120,9 @@ Before editing code or running tasks, ensure a clean, isolated environment:
 - **Workflow & Tool Guidance**: Consult `.agents/skills/` for lifecycle workflow skills
   (`workflow-git`, `workflow-code-review`, `workflow-changelog`, `workflow-adr`,
   `workflow-setup`, `workflow-skill-creator`, `workflow-docs-authoring`,
-  `workflow-docs-consumers`), Spec-Driven Development suite (`sdd`, `sdd-spec`,
-  `sdd-plan`, `sdd-implement`, `sdd-review`), engineering guides (`guide-python`,
-  `guide-ste100`), and tool-specific guidance (`tool-*/SKILL.md`).
+  `workflow-docs-consumers`, `workflow-bug-hunt`), Spec-Driven Development suite (`sdd`,
+  `sdd-spec`, `sdd-plan`, `sdd-implement`, `sdd-review`), engineering guides
+  (`guide-python`, `guide-ste100`), and tool-specific guidance (`tool-*/SKILL.md`).
 
 ## Architecture & Code Design
 
