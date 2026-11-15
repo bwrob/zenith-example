@@ -95,9 +95,9 @@ Run this stage only when the user requests fixes, or after user approval of `.te
 1. Start up to 4 concurrent Patcher agents per batch. Assign one agent to one accepted finding (`BH-<id>`).
 2. Assign disjoint line anchors (at least 10 lines apart) when multiple findings edit one file. Separate helpers, call sites, and test line budgets.
 3. Create an isolated branch worktree per agent (`git worktree add -b fix/bh-<id> .temp/worktrees/patch-<id>` or `workspace: "share"`).
-4. Apply the minimal root-cause fix, in-slice sibling fixes, and any mirrored file copies inside the patch worktree without broad exception swallowing.
+4. Apply the minimal root-cause fix and in-slice sibling fixes inside the patch worktree without broad exception swallowing.
 5. Add a typed regression test (`from __future__ import annotations`, `-> None`, `Bug / Root cause / Fix` docstring) in `tests/test_<module>.py`.
-6. Write OS-portable assertions for the blocked trigger and valid boundary inputs. Set `USERPROFILE` with `HOME`, compare `.resolve()` symlink targets, and specify UTF-8 encoding.
+6. Write portable assertions across supported platforms for the blocked trigger and valid boundary inputs.
 7. Run file-scoped verification inside the patch worktree:
 
 ```bash
@@ -117,7 +117,7 @@ UV_PROJECT_ENVIRONMENT="<root>/${UV_PROJECT_ENVIRONMENT:-.venv}" uv run --no-syn
 After the concurrent Patcher agents open their pull requests, verify cross-patch compatibility:
 
 1. Create a temporary consolidation worktree (`git worktree add --detach .temp/worktrees/integration`) and merge all `fix/bh-<id>` branches inside it.
-2. Run `PYTHONPATH="$PWD:$PWD/src" UV_PROJECT_ENVIRONMENT="<root>/${UV_PROJECT_ENVIRONMENT:-.venv}" uv run --no-sync poe test` and `poe code-quality` inside `.temp/worktrees/integration`. Verify 100% branch coverage on all modified source and test files (scans that filter `.temp` path segments can miscount untouched files inside `.temp/worktrees/`).
+2. Run `PYTHONPATH="$PWD:$PWD/src" UV_PROJECT_ENVIRONMENT="<root>/${UV_PROJECT_ENVIRONMENT:-.venv}" uv run --no-sync poe test` and `poe code-quality` inside `.temp/worktrees/integration`.
 3. If a cross-fix conflict or test failure occurs, update the affected `fix/bh-<id>` branch and pull request.
 4. Remove `.temp/worktrees/integration` and prune worktrees (`git worktree prune && rm -rf .temp/worktrees`). Run `uv sync` at the repository root so editable package links point back to the root checkout.
 5. Monitor remote CI runs across all pull requests (including Windows and macOS), then rebase and squash-merge approved pull requests sequentially before deleting `.temp/bug-hunt`.

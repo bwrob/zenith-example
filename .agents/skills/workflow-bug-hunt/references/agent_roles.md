@@ -62,12 +62,12 @@ This reference defines the five roles in `workflow-bug-hunt`, their isolation mo
 
 - **Count**: Up to 4 concurrent agents per wave (1 agent = 1 finding = 1 branch = 1 pull request).
 - **Mode**: Isolated branch worktree (`git worktree add -b fix/bh-<id> .temp/worktrees/patch-<id>` or `workspace: "share"`).
-- **Write Scope**: Only the target module, its in-slice sibling variants, any mirrored file copies, `tests/test_<module>.py` inside `.temp/worktrees/patch-<id>`, and `.temp/bug-hunt/findings/BH-<id>.md`.
+- **Write Scope**: Only the target module, its in-slice sibling variants, `tests/test_<module>.py` inside `.temp/worktrees/patch-<id>`, and `.temp/bug-hunt/findings/BH-<id>.md`.
 - **Patch Soundness Rule**: Fix the root cause directly inside Coordinator-assigned line anchors and line budgets. Never mask failures with broad exception handlers or silent fallback returns.
 - **Responsibilities**:
   1. Implement minimal fixes inside `.temp/worktrees/patch-<id>` while preserving public API contracts.
   2. Add a typed regression test (`from __future__ import annotations`, `-> None`, `Bug / Root cause / Fix` docstring) in `tests/test_<module>.py`.
-  3. Write OS-portable assertions for the blocked trigger input and valid boundary inputs (set `USERPROFILE` with `HOME`, compare `.resolve()` symlink targets, and specify UTF-8 encoding).
+  3. Test both the blocked trigger input and valid boundary inputs with portable assertions across supported platforms.
   4. Run file-scoped `pytest -c pytest.ini --rootdir="$PWD" --no-cov`, `ruff check`, `ruff format --check`, and `pyrefly check` on modified files using `PYTHONPATH="$PWD:$PWD/src"` and `UV_PROJECT_ENVIRONMENT="<root>/${UV_PROJECT_ENVIRONMENT:-.venv}"`.
   5. Stage explicit files (`git add <files>`), commit to `fix/bh-<id>`, and remove `.temp/worktrees/patch-<id>` immediately.
   6. Push `fix/bh-<id>` (`git push -u origin fix/bh-<id>`), open a dedicated pull request (`gh pr create --head fix/bh-<id> --body-file - <<'EOF'`), and exit immediately without running `gh run watch`.
